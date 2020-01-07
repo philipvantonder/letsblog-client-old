@@ -15,8 +15,14 @@
 
             <div class="d-flex justify-content-between">
                 <button class="btn btn-outline-dark">Login</button>
-                <router-link :to="{ name: 'register' }" class="btn btn-outline-dark">Register</router-link>
+                <router-link :to="{ name: 'register' }" class="btn btn-outline-secondary">Register</router-link>
             </div>
         </form>
     </div>
 </template>
+
+<script>
+</script>
+
+<style>
+</style>

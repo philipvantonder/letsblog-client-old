@@ -4,9 +4,10 @@ const bodyParser = require('body-parser')
 const PORT = 4000
 const cors = require('cors')
 const mongoose = require('mongoose')
-const config = require('./DB.js')
-const postRoute = require('./post.route.js') 
-const userRoute = require('./user.route.js') 
+const config = require('./database/DB.js')
+
+const postRoute = require('./routes/post.route.js') 
+const userRoute = require('./routes/user.route.js') 
 
 mongoose.Promise = global.Promise
 mongoose.connect(config.DB, { 

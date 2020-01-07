@@ -1,5 +1,5 @@
 <template>
-    <div class="container w-25 shadow p-3 mt-5 rounded">
+    <div class="container w-50 shadow p-3 mt-5 rounded">
 
         <h2> Lets Blog </h2>
 
@@ -39,7 +39,7 @@
 
             <div class="d-flex justify-content-between">
                 <button class="btn btn-outline-dark">Register</button>
-                <router-link :to="{ name: 'login' }" class="btn btn-outline-dark">Back to login</router-link>
+                <router-link :to="{ name: 'login' }" class="btn btn-outline-secondary">Back to login</router-link>
             </div>
         </form>
     </div>
