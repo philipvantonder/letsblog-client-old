@@ -1,15 +1,15 @@
 <template>
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <nav class="navbar navbar-expand-sm bg-primary">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <router-link to="/" class="nav-link">Home</router-link>
+                <router-link to="/" class="nav-link text-white">Home</router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/create" class="nav-link">Create Post</router-link>
+                <router-link to="/add-post" class="nav-link text-white">Create Post</router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/posts" class="nav-link">Posts</router-link>
+                <router-link to="/posts" class="nav-link text-white">Posts</router-link>
             </li>
         </ul>
     </nav>

@@ -1,17 +1,73 @@
 const express = require('express')
 const postRoutes = express.Router()
+const multer = require('multer')
+const app = express()
+
+var storage = multer.diskStorage({
+
+	destination: function (req, file, cb) {
+		cb(null, '../public/images')
+	},
+	
+	filename: function (req, file, cb) {
+		cb(null, file.originalname)
+	}
+	
+})
+
+const fileFilter = (req, file, cb) => {
+
+	const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
+
+	if (!allowedTypes.includes(file.mimetype)) {
+		const error = new Error('Incorrect file type')
+		error.code = "INCORRECT_FILETYPE"
+
+		return cb(error, false)
+	}
+
+	cb(null, true)
+
+}
+
+const fileUpload = multer({ 
+	
+	storage: storage, 
+	
+	fileFilter,
+	
+	limits: {
+
+		fileSize: 500000
+
+	}
+
+})
 
 let Post = require('../models/post.model.js')
 
-postRoutes.route('/add').post(function(req, res) {
-    let post = new Post(req.body)
+postRoutes.route('/add').post(fileUpload.single('file'), (req, res) => {
+
+	let post = new Post(req.body)
     post.save().
     then(() => {
-        res.status(200).json({ 'business': 'business in added successfully' })
+        res.status(200).json('Post have been successfully saved')
     })
     .catch(() => {
         res.status(400).send('unable to save to database')
     })
+})
+
+app.use((err, req, res, next) =>  {
+
+	if(err.code === "INCORRECT_FILETYPE") {
+		res.status(422).json("Only images are allowed")
+	}
+
+	if(err.code === "LIMIT_FILE_SIZE") {
+		res.status(422).json("Allowed file size is 2MB")
+	}
+
 })
 
 postRoutes.route('/').get(function(req, res) {

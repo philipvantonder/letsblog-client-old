@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
+
+import './css/style.scss'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate)
@@ -22,10 +24,10 @@ Vue.component('navbar', Navbar)
 import LoginComponent from './components/auth/LoginComponent.vue'
 import RegisterComponent from './components/auth/RegisterComponent.vue'
 
-import HomeComponent from './components/HomeComponent.vue'
-import CreateComponent from './components/CreateComponent.vue'
-import IndexComponent from './components/IndexComponent.vue'
-import EditComponent from './components/EditComponent.vue'
+import Home from './components/Home.vue'
+import AddPost from './components/AddPost.vue'
+import EditPost from './components/EditPost.vue'
+import AllPosts from './components/AllPosts.vue'
 
 const routes = [
     {
@@ -41,22 +43,22 @@ const routes = [
     {
         name: 'home',
         path: '/',
-        component: HomeComponent
+        component: Home
     },
     {
-        name: 'create',
-        path: '/create',
-        component: CreateComponent
+        name: 'add-post',
+        path: '/add-post',
+        component: AddPost
     },
+	{
+		name: 'edit-post',
+		path: '/edit-post/:id',
+		component: EditPost
+	},
     {
         name: 'posts',
         path: '/posts',
-        component: IndexComponent
-    },
-    {
-        name: 'edit',
-        path: '/edit/:id',
-        component: EditComponent
+        component: AllPosts
     }
 ]
 

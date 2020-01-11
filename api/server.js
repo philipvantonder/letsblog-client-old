@@ -1,16 +1,17 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const PORT = 4000
 const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./database/DB.js')
+
+const PORT = 4000
 
 const postRoute = require('./routes/post.route.js') 
 const userRoute = require('./routes/user.route.js') 
 
 mongoose.Promise = global.Promise
-mongoose.connect(config.DB, { 
+mongoose.connect(config.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true 
 })

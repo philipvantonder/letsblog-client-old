@@ -7,6 +7,9 @@ let Post = new Schema({
     },
     body: {
         type: String
+	},
+	fileName: {
+        type: String
     }
 }, {
     collection: 'posts'
