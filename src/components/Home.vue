@@ -10,10 +10,11 @@
 						<div class="col-md-3 mb-4" v-for="post in posts" :key="post._id">
 
 							<div class="card" >
-								<img class="card-img-top" :src="'images/' + post.fileName" alt="Card image cap">
+								<img class="card-img-top" :src="'/images/' + post.fileName" alt="Card image cap">
 
 								<div class="card-body">
-									<h5 class="card-title"> {{ post.title }}</h5>
+									<h5 class="card-title" title="View post"> <router-link :to="{ name: 'single-post', params: { 'id': post._id } }"> {{ post.title }} </router-link> </h5>
+
 									<p class="card-text"> {{ post.body }}</p>
 								</div>
 

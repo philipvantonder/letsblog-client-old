@@ -25,9 +25,10 @@ import LoginComponent from './components/auth/LoginComponent.vue'
 import RegisterComponent from './components/auth/RegisterComponent.vue'
 
 import Home from './components/Home.vue'
-import AddPost from './components/AddPost.vue'
-import EditPost from './components/EditPost.vue'
-import AllPosts from './components/AllPosts.vue'
+import AddPost from './components/post/AddPost.vue'
+import EditPost from './components/post/EditPost.vue'
+import AllPosts from './components/post/AllPosts.vue'
+import SinglePosts from './components/post/SinglePost.vue'
 
 const routes = [
     {
@@ -54,6 +55,11 @@ const routes = [
 		name: 'edit-post',
 		path: '/edit-post/:id',
 		component: EditPost
+	},
+	{
+		name: 'single-post',
+		path: '/single-post/:id',
+		component: SinglePosts
 	},
     {
         name: 'posts',
