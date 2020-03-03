@@ -47,7 +47,8 @@
 
 <script>
 
-    import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+	import Alert from '@/model/Alert'
 
     export default {
 
@@ -88,11 +89,29 @@
                 this.$v.$touch()
                 if (this.$v.$invalid) {
                     return;
-                }
+				}
 
-                let uri = 'http://localhost:4000/users/add'
+				let uri = 'http://localhost:4000/users/register'
+				
                 this.axios.post(uri, this.user)
-                .then(response => console.log(response))
+				.then(response => {
+
+					let { code, message } = response.data;
+
+					if (code == 0) {
+
+						Alert.message({
+							icon: 'success',
+							title: 'Completed', 
+							text: message,
+							confirmBtnText: 'Login',
+							redirect: '/login'
+						})
+
+					}
+				
+				})
+				.catch(error => console.log(error))
 
             }
 

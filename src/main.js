@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import './css/style.scss'
-// import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate)
@@ -24,11 +23,11 @@ Vue.component('navbar', Navbar)
 import LoginComponent from './components/auth/LoginComponent.vue'
 import RegisterComponent from './components/auth/RegisterComponent.vue'
 
-import Home from './components/Home.vue'
-import AddPost from './components/post/AddPost.vue'
-import EditPost from './components/post/EditPost.vue'
-import AllPosts from './components/post/AllPosts.vue'
-import SinglePosts from './components/post/SinglePost.vue'
+import Home from '@/components/Home.vue'
+import AddPost from '@/components/post/AddPost.vue'
+import EditPost from '@/components/post/EditPost.vue'
+import AllPosts from '@/components/post/AllPosts.vue'
+import SinglePosts from '@/components/post/SinglePost.vue'
 
 const routes = [
     {

@@ -44,7 +44,7 @@ const fileUpload = multer({
 
 })
 
-let Post = require('../models/post.model.js')
+let Post = require('../models/post.js')
 
 postRoutes.route('/add').post(fileUpload.single('file'), (req, res) => {
 
