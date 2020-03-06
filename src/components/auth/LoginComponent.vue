@@ -25,6 +25,7 @@
 
 import { required } from 'vuelidate/lib/validators'
 import Alert from '@/model/Alert'
+import userService from '@/services/user'
 
 export default {
 
@@ -63,14 +64,12 @@ export default {
 				return;
 			}
 
-			let uri = 'http://localhost:4000/users/login'
-
-			this.axios.post(uri, this.user)
+			userService.signIn(this.user)
 			.then(response => {
 
 				let { code, message, token } = response.data;
 
-				if (code == 1) {
+				if (code === 1) {
 
 					Alert.message({
 						icon: 'error',
@@ -81,7 +80,7 @@ export default {
 
 				}
 
-				if (code == 0) {
+				if (code === 0) {
 
 					localStorage.setItem('token', token)
 
@@ -90,7 +89,7 @@ export default {
 				}
 
 			})
-			.catch(error => console.log(error))
+			.catch(error => console.error(error))
 
 		}
 
