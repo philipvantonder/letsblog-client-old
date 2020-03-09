@@ -2,6 +2,7 @@ const express = require('express')
 const postRoutes = express.Router()
 const multer = require('multer')
 const app = express()
+const userAuthentication = require('../middleware/userAuthentication')
 
 var storage = multer.diskStorage({
 
@@ -70,7 +71,7 @@ app.use((err, req, res, next) =>  {
 
 })
 
-postRoutes.route('/').get(function(req, res) {
+postRoutes.route('/').get(userAuthentication.isLoggedIn, function(req, res) { 	
 
     Post.find(function(err, posts) {
         if (err) {

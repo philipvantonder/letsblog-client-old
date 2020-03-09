@@ -35,6 +35,9 @@
 
 <script>
 
+import postService from '@/services/post'
+
+
 export default {
 
     data() {
@@ -45,24 +48,16 @@ export default {
 
     created() {
 
-        let uri = 'http://localhost:4000/posts';
+        // let uri = 'http://localhost:4000/posts';
 
-        this.axios.get(uri).then(response => {
-            this.posts = response.data;
-        });
+        // this.axios.get(uri).then(response => {
+        //     this.posts = response.data;
+		// });
+		
+		postService.fetchAll()
+		.then(response => console.log(response))
+		.catch(error => console.error(error))
 
-    },
-
-    methods: {
-        
-        deletePost(id) {
-
-            let uri = `http://l:4000/posts/delete/${id}`;
-            this.axios.delete(uri).then(() => {
-                this.posts.splice(this.posts.indexOf(id), 1);
-            });
-
-        }
     }
 
 }

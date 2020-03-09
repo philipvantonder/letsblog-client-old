@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const appSettings = require('../config/appSettings')
 
 var BCRYPT_SALT_ROUNDS = 12
 
@@ -30,7 +31,7 @@ router.route('/login').post(function(req, res) {
 
 			if (isMatch) {
 
-				let jwt_token = jwt.sign({ userId: user._id }, 'sxerpoys01key7K983JjJ75643DD2')
+				let jwt_token = jwt.sign({ userId: user._id }, appSettings.jwt_secret)
 
 				res.status(200).send({ 
 					code: 0, 
@@ -58,13 +59,15 @@ router.route('/login').post(function(req, res) {
 // User Registration
 router.route('/register').post(function(req, res) {
 	
-	bcrypt.hash(req.body.password, BCRYPT_SALT_ROUNDS).
+	let { name, surname, email, password } = req.body
+
+	bcrypt.hash(password, BCRYPT_SALT_ROUNDS).
 	then(hashed_password => {
-	
+
 		let post = new User({
-			'name': req.body.name,
-			'surname': req.body.surname,
-			'email': req.body.email,
+			'name': name,
+			'surname': surname,
+			'email': email,
 			'password': hashed_password
 		})
 		
@@ -79,9 +82,7 @@ router.route('/register').post(function(req, res) {
 		})
 
     })
-    .catch(() => {
-        res.status(400)
-	})
+    .catch(() => res.status(400))
 	
 })
 

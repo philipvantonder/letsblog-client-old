@@ -1,2 +1,2 @@
 # letsblog
-This is MEVN stack blog
+A blog using the MEVN stack.
