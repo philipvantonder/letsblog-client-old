@@ -71,7 +71,7 @@ app.use((err, req, res, next) =>  {
 
 })
 
-postRoutes.route('/').get(userAuthentication.isLoggedIn, function(req, res) { 	
+postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	
 
     Post.find(function(err, posts) {
         if (err) {
@@ -83,9 +83,9 @@ postRoutes.route('/').get(userAuthentication.isLoggedIn, function(req, res) {
 
 })
 
-postRoutes.route('/edit/:id').get(function(req, res) {
+postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, (req, res) => {
 
-    let id = req.params.id;
+    let { id } = req.params;
 
     Post.findById(id, function(err, post) {
         if (err) {
@@ -97,7 +97,7 @@ postRoutes.route('/edit/:id').get(function(req, res) {
 
 })
 
-postRoutes.route('/update/:id').post(function(req, res) {
+postRoutes.route('/update/:id').post((req, res) => {
 
     Post.findById(req.params.id, function(err, post) {
 
@@ -123,7 +123,7 @@ postRoutes.route('/update/:id').post(function(req, res) {
 
 })
 
-postRoutes.route('/delete/:id').delete(function(req, res) {
+postRoutes.route('/delete/:id').delete((req, res) => {
 
     Post.findByIdAndRemove({ _id: req.params.id }, function(err) {
      

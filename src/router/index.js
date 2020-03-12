@@ -3,20 +3,17 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-import LoginComponent from '@/components/auth/LoginComponent.vue'
-import RegisterComponent from '@/components/auth/RegisterComponent.vue'
+import LoginComponent from '@/components/auth/LoginComponent'
+import RegisterComponent from '@/components/auth/RegisterComponent'
 
-import Home from '@/components/Home.vue'
-import AddPost from '@/components/post/AddPost.vue'
-import EditPost from '@/components/post/EditPost.vue'
-import AllPosts from '@/components/post/AllPosts.vue'
-import SinglePosts from '@/components/post/SinglePost.vue'
+import Navbar from '@/components/layout/Navbar'
 
-import Navbar from '@/components/layout/Navbar.vue'
+// import userService from '@/services/user'
+import { lazyLoad } from '@/model/utilities'
 
 Vue.component('navbar', Navbar)
 
-export default new VueRouter({
+const router = new VueRouter({
 
 	mode: 'history',
 
@@ -37,33 +34,58 @@ export default new VueRouter({
 		{
 			name: 'home',
 			path: '/',
-			component: Home
+			component: lazyLoad('components/Home')
 		},
 
 		{
 			name: 'add-post',
 			path: '/add-post',
-			component: AddPost
+			component: lazyLoad('components/post/AddPost')
 		},
 
 		{
 			name: 'edit-post',
 			path: '/edit-post/:id',
-			component: EditPost
+			component: lazyLoad('components/post/EditPost')
 		},
 
 		{
 			name: 'single-post',
 			path: '/single-post/:id',
-			component: SinglePosts
+			component: lazyLoad('components/post/SinglePost')
 		},
 
 		{
 			name: 'posts',
 			path: '/posts',
-			component: AllPosts
+			component: lazyLoad('components/post/AllPosts')
 		}
 
 	]
 
 })
+
+router.beforeEach((to, from, next) => {
+
+	const unAuthenticatedRoutes = ['login', 'register'];
+
+	// these routes do not need authentication
+	if (unAuthenticatedRoutes.includes(to.name)) {
+		next()
+	} else {
+
+		// If token is not setted redirect to login
+		if (localStorage.getItem('token') === null) {
+			next({ name: 'login' })
+		}
+
+		// check if the token that is provide is valid
+		// userService.isAuthenticated()
+
+		next()
+
+	}
+
+})
+
+export default router

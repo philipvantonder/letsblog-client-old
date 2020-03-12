@@ -9,7 +9,7 @@ var BCRYPT_SALT_ROUNDS = 12
 let User = require('../models/user.js')
 
 // User login
-router.route('/login').post(function(req, res) {	
+router.route('/login').post((req, res) => {	
 
 	let { email, password } = req.body
 
@@ -57,7 +57,7 @@ router.route('/login').post(function(req, res) {
 })
 
 // User Registration
-router.route('/register').post(function(req, res) {
+router.route('/register').post((req, res) => {
 	
 	let { name, surname, email, password } = req.body
 
@@ -84,6 +84,10 @@ router.route('/register').post(function(req, res) {
     })
     .catch(() => res.status(400))
 	
+})
+
+router.route('/isAuthenticated').get((req, res) => {
+
 })
 
 module.exports = router

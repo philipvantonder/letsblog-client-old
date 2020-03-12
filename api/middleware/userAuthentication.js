@@ -33,8 +33,6 @@ module.exports = {
 
 		} else {
 
-			console.log('could not find token')
-
 			res.status(200).send({
 				code: 1,
 				message: 'Token is expired'

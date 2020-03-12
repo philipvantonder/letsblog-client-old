@@ -3,7 +3,7 @@
 
         <h2> Lets Blog </h2>
 
-        <form @submit.prevent="register()">
+        <form @submit.prevent="registerUser()">
             
             <div class="form-group">
                 <label for="exampleInputEmail1">Name</label>
@@ -49,6 +49,7 @@
 
 	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 	import Alert from '@/model/Alert'
+	import userService from '@/services/user'
 
     export default {
 
@@ -84,21 +85,19 @@
 
         methods: {
 
-            register() {
+            registerUser() {
 
                 this.$v.$touch()
                 if (this.$v.$invalid) {
                     return;
 				}
 
-				let uri = 'http://localhost:4000/users/register'
-				
-                this.axios.post(uri, this.user)
+				userService.register(this.user)
 				.then(response => {
 
-					let { code, message } = response.data;
+					let { code, message } = response.data
 
-					if (code == 0) {
+					if (code === 0) {
 
 						Alert.message({
 							icon: 'success',
@@ -109,9 +108,9 @@
 						})
 
 					}
-				
+
 				})
-				.catch(error => console.log(error))
+				.catch(error => console.error(error))
 
             }
 
