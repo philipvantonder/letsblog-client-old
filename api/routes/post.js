@@ -3,11 +3,27 @@ const postRoutes = express.Router()
 const multer = require('multer')
 const app = express()
 const userAuthentication = require('../middleware/userAuthentication')
+const Post = require('../models/post.js')
+const  userHelper = require('../lib/user/helper')
+const fs = require('fs')
 
 var storage = multer.diskStorage({
 
 	destination: function (req, file, cb) {
-		cb(null, '../public/images')
+		
+		userHelper.getUser(req)
+		.then(user => {
+
+			let fileDir = 'images/' + user._id
+
+			if (!fs.existsSync(fileDir)) {
+				fs.mkdirSync(fileDir)
+			}
+	
+			cb(null, fileDir + '/')
+		})
+		.catch(error => console.error(error))
+
 	},
 	
 	filename: function (req, file, cb) {
@@ -45,20 +61,22 @@ const fileUpload = multer({
 
 })
 
-let Post = require('../models/post.js')
 
-postRoutes.route('/add').post(fileUpload.single('file'), (req, res) => {
+// Get all posts
+postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	
 
-	let post = new Post(req.body)
-    post.save().
-    then(() => {
-        res.status(200).json('Post have been successfully saved')
+    Post.find(function(err, posts) {
+        if (err) {
+            res.json(err)
+        } else {
+            res.json(posts)
+        }
     })
-    .catch(() => {
-        res.status(400).send('unable to save to database')
-    })
+
 })
 
+
+// file upload error checking
 app.use((err, req, res, next) =>  {
 
 	if(err.code === "INCORRECT_FILETYPE") {
@@ -71,16 +89,16 @@ app.use((err, req, res, next) =>  {
 
 })
 
-postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	
+postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), (req, res) => {
 
-    Post.find(function(err, posts) {
-        if (err) {
-            res.json(err)
-        } else {
-            res.json(posts)
-        }
+	let post = new Post(req.body)
+    post.save().
+    then(() => {
+        res.status(200).json('Post have been successfully saved')
     })
-
+    .catch(() => {
+        res.status(400).send('unable to save to database')
+    })
 })
 
 postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, (req, res) => {
@@ -97,24 +115,28 @@ postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, (req, res) => {
 
 })
 
-postRoutes.route('/update/:id').post((req, res) => {
+postRoutes.route('/update/:id').post(userAuthentication.isLoggedIn, (req, res) => {
 
-    Post.findById(req.params.id, function(err, post) {
+	let { id } = req.params;
+
+    Post.findById(id, function(err, post) {
 
         if (!post) {
 
-            res.status(404).send('data is not found')
+            res.status(200).send({ code: 0, messasge: 'Post not found' })
 
         } else {
 
-            post.title = req.body.title
-            post.body = req.body.body
+			let { title, body } = req.body
+
+            post.title = title
+            post.body = body
             post.save()
             .then(() => {
-                res.json('Update complete')
+                res.status(200).send({ code: 0, messasge: 'Post have been updated' })
             })
             .catch(() => {
-                res.status(400).send('Unable to update the data base')
+				res.status(200).send({ code: 0, messasge: 'Unable to update the data' })
             })
 
         }
@@ -123,14 +145,14 @@ postRoutes.route('/update/:id').post((req, res) => {
 
 })
 
-postRoutes.route('/delete/:id').delete((req, res) => {
+postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, (req, res) => {
 
     Post.findByIdAndRemove({ _id: req.params.id }, function(err) {
      
         if (err) {
             res.json(err)
         } else {
-            res.json('Successfully removed')
+            res.status(200).send({ code: 0, messasge: 'Post have been removed' })
         }
 
     })

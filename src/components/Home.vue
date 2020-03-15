@@ -40,9 +40,13 @@ import postService from '@/services/post'
 export default {
 
     data() {
+
         return {
-            posts: []
-        }
+
+			posts: []
+			
+		}
+		
     },
 
     created() {
