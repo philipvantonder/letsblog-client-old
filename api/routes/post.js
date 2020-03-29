@@ -1,33 +1,43 @@
+const fs = require('fs')
 const express = require('express')
 const postRoutes = express.Router()
 const multer = require('multer')
 const app = express()
 const userAuthentication = require('../middleware/userAuthentication')
 const Post = require('../models/post.js')
-const  userHelper = require('../lib/user/helper')
-const fs = require('fs')
+const userHelper = require('../lib/user/helper')
+
+var fileDir;
 
 var storage = multer.diskStorage({
 
 	destination: function (req, file, cb) {
-		
+
 		userHelper.getUser(req)
 		.then(user => {
-
-			let fileDir = 'images/' + user._id
+			fileDir = 'images/' + user._id
 
 			if (!fs.existsSync(fileDir)) {
-				fs.mkdirSync(fileDir)
+				fs.mkdirSync(fileDir, { recursive: true })
 			}
-	
+
 			cb(null, fileDir + '/')
+
 		})
 		.catch(error => console.error(error))
-
+		
 	},
 	
 	filename: function (req, file, cb) {
-		cb(null, file.originalname)
+
+		var originalname = file.originalname;
+		if (fs.existsSync(fileDir + '/' + originalname)) {
+			let fileName = originalname.split('.')[0];
+			let fileExtension = originalname.split('.')[1];
+			originalname = fileName + '-' + Date.now() + fileExtension
+		}
+
+		cb(null, originalname) 
 	}
 	
 })
@@ -61,7 +71,6 @@ const fileUpload = multer({
 
 })
 
-
 // Get all posts
 postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	
 
@@ -74,7 +83,6 @@ postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => {
     })
 
 })
-
 
 // file upload error checking
 app.use((err, req, res, next) =>  {
@@ -91,14 +99,42 @@ app.use((err, req, res, next) =>  {
 
 postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), (req, res) => {
 
-	let post = new Post(req.body)
-    post.save().
-    then(() => {
-        res.status(200).json('Post have been successfully saved')
-    })
-    .catch(() => {
-        res.status(400).send('unable to save to database')
-    })
+	let { title, body, isPublished } = req.body
+
+	console.log('------')
+	console.log(title)
+	console.log(body)
+	console.log(isPublished)
+	console.log('------')
+
+	let { filename } = req.file
+
+	userHelper.getUser(req)
+	.then(user => {
+		
+		let post = new Post({
+			title: title,
+			body: body,
+			isPublished: isPublished,
+			fileName: filename,
+			user: user._id,
+		})
+		post.save().
+		then(() => {
+			res.status(200).json({ 
+				code: 0, 
+				message: 'Post have been successfully saved' 
+			})
+		})
+		.catch(() => {
+			res.status(400).send({ 
+				code: 1, 
+				message: 'unable to save to database' 
+			})
+		})
+
+	})
+	.catch(error => console.error(error))
 })
 
 postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, (req, res) => {

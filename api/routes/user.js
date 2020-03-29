@@ -27,7 +27,7 @@ router.route('/login').post((req, res) => {
 
 		bcrypt.compare(password, user.password, (err, isMatch) => {
 
-			if (err) res.status(500) 
+			if (err) res.sendStatus(500) 
 
 			if (isMatch) {
 
@@ -51,9 +51,8 @@ router.route('/login').post((req, res) => {
 		})
 
 	})
-	.catch(() => res.send(400))
+	.catch(() => res.sendStatus(400))
 
-	
 })
 
 // User Registration

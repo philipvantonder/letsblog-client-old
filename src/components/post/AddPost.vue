@@ -24,8 +24,12 @@
 						</div>
 
 						<div class="form-group">
-							<input type="file" class="form-control" id="file" ref="file" :class="{ 'is-invalid': $v.post.file.$error }" @change="onSelect()" >
+							<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
 						</div>
+
+						<div class="form-group">
+							<input type="file" class="form-control" id="file" ref="file" :class="{ 'is-invalid': $v.post.file.$error }" @change="onSelect()" >
+						</div>	
 
 						<div class="form-group">
 							<button class="btn btn-outline-primary">Create</button>
@@ -65,11 +69,16 @@
 					return;
 				}
 
+				console.log('Hit 1')
+
 				let formData = new FormData()
 				formData.append('file', this.post.file)
 				formData.append('title', this.post.title)
 				formData.append('body', this.post.body)
+				formData.append('isPublished', this.post.isPublished)
 				formData.append('fileName', this.post.file.name)
+
+				console.log('Hit 2')
 
                 let uri = 'http://localhost:4000/posts/add'
 				this.axios.post(uri, formData,
@@ -113,6 +122,7 @@
 
 				title: { required },
 				body: { required },
+				isPublished: { required },
 				file: { required },
 
 			}
