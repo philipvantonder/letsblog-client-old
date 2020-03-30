@@ -8,7 +8,7 @@ import RegisterComponent from '@/components/auth/RegisterComponent'
 
 import Navbar from '@/components/layout/Navbar'
 
-// import userService from '@/services/user'
+import userService from '@/services/user'
 import { lazyLoad } from '@/model/utilities'
 
 Vue.component('navbar', Navbar)
@@ -80,7 +80,22 @@ router.beforeEach((to, from, next) => {
 		}
 
 		// check if the token that is provide is valid
-		// userService.isAuthenticated()
+		userService.isAuthenticated()
+		.then(response => {
+
+			let { code } = response.data
+			
+			if (code === 1) {
+				
+				localStorage.removeItem('token')
+				
+				next({ name: 'login' })
+			} else if (code === 0) {
+				next()
+			}
+
+		})
+		.catch(error => console.error(error))
 
 		next()
 

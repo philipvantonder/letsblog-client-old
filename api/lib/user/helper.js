@@ -16,15 +16,13 @@ function getUser(req) {
 			
 			jwt.verify(token, appSettings.jwt_secret, (err, decoded) => {
 				
-				if (err) {
-					reject(err)
+				if (err) { 
+					reject(err) 
 				}
 				
 				User.findOne({ _id: decoded.userId })
 				.then(user => {
-					
 					return resolve(user)
-					
 				})
 				.catch(err => {
 					reject(err)

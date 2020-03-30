@@ -5,8 +5,8 @@
 		<div class="container">
 			<div class="row pt-4">
 				<div class="col-md-12">
-					
-					<div class="card-deck">
+
+					<div v-if="posts.length" class="card-deck">
 						<div class="col-md-3 mb-4" v-for="post in posts" :key="post._id">
 
 							<div class="card" >
@@ -24,6 +24,9 @@
 							</div>
 
 						</div>
+					</div>
+					<div v-else>
+						There is currently no posts loaded.
 					</div>
 
 				</div>

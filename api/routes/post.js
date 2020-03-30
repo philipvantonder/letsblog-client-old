@@ -78,9 +78,9 @@ postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => {
         if (err) {
             res.json(err)
         } else {
-            res.json(posts)
+            res.json({ code: 0, data: posts })
         }
-    })
+    }, { "title": 0 })
 
 })
 
@@ -99,18 +99,22 @@ app.use((err, req, res, next) =>  {
 
 postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), (req, res) => {
 
-	let { title, body, isPublished } = req.body
+	console.log(req.body)
 
-	console.log('------')
-	console.log(title)
-	console.log(body)
-	console.log(isPublished)
-	console.log('------')
+	let { title, body, isPublished } = req.body
 
 	let { filename } = req.file
 
 	userHelper.getUser(req)
 	.then(user => {
+		
+		console.log('-- POST DATA ----')
+		console.log(title)
+		console.log(body)
+		console.log(isPublished)
+		console.log(filename)
+		console.log(user._id)
+		console.log('-- POST DATA ----')
 		
 		let post = new Post({
 			title: title,
@@ -119,8 +123,8 @@ postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('
 			fileName: filename,
 			user: user._id,
 		})
-		post.save().
-		then(() => {
+		post.save()
+		.then(() => {
 			res.status(200).json({ 
 				code: 0, 
 				message: 'Post have been successfully saved' 

@@ -69,16 +69,12 @@
 					return;
 				}
 
-				console.log('Hit 1')
-
 				let formData = new FormData()
 				formData.append('file', this.post.file)
 				formData.append('title', this.post.title)
 				formData.append('body', this.post.body)
 				formData.append('isPublished', this.post.isPublished)
 				formData.append('fileName', this.post.file.name)
-
-				console.log('Hit 2')
 
                 let uri = 'http://localhost:4000/posts/add'
 				this.axios.post(uri, formData,
@@ -90,7 +86,7 @@
 				).then(() => {
                     this.$router.push({ name: 'posts' })
 				})
-				.catch(error => console.log(error))
+				.catch(error => console.error(error))
 				
 			},
 			
@@ -122,7 +118,6 @@
 
 				title: { required },
 				body: { required },
-				isPublished: { required },
 				file: { required },
 
 			}

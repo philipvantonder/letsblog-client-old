@@ -34,6 +34,8 @@
 
 <script>
 
+import postService from '@/services/post'
+
 export default {
 
     data() {
@@ -44,11 +46,21 @@ export default {
 
     created() {
 
-        let uri = 'http://localhost:4000/posts';
+		postService.fetchAll()
+		.then(response => {
 
-        this.axios.get(uri).then(response => {
-            this.posts = response.data;
-        });
+			let { code, data } = response.data
+
+			console.log(response.data)
+
+			if (code === 0) {
+
+				this.posts = data;
+
+			}
+
+		})
+		.catch(error => console.error(error));
 
     },
 

@@ -25,9 +25,20 @@ module.exports = {
 					
 				}
 				
-				User.findOne({ _id: decoded._id })
-				.then(user => next())
-				.catch(error => req.status(200).send({ code: 1, message: 'Could not find user' }))
+				User.findOne({ _id: decoded.userId })
+				.then(user => {
+
+					if (user) {
+						next()
+					} else {
+						res.status(200).send({ 
+							code: 1, 
+							message: 'Could not find user' 
+						})
+					}
+
+				})
+				.catch(() => res.status(200).send({ code: 1, message: 'Error retreiving user' }))
 
 			})
 
