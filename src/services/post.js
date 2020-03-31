@@ -20,6 +20,36 @@ export default {
 
 		})
 
+	},
+
+	fetchAllPublished() {
+
+		return new Promise((resolve, reject) => {
+			
+			axios.get('/posts/published')
+			.then(response => resolve(response))
+			.catch(error => reject(error))
+
+		})
+
+	},
+
+	addNew(data) {
+
+		return new Promise((resolve, reject) => {
+
+			axios.post('/posts/add', data,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				}
+			)
+			.then(response => resolve(response))
+			.catch(error => reject(error))
+
+		})
+
 	}
 
 }

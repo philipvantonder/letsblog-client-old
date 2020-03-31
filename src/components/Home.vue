@@ -7,20 +7,20 @@
 				<div class="col-md-12">
 
 					<div v-if="posts.length" class="card-deck">
-						<div class="col-md-3 mb-4" v-for="post in posts" :key="post._id">
+						<div class="col-md-4 mb-4" v-for="post in posts" :key="post._id">
 
 							<div class="card" >
-								<img class="card-img-top" :src="'/images/' + post.fileName" alt="Card image cap">
+								<img class="card-img-top" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="Card image cap">
 
 								<div class="card-body">
 									<h5 class="card-title" title="View post"> <router-link :to="{ name: 'single-post', params: { 'id': post._id } }"> {{ post.title }} </router-link> </h5>
 
-									<p class="card-text"> {{ post.body }}</p>
+									<p class="card-text"> {{ post.body | LimitText(200) }}</p>
 								</div>
 
-								<!-- <div class="card-footer">
-									<small class="text-muted">Last updated 3 mins ago</small>
-								</div> -->
+								<div class="card-footer">
+									<small class="text-muted">Date published: {{ post.dateAdded | Date }} </small>
+								</div>
 							</div>
 
 						</div>
@@ -54,11 +54,17 @@ export default {
 
     created() {
 		
-		postService.fetchAll()
+		postService.fetchAllPublished()
 		.then(response => {
 
-			this.posts = response.data
+			let { code, data } = response.data
 
+			if (code === 0) {
+
+				this.posts = data;
+
+			}
+			
 		})
 		.catch(error => console.error(error))
 

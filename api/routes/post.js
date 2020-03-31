@@ -1,5 +1,7 @@
 const fs = require('fs')
 const express = require('express')
+const path = require('path')
+const moment = require('moment')
 const postRoutes = express.Router()
 const multer = require('multer')
 const app = express()
@@ -71,6 +73,16 @@ const fileUpload = multer({
 
 })
 
+postRoutes.route('/image/:id/:file').get((req, res) => {
+
+	let { id, file } = req.params
+
+	fileDir = 'images/' + id + '/' + file
+
+	res.sendFile(path.join(__dirname, '../' + fileDir))
+
+})
+
 // Get all posts
 postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	
 
@@ -80,7 +92,20 @@ postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => {
         } else {
             res.json({ code: 0, data: posts })
         }
-    }, { "title": 0 })
+    })
+
+})
+
+// Get all published posts 
+postRoutes.route('/published').get(userAuthentication.isLoggedIn, (req, res) => { 	
+
+    Post.find({ isPublished: true }, function(err, posts) {
+        if (err) {
+            res.json(err)
+        } else {
+            res.json({ code: 0, data: posts })
+        }
+	})
 
 })
 
@@ -99,8 +124,6 @@ app.use((err, req, res, next) =>  {
 
 postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), (req, res) => {
 
-	console.log(req.body)
-
 	let { title, body, isPublished } = req.body
 
 	let { filename } = req.file
@@ -108,14 +131,10 @@ postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('
 	userHelper.getUser(req)
 	.then(user => {
 		
-		console.log('-- POST DATA ----')
-		console.log(title)
-		console.log(body)
-		console.log(isPublished)
-		console.log(filename)
-		console.log(user._id)
-		console.log('-- POST DATA ----')
-		
+		if (isPublished === 'undefined') {
+			isPublished = false
+		}
+
 		let post = new Post({
 			title: title,
 			body: body,
@@ -167,10 +186,12 @@ postRoutes.route('/update/:id').post(userAuthentication.isLoggedIn, (req, res) =
 
         } else {
 
-			let { title, body } = req.body
+			let { title, body, isPublished } = req.body
 
             post.title = title
-            post.body = body
+			post.body = body
+			post.isPublished = isPublished
+			post.dateUpdated = moment().format('YYYY-MM-DD hh:mm:ss')
             post.save()
             .then(() => {
                 res.status(200).send({ code: 0, messasge: 'Post have been updated' })

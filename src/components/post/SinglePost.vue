@@ -6,9 +6,9 @@
 			<div class="row pt-4">
 				<div class="col-lg-12">
 
-					<h1> {{ post.fileName }} </h1>
+					<h1> {{ post.title }} </h1>
 					
-					<img :src="'/images/' + post.fileName" alt="Card image cap" > 	
+					<img :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" class="img-fluid" > 	
 
 					<p> {{ post.body }} </p>
 

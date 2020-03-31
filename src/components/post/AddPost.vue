@@ -45,6 +45,7 @@
 <script>
 
 	import { required } from 'vuelidate/lib/validators'
+	import postService from '@/services/post'
 
     export default {
 
@@ -76,15 +77,11 @@
 				formData.append('isPublished', this.post.isPublished)
 				formData.append('fileName', this.post.file.name)
 
-                let uri = 'http://localhost:4000/posts/add'
-				this.axios.post(uri, formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				}
-				).then(() => {
-                    this.$router.push({ name: 'posts' })
+               	postService.addNew(formData)
+				.then(() => {
+
+					this.$router.push({ name: 'posts' })
+					
 				})
 				.catch(error => console.error(error))
 				

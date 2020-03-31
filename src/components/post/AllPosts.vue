@@ -2,7 +2,7 @@
     <div>
         <navbar />
 
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row pt-4">
 				<div class="col-lg-12">
 					<h1>Posts</h1>
@@ -13,6 +13,7 @@
 							<th>Title</th>
 							<th>Body</th>
 							<th>File</th>
+							<th>Published</th>
 							<th colspan="2">Actions</th>
 						</tr>
 						</thead>
@@ -20,7 +21,8 @@
 							<tr v-for="post in posts" :key="post._id">
 								<td>{{ post.title }}</td>
 								<td>{{ post.body }}</td>
-								<td>{{ post.fileName }}</td>
+								<td><img class="img-thumbnail" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
+								<td>{{ post.isPublished | BooleanText }}</td>
 								<td><router-link :to="{name: 'edit-post', params: { id: post._id }}" class="btn btn-primary">Edit</router-link></td>
 								<td><button class="btn btn-danger" @click="deletePost(post._id)">Delete</button></td>
 							</tr>
@@ -50,8 +52,6 @@ export default {
 		.then(response => {
 
 			let { code, data } = response.data
-
-			console.log(response.data)
 
 			if (code === 0) {
 

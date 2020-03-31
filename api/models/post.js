@@ -12,6 +12,10 @@ let Post = new Schema({
 		type: Date, 
 		default: Date.now()
 	},
+	dateUpdated: {
+		type: Date,
+		default: null
+	},
 	fileName: String,
 	user: { 
 		type: mongoose.Schema.Types.ObjectId, 

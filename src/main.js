@@ -11,6 +11,9 @@ import router from './router/index'
 
 import './css/style.scss'
 
+/* Filters */
+import '@/model/filters/index'
+
 Vue.use(Vuelidate)
 Vue.use(VueAxios, axios)
 

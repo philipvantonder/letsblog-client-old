@@ -19,6 +19,10 @@
 						</div>
 
 						<div class="form-group">
+							<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
+						</div>
+
+						<div class="form-group">
 							<button class="btn btn-outline-primary">Update</button>
 							<router-link class="btn btn-outline-secondary ml-1" :to="{ name: 'posts' }"> Back </router-link>
 						</div>
