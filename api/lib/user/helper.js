@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken')
-const User = require('../../models/user')
-const appSettings = require('../../config/appSettings')
+const jwt = require('jsonwebtoken');
+const User = require('../../models/user');
+const appSettings = require('../../config/appSettings');
 
 function getUser(req) {
 
