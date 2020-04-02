@@ -11,12 +11,12 @@ let User = require('../models/user.js')
 router.route('/isAuthenticated').get((req, res) => {
 
 	let token = req.headers['x-access-token'] || req.headers['authorization']
-
-	if (token.startsWith('Bearer ')) {
-		token = token.slice(7, token.length)
-	}
-
+	
 	if (token) {
+	
+		if (token.startsWith('Bearer ')) {
+			token = token.slice(7, token.length)
+		}
 
 		jwt.verify(token, appSettings.jwt_secret, (err, decoded) => {
 

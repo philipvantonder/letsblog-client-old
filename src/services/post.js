@@ -1,54 +1,60 @@
-import axios from 'axios'
+import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:4000'
+axios.defaults.baseURL = 'http://localhost:4000';
 
-const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false)
+const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
 
 if (token) {
-	axios.defaults.headers.common['authorization'] = token
+	axios.defaults.headers.common['authorization'] = token;
 }
 
 export default {
 
-	fetchAll() {
+	async fetchAll() {
 
-		return new Promise((resolve, reject) => {
-			
-			axios.get('/posts')
-			.then(response => resolve(response))
-			.catch(error => reject(error))
+		try {
+			const reponse = await axios.get('/posts');
 
-		})
+			return reponse;
 
-	},
+		} catch(error) {
+			console.error(error);
+		}
 
-	fetchAllPublished() {
-
-		return new Promise((resolve, reject) => {
-			
-			axios.get('/posts/published')
-			.then(response => resolve(response))
-			.catch(error => reject(error))
-
-		})
 
 	},
 
-	addNew(data) {
+	async fetchAllPublished() {
+			
+		try {
+			const reponse = await axios.get('/posts/published');
 
-		return new Promise((resolve, reject) => {
+			return reponse;
+		} catch (error) {
+			console.error(error);
+		}
 
-			axios.post('/posts/add', data,
+	},
+
+	async addNew(data) {
+
+
+		try {
+
+			const reponse = await axios.post('/posts/add', data,
 				{
 					headers: {
 						'Content-Type': 'multipart/form-data'
 					}
 				}
-			)
-			.then(response => resolve(response))
-			.catch(error => reject(error))
+			);
 
-		})
+			return reponse;
+
+		} catch(error) {
+			console.error(error);
+		}
+
 
 	}
 

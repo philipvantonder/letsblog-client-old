@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-import LoginComponent from '@/components/auth/LoginComponent'
-import RegisterComponent from '@/components/auth/RegisterComponent'
+import Login from '@/components/auth/Login'
+import Register from '@/components/auth/Register'
 
 import Navbar from '@/components/layout/Navbar'
 
@@ -22,13 +22,13 @@ const router = new VueRouter({
 		{
 			name: 'login',
 			path: '/login',
-			component: LoginComponent
+			component: Login
 		},
 
 		{
 			name: 'register',
 			path: '/register',
-			component: RegisterComponent
+			component: Register
 		},
 
 		{
@@ -59,7 +59,7 @@ const router = new VueRouter({
 			name: 'posts',
 			path: '/posts',
 			component: lazyLoad('components/post/AllPosts')
-		}
+		},
 
 	]
 

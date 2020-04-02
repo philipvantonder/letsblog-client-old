@@ -1,48 +1,51 @@
-import axios from 'axios'
+import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:4000'
+axios.defaults.baseURL = 'http://localhost:4000';
 
 const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
 
 if (token) {
-	axios.defaults.headers.common['authorization'] = token 
+	axios.defaults.headers.common['authorization'] = token;
 }
 
 export default {
 
-	signIn(user) {
+	async signIn(user) {
 
-		return new Promise((resolve, reject) => {
+		try {
+			const response  = await axios.post('/users/login', user);
 
-			axios.post('/users/login', user)
-			.then(response => resolve(response))
-			.catch(error => reject(error))
+			return response;
 
-		})
+		} catch(error) {
+			console.error(error);
+		}
 
 	},
 
-	register(user) {
+	async register(user) {
 
-		return new Promise((resolve, reject) => {
+		try {
+			const response = await axios.post('users/register', user);
+
+			return response;
 			
-			axios.post('users/register', user)
-			.then(response => resolve(response))
-			.catch(error => reject(error))
-		
-		})
+		} catch(error) {
+			console.error(error);
+		}
 
 	},
 
-	isAuthenticated() {
+	async isAuthenticated() {
 
-		return new Promise((resolve, reject) => {
+		try {
+			const response = await axios.get('users/isAuthenticated');
 
-			axios.get('users/isAuthenticated')
-			.then(response => resolve(response))
-			.catch(error => reject(error))
+			return response;
 
-		})
+		} catch(error) {
+			console.error(error);
+		}
 
 	}
 

@@ -77,7 +77,7 @@
 				formData.append('isPublished', this.post.isPublished)
 				formData.append('fileName', this.post.file.name)
 
-               	postService.addNew(formData)
+				postService.addNew(formData)
 				.then(() => {
 
 					this.$router.push({ name: 'posts' })

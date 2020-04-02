@@ -10,6 +10,7 @@ import store from './store/index'
 import router from './router/index'
 
 import './css/style.scss'
+import 'bootstrap'
 
 /* Filters */
 import '@/model/filters/index'
