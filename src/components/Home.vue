@@ -38,7 +38,7 @@
 
 <script>
 
-import postService from '@/services/post'
+import postService from '@/services/post';
 
 export default {
 
@@ -57,7 +57,7 @@ export default {
 		postService.fetchAllPublished()
 		.then(response => {
 
-			let { code, data } = response.data
+			let { code, data } = response.data;
 
 			if (code === 0) {
 
@@ -66,7 +66,7 @@ export default {
 			}
 			
 		})
-		.catch(error => console.error(error))
+		.catch(error => console.error(error));
 
     }
 

@@ -8,10 +8,6 @@ function getUser(req) {
 		
 		let token = req.headers['x-access-token'] || req.headers['authorization']
 		
-		if (token.startsWith('Bearer ')) {
-			token = token.slice(7, token.lenth)
-		}
-		
 		if (token) {
 			
 			jwt.verify(token, appSettings.jwt_secret, (err, decoded) => {

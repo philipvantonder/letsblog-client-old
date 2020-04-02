@@ -36,7 +36,7 @@
 
 <script>
 
-import postService from '@/services/post'
+import postService from '@/services/post';
 
 export default {
 
@@ -51,7 +51,7 @@ export default {
 		postService.fetchAll()
 		.then(response => {
 
-			let { code, data } = response.data
+			let { code, data } = response.data;
 
 			if (code === 0) {
 

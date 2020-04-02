@@ -23,9 +23,9 @@
 
 <script>
 
-import { required } from 'vuelidate/lib/validators'
-import Alert from '@/model/Alert'
-import userService from '@/services/user'
+import { required } from 'vuelidate/lib/validators';
+import Alert from '@/model/Alert';
+import userService from '@/services/user';
 
 export default {
 
@@ -82,14 +82,14 @@ export default {
 
 				if (code === 0) {
 
-					localStorage.setItem('token', token)
+					localStorage.setItem('token', token);
 
-					this.$router.push({ name: 'home' })
+					this.$router.push({ name: 'home' });
 
 				}
 
 			})
-			.catch(error => console.error(error))
+			.catch(error => console.error(error));
 
 		}
 

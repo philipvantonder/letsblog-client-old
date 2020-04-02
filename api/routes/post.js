@@ -1,13 +1,13 @@
-const fs = require('fs')
-const express = require('express')
-const path = require('path')
-const moment = require('moment')
-const postRoutes = express.Router()
-const multer = require('multer')
-const app = express()
-const userAuthentication = require('../middleware/userAuthentication')
-const Post = require('../models/post.js')
-const userHelper = require('../lib/user/helper')
+const fs = require('fs');
+const express = require('express');
+const path = require('path');
+const moment = require('moment');
+const postRoutes = express.Router();
+const multer = require('multer');
+const app = express();
+const userAuthentication = require('../middleware/userAuthentication');
+const Post = require('../models/post.js');
+const userHelper = require('../lib/user/helper');
 
 var fileDir;
 
@@ -42,7 +42,7 @@ var storage = multer.diskStorage({
 		cb(null, originalname) 
 	}
 	
-})
+});
 
 const fileFilter = (req, file, cb) => {
 
@@ -71,7 +71,7 @@ const fileUpload = multer({
 
 	}
 
-})
+});
 
 postRoutes.route('/image/:id/:file').get((req, res) => {
 
@@ -81,7 +81,7 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
 
 	res.sendFile(path.join(__dirname, '../' + fileDir))
 
-})
+});
 
 // Get all posts
 postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	

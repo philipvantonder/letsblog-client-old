@@ -1,23 +1,23 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
 
 import Vuelidate from 'vuelidate';
 
-import VueAxios from 'vue-axios'
-import axios from 'axios'
+import VueAxios from 'vue-axios';
+import axios from 'axios';
 
-import store from './store/index'
-import router from './router/index'
+import store from './store/index';
+import router from './router/index';
 
-import './css/style.scss'
-import 'bootstrap'
+import './css/style.scss';
+import 'bootstrap';
 
 /* Filters */
-import '@/model/filters/index'
+import '@/model/filters/index';
 
-Vue.use(Vuelidate)
-Vue.use(VueAxios, axios)
+Vue.use(Vuelidate);
+Vue.use(VueAxios, axios);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-new Vue(Vue.util.extend({ router, store }, App)).$mount('#app')
+new Vue(Vue.util.extend({ router, store }, App)).$mount('#app');

@@ -44,8 +44,8 @@
 
 <script>
 
-	import { required } from 'vuelidate/lib/validators'
-	import postService from '@/services/post'
+	import { required } from 'vuelidate/lib/validators';
+	import postService from '@/services/post';
 
     export default {
 
@@ -89,21 +89,21 @@
 			
 			onSelect() {
 
-				this.message = ''
+				this.message = '';
 
-				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
+				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 				const file = this.$refs.file.files[0];
 
 				if (!allowedTypes.includes(file.type)) {
-					this.message = 'Only images are required'
+					this.message = 'Only images are required';
 				}
 
 				if (file.size > 500000) {
-					this.message = 'Too large, max size is 500KB'
+					this.message = 'Too large, max size is 500KB';
 				}
 
-				this.post.fileName = file.name
-				this.post.file = file
+				this.post.fileName = file.name;
+				this.post.file = file;
 
 			}
 

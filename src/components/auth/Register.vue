@@ -47,9 +47,9 @@
 
 <script>
 
-	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
-	import Alert from '@/model/Alert'
-	import userService from '@/services/user'
+	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
+	import Alert from '@/model/Alert';
+	import userService from '@/services/user';
 
     export default {
 
@@ -95,7 +95,7 @@
 				userService.register(this.user)
 				.then(response => {
 
-					let { code, message } = response.data
+					let { code, message } = response.data;
 
 					if (code === 0) {
 
@@ -110,7 +110,7 @@
 					}
 
 				})
-				.catch(error => console.error(error))
+				.catch(error => console.error(error));
 
             }
 

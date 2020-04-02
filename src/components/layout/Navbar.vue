@@ -34,9 +34,9 @@ export default {
 		logout() {
 
 			if (localStorage.getItem('token') !== null) {
-				localStorage.removeItem('token')
+				localStorage.removeItem('token');
 
-				this.$router.push({ name: 'login' })
+				this.$router.push({ name: 'login' });
 			}
 
 		}

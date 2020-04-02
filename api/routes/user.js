@@ -1,22 +1,18 @@
-const express = require('express')
-const router = express.Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const appSettings = require('../config/appSettings')
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const appSettings = require('../config/appSettings');
 
-var BCRYPT_SALT_ROUNDS = 12
+var BCRYPT_SALT_ROUNDS = 12;
 
-let User = require('../models/user.js')
+let User = require('../models/user.js');
 
 router.route('/isAuthenticated').get((req, res) => {
 
 	let token = req.headers['x-access-token'] || req.headers['authorization']
 	
 	if (token) {
-	
-		if (token.startsWith('Bearer ')) {
-			token = token.slice(7, token.length)
-		}
 
 		jwt.verify(token, appSettings.jwt_secret, (err, decoded) => {
 

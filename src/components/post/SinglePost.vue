@@ -2,7 +2,7 @@
     <div>
         <navbar />
 
-		<div class="container">
+		<div v-if="post" class="container">
 			<div class="row pt-4">
 				<div class="col-lg-12">
 
@@ -34,7 +34,7 @@
 
 		created() {
 
-			let id = this.$route.params.id
+			let id = this.$route.params.id;
 
 			let uri = `http://localhost:4000/posts/edit/${id}`;
 
