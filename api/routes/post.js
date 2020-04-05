@@ -34,8 +34,8 @@ var storage = multer.diskStorage({
 
 		var originalname = file.originalname;
 		if (fs.existsSync(postsImageDir + '/' + originalname)) {
-			let fileName = originalname.split('.')[0];
-			let fileExtension = originalname.split('.')[1];
+			let fileName = path.parse(originalname).name;
+			let fileExtension = path.parse(originalname).ext;
 			originalname = fileName + '-' + Date.now() + '.' + fileExtension
 		}
 
@@ -152,9 +152,15 @@ postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req
 
 	let { id } = req.params;
 
-	let { code, message } = await PostService.delete(id);
+	let { code, message, post } = await PostService.delete(id);
 
-	res.send({ code, message });
+	if (code === 0) {
+		await PostService.removeUserPostFile(post);
+	}
+
+	let { posts } = await PostService.getAllPosts();
+
+	res.send({ code, message, posts });
 
 })
 

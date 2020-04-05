@@ -20,7 +20,7 @@
 						<tbody>
 							<tr v-for="post in posts" :key="post._id">
 								<td>{{ post.title }}</td>
-								<td>{{ post.body }}</td>
+								<td>{{ post.body | LimitText(50) }}</td>
 								<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
 								<td>{{ post.isPublished | BooleanText }}</td>
 								<td><router-link :to="{name: 'edit-post', params: { id: post._id }}" class="btn btn-primary">Edit</router-link></td>
@@ -36,7 +36,7 @@
 
 <script>
 
-import postService from '@/services/post';
+import PostService from '@/services/post';
 
 export default {
 
@@ -46,32 +46,29 @@ export default {
         }
     },
 
-    created() {
+    async created() {
 
-		postService.fetchAll()
-		.then(response => {
+		let response = await PostService.fetchAll()
 
-			let { code, posts } = response.data;
+		let { code, posts } = response.data;
 
-			if (code === 0) {
-
-				this.posts = posts;
-
-			}
-
-		})
-		.catch(error => console.error(error));
+		if (code === 0) {
+			this.posts = posts;
+		}
 
     },
 
     methods: {
         
-        deletePost(id) {
+        async deletePost(id) {
 
-            let uri = `http://localhost:4000/posts/delete/${id}`;
-            this.axios.delete(uri).then(() => {
-                this.posts.splice(this.posts.indexOf(id), 1);
-            });
+			let response = await PostService.remove(id);
+
+			let { code, posts } = response.data;
+
+			if (code === 0) {
+				this.posts = posts;
+			}
 
         }
     }

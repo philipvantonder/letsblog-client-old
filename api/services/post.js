@@ -1,44 +1,62 @@
 const PostModel = require('../models/post')
 const UserService = require('../services/user')
 const moment = require('moment');
+const fs = require('fs');
 
 module.exports = {
 
 	getPublishedPosts: async (id) => {
 
-		let posts = await PostModel.find({ isPublished: true, user: id });
+		try {
 
-		return  { code: 0, message: 'Published posts', posts };
+			let posts = await PostModel.find({ isPublished: true, user: id });
+			
+			return  { code: 0, message: 'Published posts', posts };
+		} catch (error) {
+			return { code: 1, message: 'Could not get published posts' };
+		}
 
 	},
 
 	getAllPosts: async () => {
 
-		let posts = await PostModel.find();
+		try {
+			
+			let posts = await PostModel.find();
+			
+			return { code: 0, message: 'All posts', posts: posts };
 
-		return { code: 0, message: 'All posts', posts: posts };
+		} catch (error) {
+			return { code: 1, message: 'Could not get posts' };
+		}
 
 	},
 
 	create: async (postDTO, token) => {
 
-		const { user } = await UserService.getUserByToken(token);
+		try {
 
-		if (postDTO.isPublished == 'undefined') {
-			postDTO.isPublished = false;
+			const { user } = await UserService.getUserByToken(token);
+
+			if (postDTO.isPublished == 'undefined') {
+				postDTO.isPublished = false;
+			}
+
+			let post = new PostModel({
+				title: postDTO.title,
+				body: postDTO.body,
+				isPublished: postDTO.isPublished,
+				fileName: postDTO.filename,
+				user: user._id
+			})
+
+			let newPost = await post.save();
+
+			return { code: 0, message: 'Post created', post: newPost };
+
+		} catch (error) {
+			return { code: 1, message: 'Could not create post' };
 		}
-
-		let post = new PostModel({
-			title: postDTO.title,
-			body: postDTO.body,
-			isPublished: postDTO.isPublished,
-			fileName: postDTO.filename,
-			user: user._id
-		})
-
-		let newPost = await post.save();
-
-		return { code: 0, message: 'Post created', post: newPost };
 
 	},
 
@@ -51,7 +69,7 @@ module.exports = {
 			return { code: 0, message: 'Post', post: post };
 
 		} catch (error) {
-			return { code: 1, message: 'Could not find post', post: post };
+			return { code: 1, message: 'Could not find post' };
 		}
 
 	},
@@ -85,13 +103,29 @@ module.exports = {
 
 		try {
 
-			await PostModel.findByIdAndRemove({ _id: id });
-			
-			return { code: 0, messasge: 'Post have been removed' };
+			let post = await PostModel.findByIdAndRemove({ _id: id });
+
+			return { code: 0, message: 'Post have been removed', post: post };
 
 		} catch (error) {
-			return { code: 1, messasge: 'Unable to delete entry' };
+			return { code: 1, message: 'Unable to remove post' };
 		} 
+
+	},
+
+	removeUserPostFile: async (post) => {
+
+		try {
+
+			filePath = 'images/' + post.user + '/' + post.fileName;
+			
+			if (fs.existsSync(filePath)) {
+				fs.unlinkSync(filePath)
+			}
+
+		} catch(error) {
+			return { code: 1, message: 'Unable to remove file' };
+		}
 
 	}
 

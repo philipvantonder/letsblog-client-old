@@ -53,6 +53,48 @@ export default {
 			console.error(error);
 		}
 
+	},
+
+	async edit(id) {
+
+		try {
+
+			const response = await axios.get('/posts/edit/' + id);
+
+			return response;
+
+		} catch (error) {
+			console.log(error);
+		}
+
+	},
+
+	async remove (id) {
+
+		try {
+
+			const response = await axios.delete('/posts/delete/' + id);
+
+			return response;
+
+		} catch (error) {
+			console.log(error);
+		}
+		
+	},
+
+	async getImage (post) {
+
+		try {
+
+			const response = await axios.get('/posts/image/' + post.user + '/' + post.fileName);
+
+			return response;
+
+		} catch (error) {
+			console.log(error);
+		}
+
 	}
 
 }

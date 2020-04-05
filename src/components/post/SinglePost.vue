@@ -10,7 +10,7 @@
 					
 					<img :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" class="img-fluid" > 	
 
-					<p> {{ post.body }} </p>
+					<p class="text-break mt-3"> {{ post.body }} </p>
 
 				</div>
 			</div>
@@ -20,28 +20,31 @@
 
 <script>
 
+	import PostService from '@/services/post';
+
     export default {
 
 		data() {
 
 			return {
 
-				post: []
+				post: false
 
 			}
 
 		},
 
-		created() {
+		async created() {
 
 			let id = this.$route.params.id;
 
-			let uri = `http://localhost:4000/posts/edit/${id}`;
+			let response = await PostService.edit(id);
 
-			this.axios.get(uri).then((response) => {
-				this.post = response.data;
-			});
+			let { code, post } = response.data;
 
+			if (code === 0) {
+				this.post = post;
+			}
 
 		}
 

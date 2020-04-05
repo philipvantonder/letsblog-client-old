@@ -4,29 +4,37 @@
 
 		<div class="container">
 			<div class="row pt-4">
-				<div class="col-lg-12">
+				<div v-if="post" class="col-lg-12">
+					<div class="shadow rounded p-5">
+						<h1>Edit</h1>
+						<form @submit.prevent="updatePost">
+							<div class="form-group">
+								<input type="text" class="form-control" v-model="post.title" placeholder="Title">
+							</div>
 
-					<h1>Edit Post</h1>
-					<form @submit.prevent="updatePost">
-						<div class="form-group">
-							<label>Post Title:</label>
-							<input type="text" class="form-control" v-model="post.title">
-						</div>
+							<div class="form-group">
+								<textarea class="form-control" v-model="post.body" rows="5" placeholder="Body"></textarea>
+							</div>
 
-						<div class="form-group">
-							<label>Post Body:</label>
-							<textarea class="form-control" v-model="post.body" rows="5"></textarea>
-						</div>
+							<div class="form-group">
+								<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
+							</div>
 
-						<div class="form-group">
-							<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
-						</div>
+							<div class="form-group">
+								<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
+							</div>
 
-						<div class="form-group">
-							<button class="btn btn-outline-primary">Update</button>
-							<router-link class="btn btn-outline-secondary ml-1" :to="{ name: 'posts' }"> Back </router-link>
-						</div>
-					</form>
+							<div class="form-group">
+								<input type="file" class="form-control" id="file" ref="file" @change="onSelect()" >
+							</div>	
+
+							<div class="form-group">
+								<button class="btn btn-outline-primary"> Save </button>
+								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'posts' }"> Cancel </router-link>
+							</div>
+
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -41,7 +49,7 @@ export default {
 
         return {
 
-            post: {}
+            post: false
 
         }
         
@@ -73,9 +81,39 @@ export default {
                 this.$router.push({name: 'posts'});
             });
             
-        }
-    }
+		},
+
+		onSelect() {
+
+			this.message = '';
+
+			const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+			const file = this.$refs.file.files[0];
+
+			if (!allowedTypes.includes(file.type)) {
+				this.message = 'Only images are required';
+			}
+
+			if (file.size > 500000) {
+				this.message = 'Too large, max size is 500KB';
+			}
+
+			this.post.fileName = file.name;
+			this.post.file = file;
+
+		}
+
+	},
 
 }
 
 </script>
+
+<style scoped>
+
+.img-thumb {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+</style>

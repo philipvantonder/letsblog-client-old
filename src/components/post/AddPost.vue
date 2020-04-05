@@ -5,37 +5,36 @@
 		<div class="container">
 			<div class="row pt-4">
 				<div class="col-lg-12">
+					<div class="shadow rounded p-5">
+						<h1>Create New</h1>
 
-					<h1>Create A Post</h1>
+						<div v-if="message" class="alert alert-warning" role="alert">
+							{{ message }}
+						</div>
 
-					<div v-if="message" class="alert alert-warning" role="alert">
-						{{ message }}
+						<form @submit.prevent="addPost()" enctype="multipart/form-data">
+							<div class="form-group">
+								<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }" placeholder="Title">
+							</div>
+
+							<div class="form-group">
+								<textarea class="form-control" v-model="post.body" rows="5" :class="{ 'is-invalid': $v.post.body.$error }" placeholder="Body"></textarea>
+							</div>
+
+							<div class="form-group">
+								<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
+							</div>
+
+							<div class="form-group">
+								<input type="file" class="form-control" id="file" ref="file" :class="{ 'is-invalid': $v.post.file.$error }" @change="onSelect()" >
+							</div>	
+
+							<div class="form-group">
+								<button class="btn btn-outline-primary"> Save </button>
+								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'home' }"> Cancel </router-link>
+							</div>
+						</form>
 					</div>
-
-					<form @submit.prevent="addPost()" enctype="multipart/form-data">
-						<div class="form-group">
-							<label>Title:</label>
-							<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }">
-						</div>
-
-						<div class="form-group">
-							<label>Body:</label>
-							<textarea class="form-control" v-model="post.body" rows="5" :class="{ 'is-invalid': $v.post.body.$error }"></textarea>
-						</div>
-
-						<div class="form-group">
-							<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
-						</div>
-
-						<div class="form-group">
-							<input type="file" class="form-control" id="file" ref="file" :class="{ 'is-invalid': $v.post.file.$error }" @change="onSelect()" >
-						</div>	
-
-						<div class="form-group">
-							<button class="btn btn-outline-primary">Create</button>
-						</div>
-					</form>
-
 				</div>
 			</div>
 		</div>
