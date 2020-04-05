@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const appSettings = require('../config/appSettings');
+const { jwt_secret } = require('../config/index');
 const User = require('../models/user');
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
 
 		if (token) {
 
-			jwt.verify(token, appSettings.jwt_secret, (err, decoded) => {
+			jwt.verify(token, jwt_secret, (err, decoded) => {
 
 				if (err) {
 					

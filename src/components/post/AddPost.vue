@@ -65,17 +65,18 @@
 
             addPost() {
 
-				this.$v.$touch()
+				this.$v.$touch();
 				if (this.$v.$invalid) {
 					return;
 				}
 
-				let formData = new FormData()
+				let formData = new FormData();
+
 				formData.append('file', this.post.file)
-				formData.append('title', this.post.title)
-				formData.append('body', this.post.body)
-				formData.append('isPublished', this.post.isPublished)
-				formData.append('fileName', this.post.file.name)
+				formData.append('title', this.post.title);
+				formData.append('body', this.post.body);
+				formData.append('isPublished', this.post.isPublished);
+				formData.append('fileName', this.post.file.name);
 
 				postService.addNew(formData)
 				.then(() => {

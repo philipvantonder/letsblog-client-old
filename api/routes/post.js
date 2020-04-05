@@ -1,42 +1,42 @@
+const PostService = require('../services/post');
+const UserService = require('../services/user');
+
 const fs = require('fs');
 const express = require('express');
 const path = require('path');
-const moment = require('moment');
-const postRoutes = express.Router();
 const multer = require('multer');
-const app = express();
 const userAuthentication = require('../middleware/userAuthentication');
-const Post = require('../models/post.js');
-const userHelper = require('../lib/user/helper');
 
-var fileDir;
+const postRoutes = express.Router();
+const app = express();
+
+var postsImageDir;
 
 var storage = multer.diskStorage({
 
-	destination: function (req, file, cb) {
+	destination: async function (req, file, cb) {
 
-		userHelper.getUser(req)
-		.then(user => {
-			fileDir = 'images/' + user._id
+		let token = req.headers['authorization'];
 
-			if (!fs.existsSync(fileDir)) {
-				fs.mkdirSync(fileDir, { recursive: true })
-			}
+		let { user } = await UserService.getUserByToken(token);
 
-			cb(null, fileDir + '/')
+		postsImageDir = 'images/' + user._id
 
-		})
-		.catch(error => console.error(error))
+		if (!fs.existsSync(postsImageDir)) {
+			fs.mkdirSync(postsImageDir, { recursive: true })
+		}
+
+		cb(null, postsImageDir + '/')
 		
 	},
 	
 	filename: function (req, file, cb) {
 
 		var originalname = file.originalname;
-		if (fs.existsSync(fileDir + '/' + originalname)) {
+		if (fs.existsSync(postsImageDir + '/' + originalname)) {
 			let fileName = originalname.split('.')[0];
 			let fileExtension = originalname.split('.')[1];
-			originalname = fileName + '-' + Date.now() + fileExtension
+			originalname = fileName + '-' + Date.now() + '.' + fileExtension
 		}
 
 		cb(null, originalname) 
@@ -73,6 +73,30 @@ const fileUpload = multer({
 
 });
 
+// app.use((err, req, res, next) =>  {
+
+// 	if(err.code === "INCORRECT_FILETYPE") {
+// 		res.status(422).json("Only images are allowed")
+// 	}
+
+// 	if(err.code === "LIMIT_FILE_SIZE") {
+// 		res.status(422).json("Allowed file size is 2MB")
+// 	}
+
+// })
+
+postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+
+	let token = req.headers['authorization'];
+
+	const userDTO = { ...req.body, ...req.file };
+
+	let { code, message, post } = await PostService.create(userDTO, token);
+
+	res.send({ code, message, post });
+
+})
+
 postRoutes.route('/image/:id/:file').get((req, res) => {
 
 	let { id, file } = req.params
@@ -83,140 +107,54 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
 
 });
 
-// Get all posts
-postRoutes.route('/').get(userAuthentication.isLoggedIn, (req, res) => { 	
+postRoutes.route('/').get(userAuthentication.isLoggedIn, async (req, res) => { 	
 
-    Post.find(function(err, posts) {
-        if (err) {
-            res.json(err)
-        } else {
-            res.json({ code: 0, data: posts })
-        }
-    })
+	let token = req.headers['authorization'];
 
+	let { code, message, posts } = await PostService.getAllPosts(token);
+
+	res.send({ code, message, posts });
+
+});
+
+postRoutes.route('/published').get(userAuthentication.isLoggedIn, async (req, res) => { 	
+
+	let token = req.headers['authorization'];
+
+	let { user } = await UserService.getUserByToken(token);
+
+	let { code, message, posts } = await PostService.getPublishedPosts(user._id)
+
+	res.send({ code, message, posts })
 })
 
-// Get all published posts 
-postRoutes.route('/published').get(userAuthentication.isLoggedIn, (req, res) => { 	
-
-    Post.find({ isPublished: true }, function(err, posts) {
-        if (err) {
-            res.json(err)
-        } else {
-            res.json({ code: 0, data: posts })
-        }
-	})
-
-})
-
-// file upload error checking
-app.use((err, req, res, next) =>  {
-
-	if(err.code === "INCORRECT_FILETYPE") {
-		res.status(422).json("Only images are allowed")
-	}
-
-	if(err.code === "LIMIT_FILE_SIZE") {
-		res.status(422).json("Allowed file size is 2MB")
-	}
-
-})
-
-postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), (req, res) => {
-
-	let { title, body, isPublished } = req.body
-
-	let { filename } = req.file
-
-	userHelper.getUser(req)
-	.then(user => {
-		
-		if (isPublished === 'undefined') {
-			isPublished = false
-		}
-
-		let post = new Post({
-			title: title,
-			body: body,
-			isPublished: isPublished,
-			fileName: filename,
-			user: user._id,
-		})
-		post.save()
-		.then(() => {
-			res.status(200).json({ 
-				code: 0, 
-				message: 'Post have been successfully saved' 
-			})
-		})
-		.catch(() => {
-			res.status(400).send({ 
-				code: 1, 
-				message: 'unable to save to database' 
-			})
-		})
-
-	})
-	.catch(error => console.error(error))
-})
-
-postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, (req, res) => {
+postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
 
     let { id } = req.params;
 
-    Post.findById(id, function(err, post) {
-        if (err) {
-            res.json(err)
-        } else {
-            res.json(post)
-        }
-    })
+	let { code, message, post } = await PostService.edit(id);
+
+	res.send({ code, message, post });
 
 })
 
 postRoutes.route('/update/:id').post(userAuthentication.isLoggedIn, (req, res) => {
+	
+	let { id } = req.params;
+
+	let { code, message } = PostService.update(id, req.body);
+
+	res.send({ code, message });
+	
+})
+
+postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
 
 	let { id } = req.params;
 
-    Post.findById(id, function(err, post) {
+	let { code, message } = await PostService.delete(id);
 
-        if (!post) {
-
-            res.status(200).send({ code: 0, messasge: 'Post not found' })
-
-        } else {
-
-			let { title, body, isPublished } = req.body
-
-            post.title = title
-			post.body = body
-			post.isPublished = isPublished
-			post.dateUpdated = moment().format('YYYY-MM-DD hh:mm:ss')
-            post.save()
-            .then(() => {
-                res.status(200).send({ code: 0, messasge: 'Post have been updated' })
-            })
-            .catch(() => {
-				res.status(200).send({ code: 0, messasge: 'Unable to update the data' })
-            })
-
-        }
-
-    })
-
-})
-
-postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, (req, res) => {
-
-    Post.findByIdAndRemove({ _id: req.params.id }, function(err) {
-     
-        if (err) {
-            res.json(err)
-        } else {
-            res.status(200).send({ code: 0, messasge: 'Post have been removed' })
-        }
-
-    })
+	res.send({ code, message });
 
 })
 

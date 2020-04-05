@@ -52,7 +52,13 @@ export default {
         let uri = `http://localhost:4000/posts/edit/${this.$route.params.id}`;
 
         this.axios.get(uri).then((response) => {
-            this.post = response.data;
+
+			let { code, post } = response.data;
+
+			if (code == 0) {
+				this.post = post;
+			}
+			
         });
 
     },

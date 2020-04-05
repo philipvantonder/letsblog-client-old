@@ -21,7 +21,6 @@ export default {
 			console.error(error);
 		}
 
-
 	},
 
 	async fetchAllPublished() {
@@ -38,7 +37,6 @@ export default {
 
 	async addNew(data) {
 
-
 		try {
 
 			const reponse = await axios.post('/posts/add', data,
@@ -54,7 +52,6 @@ export default {
 		} catch(error) {
 			console.error(error);
 		}
-
 
 	}
 

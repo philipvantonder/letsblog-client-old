@@ -91,6 +91,7 @@ router.beforeEach((to, from, next) => {
 				
 				next({ name: 'login' })
 			} else if (code === 0) {
+
 				next()
 			}
 

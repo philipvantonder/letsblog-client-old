@@ -21,7 +21,7 @@
 							<tr v-for="post in posts" :key="post._id">
 								<td>{{ post.title }}</td>
 								<td>{{ post.body }}</td>
-								<td><img class="img-thumbnail" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
+								<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
 								<td>{{ post.isPublished | BooleanText }}</td>
 								<td><router-link :to="{name: 'edit-post', params: { id: post._id }}" class="btn btn-primary">Edit</router-link></td>
 								<td><button class="btn btn-danger" @click="deletePost(post._id)">Delete</button></td>
@@ -51,11 +51,11 @@ export default {
 		postService.fetchAll()
 		.then(response => {
 
-			let { code, data } = response.data;
+			let { code, posts } = response.data;
 
 			if (code === 0) {
 
-				this.posts = data;
+				this.posts = posts;
 
 			}
 
@@ -79,3 +79,16 @@ export default {
 }
 
 </script>
+
+<style scoped>
+
+.img-thumb {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+td {
+    width:33%;
+}
+
+</style>

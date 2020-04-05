@@ -57,11 +57,11 @@ export default {
 		postService.fetchAllPublished()
 		.then(response => {
 
-			let { code, data } = response.data;
+			let { code, posts } = response.data;
 
 			if (code === 0) {
 
-				this.posts = data;
+				this.posts = posts;
 
 			}
 			

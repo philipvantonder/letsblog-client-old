@@ -1,140 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const appSettings = require('../config/appSettings');
+const UserService = require('../services/user')
 
-var BCRYPT_SALT_ROUNDS = 12;
+router.route('/isAuthenticated').get(async (req, res) => {
 
-let User = require('../models/user.js');
+	let token = req.headers['x-access-token'] || req.headers['authorization'];
 
-router.route('/isAuthenticated').get((req, res) => {
+	const { code, message} = await UserService.isAuthenticated(token);
 
-	let token = req.headers['x-access-token'] || req.headers['authorization']
-	
-	if (token) {
-
-		jwt.verify(token, appSettings.jwt_secret, (err, decoded) => {
-
-			if (err) {
-				
-				res.status(200).send({
-					code: 1,
-					message: 'Invalid token'
-				})
-				
-			}
-
-			User.findOne({ _id: decoded.userId })
-			.then(user => {
-
-				if (user) {
-
-					res.status(200).send({ 
-						code: 0, 
-						message: 'User have been found' 
-					})
-					
-				} else {
-
-					res.status(200).send({ 
-						code: 1, 
-						message: 'Could not find user' 
-					})
-
-				}
-
-			})
-			.catch(error => res.status(200).send({ code: 1, message: 'Error retreiving user' }))
-
-		})
-
-	} else {
-
-		res.status(200).send({
-			code: 1,
-			message: 'Token is expired'
-		})
-
-	}
+	res.send({ code, message });
 
 })
 
-// User login
-router.route('/login').post((req, res) => {	
+router.route('/login').post(async (req, res) => {	
+	
+	const { code, message, token } = await UserService.signIn(req.body);
 
-	let { email, password } = req.body
-
-	User.findOne({ email: email })
-	.then(user => {
-
-		if (!user) {
-			
-			res.status(200).send({ 
-				code: 1, 
-				message: 'Username or password is incorrect' 
-			})
-
-		}
-
-		bcrypt.compare(password, user.password, (err, isMatch) => {
-
-			if (err) res.sendStatus(500) 
-
-			if (isMatch) {
-
-				let jwt_token = jwt.sign({ userId: user._id }, appSettings.jwt_secret)
-
-				res.status(200).send({ 
-					code: 0, 
-					message: 'Logged in', 
-					token: jwt_token 
-				})
-
-			} else {
-
-				res.status(200).send({ 
-					code: 1, 
-					message: 'Username or password is incorrect' 
-				})
-
-			}
-
-		})
-
-	})
-	.catch(() => res.sendStatus(400))
+	res.send({ code, message, token });
 
 })
 
-// User Registration
-router.route('/register').post((req, res) => {
-	
-	let { name, surname, email, password } = req.body
+router.route('/register').post(async (req, res) => {
 
-	bcrypt.hash(password, BCRYPT_SALT_ROUNDS).
-	then(hashed_password => {
+	const { code, message } = await UserService.createUser(req.body);
 
-		let post = new User({
-			'name': name,
-			'surname': surname,
-			'email': email,
-			'password': hashed_password
-		})
-		
-		post.save()
+	res.send({ code, message });
 
-	})
-	.then(() => {
-
-        res.status(200).json({ 
-			code: 0, 
-			message: 'Registration successfully'
-		})
-
-    })
-    .catch(() => res.status(400))
-	
 })
 
 module.exports = router
