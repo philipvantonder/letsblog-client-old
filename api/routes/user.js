@@ -13,10 +13,15 @@ router.route('/isAuthenticated').get(async (req, res) => {
 })
 
 router.route('/login').post(async (req, res) => {	
-	
-	const { code, message, token } = await UserService.signIn(req.body);
 
-	res.send({ code, message, token });
+	try {
+
+		const { code, message, token } = await UserService.signIn(req, res, req.body);
+		return res.send({ code, message, token });
+		
+	} catch (error) {
+		return res.status(500).send({ message: 'Something went wrong' });
+	}
 
 })
 

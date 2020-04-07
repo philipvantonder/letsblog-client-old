@@ -13,6 +13,7 @@ export default {
 	async signIn(user) {
 
 		try {
+			
 			const response  = await axios.post('/users/login', user);
 
 			return response;
@@ -26,6 +27,7 @@ export default {
 	async register(user) {
 
 		try {
+
 			const response = await axios.post('users/register', user);
 
 			return response;
@@ -39,6 +41,7 @@ export default {
 	async isAuthenticated() {
 
 		try {
+
 			const response = await axios.get('users/isAuthenticated');
 
 			return response;

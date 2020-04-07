@@ -9,7 +9,7 @@ module.exports = {
 
 		try {
 
-			let posts = await PostModel.find({ isPublished: true, user: id });
+			let posts = await PostModel.find({ isPublished: true});
 			
 			return  { code: 0, message: 'Published posts', posts };
 		} catch (error) {

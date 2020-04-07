@@ -3,13 +3,13 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import userModule from './modules/users'
+import UserModule from './modules/users'
 
 export default new Vuex.Store({
 
 	modules: {
 
-		users: userModule
+		users: UserModule
 
 	}
 

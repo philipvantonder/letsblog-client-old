@@ -49,7 +49,7 @@ module.exports = {
 
 	},
 
-	signIn: async (user) => {
+	signIn: async (req, res, user) => {
 		
 		try {
 
@@ -62,7 +62,7 @@ module.exports = {
 			let findUser = await bcrypt.compare(user.password, getUser.password);
 
 			if (!findUser) {
-				return { code: 1, message: 'Password does not match' };
+				return { code: 1, message: 'Password or username does not match.' };
 			}
 
 			let signed_token = await jwt.sign({ 'userId': getUser._id }, jwt_secret);

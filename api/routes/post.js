@@ -117,13 +117,9 @@ postRoutes.route('/').get(userAuthentication.isLoggedIn, async (req, res) => {
 
 });
 
-postRoutes.route('/published').get(userAuthentication.isLoggedIn, async (req, res) => { 	
+postRoutes.route('/published').get(async (req, res) => { 	
 
-	let token = req.headers['authorization'];
-
-	let { user } = await UserService.getUserByToken(token);
-
-	let { code, message, posts } = await PostService.getPublishedPosts(user._id)
+	let { code, message, posts } = await PostService.getPublishedPosts()
 
 	res.send({ code, message, posts })
 })

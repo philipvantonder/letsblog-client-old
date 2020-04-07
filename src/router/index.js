@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
@@ -67,7 +68,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 
-	const unAuthenticatedRoutes = ['login', 'register'];
+	const unAuthenticatedRoutes = ['login', 'register', 'home', 'single-post'];
 
 	// these routes do not need authentication
 	if (unAuthenticatedRoutes.includes(to.name)) {
@@ -83,20 +84,23 @@ router.beforeEach((to, from, next) => {
 		userService.isAuthenticated()
 		.then(response => {
 
-			let { code } = response.data
+			let { code } = response.data;
 			
 			if (code === 1) {
+
+				localStorage.removeItem('token');
+
+				store.dispatch('users/logout');
 				
-				localStorage.removeItem('token')
-				
-				next({ name: 'login' })
+				next({ name: 'login' });
+
 			} else if (code === 0) {
 
-				next()
+				next();
 			}
 
 		})
-		.catch(error => console.error(error))
+		.catch(error => console.error(error));
 
 		next();
 

@@ -24,8 +24,7 @@
 <script>
 
 import { required } from 'vuelidate/lib/validators';
-import Alert from '@/model/Alert';
-import userService from '@/services/user';
+import { mapActions } from 'vuex';
 
 export default {
 
@@ -57,39 +56,20 @@ export default {
 
 	methods: {
 
-		signIn() {
+		...mapActions('users', ['login']),
+
+		async signIn() {
 
 			this.$v.$touch()
 			if (this.$v.$invalid) {
 				return;
 			}
 
-			userService.signIn(this.user)
-			.then(response => {
+			let response = await this.login(this.user);
 
-				let { code, message, token } = response.data;
-
-				if (code === 1) {
-
-					Alert.message({
-						icon: 'error',
-						title: 'Login failed', 
-						text: message,
-						confirmBtnText: 'Try again',
-					})
-
-				}
-
-				if (code === 0) {
-
-					localStorage.setItem('token', token);
-
-					this.$router.push({ name: 'home' });
-
-				}
-
-			})
-			.catch(error => console.error(error));
+			if (response.code == 0) {
+				this.$router.push({ name: 'home' });
+			}
 
 		}
 
