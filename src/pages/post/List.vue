@@ -23,7 +23,7 @@
 								<td>{{ post.body | LimitText(50) }}</td>
 								<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
 								<td>{{ post.isPublished | BooleanText }}</td>
-								<td><router-link :to="{name: 'edit-post', params: { id: post._id }}" class="btn btn-primary">Edit</router-link></td>
+								<td><router-link :to="{ name: 'edit-post', params: { id: post._id } }" class="btn btn-primary">Edit</router-link></td>
 								<td><button class="btn btn-danger" @click="deletePost(post._id)">Delete</button></td>
 							</tr>
 						</tbody>
@@ -48,7 +48,7 @@ export default {
 
     async created() {
 
-		let response = await PostService.fetchAll()
+		let response = await PostService.fetchUserPosts()
 
 		let { code, posts } = response.data;
 
@@ -62,7 +62,7 @@ export default {
         
         async deletePost(id) {
 
-			let response = await PostService.remove(id);
+			let response = await PostService.delete(id);
 
 			let { code, posts } = response.data;
 

@@ -2,9 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 
 import Vuelidate from 'vuelidate';
-
-import VueAxios from 'vue-axios';
-import axios from 'axios';
+import Axios from 'axios';
 
 import store from './store/index';
 import router from './router/index';
@@ -16,7 +14,32 @@ import 'bootstrap';
 import '@/model/filters/index';
 
 Vue.use(Vuelidate);
-Vue.use(VueAxios, axios);
+
+Vue.prototype.$http = Axios;
+
+Axios.interceptors.response.use(response => {
+
+	let { code } = response.data;
+
+	if (code === "INVALID_TOKEN") {
+
+		if (store.getters['users/isLoggedIn']) {
+			
+			console.log("You are logged in and the token is invalid. Remove token and logout");
+			
+			localStorage.removeItem('token');
+			
+			store.dispatch('users/logout');
+			
+			router.push({ name: 'feed' });
+		
+		}
+	
+	}
+
+	return Promise.resolve(response);
+
+});
 
 Vue.config.productionTip = false;
 

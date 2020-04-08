@@ -5,26 +5,43 @@ const fs = require('fs');
 
 module.exports = {
 
-	getPublishedPosts: async (id) => {
+	getFeedPost: async (id) => {
+
+		try {
+
+			let post = await PostModel.findOne({ _id: id });
+			
+			return  { code: 0, message: 'feed post', post };
+
+		} catch (error) {
+			return { code: 1, message: 'Could not get post feed' };
+		}
+
+	},
+
+	getPublishedPosts: async () => {
 
 		try {
 
 			let posts = await PostModel.find({ isPublished: true});
 			
 			return  { code: 0, message: 'Published posts', posts };
+
 		} catch (error) {
 			return { code: 1, message: 'Could not get published posts' };
 		}
 
 	},
 
-	getAllPosts: async () => {
+	getUserPosts: async (token) => {
 
 		try {
+
+			let { user } = await UserService.getUserByToken(token);
 			
-			let posts = await PostModel.find();
+			let posts = await PostModel.find({ user: user._id });
 			
-			return { code: 0, message: 'All posts', posts: posts };
+			return { code: 0, message: 'posts', posts: posts };
 
 		} catch (error) {
 			return { code: 1, message: 'Could not get posts' };

@@ -11,7 +11,6 @@ module.exports = {
 	
 			let verify = await jwt.verify(token, jwt_secret);
 
-
 			let user = await UserModel.findOne({ _id: verify.userId });
 
 			if (!user) {
@@ -78,7 +77,7 @@ module.exports = {
 	getUserByToken: async (token) => {
 
 		let token_verify = await jwt.verify(token, jwt_secret);
-
+		
 		let user = await UserModel.findById({ _id: token_verify.userId });
 
 		if (!user) {

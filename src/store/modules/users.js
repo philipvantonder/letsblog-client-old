@@ -36,8 +36,7 @@ export default {
 					commit('SET_AUTH', token);
 
 					localStorage.setItem('token', token);
-					
-					return { code: 0 }
+				
 				}
 
 				if (code === 1) {

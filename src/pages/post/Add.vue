@@ -31,7 +31,7 @@
 
 							<div class="form-group">
 								<button class="btn btn-outline-primary"> Save </button>
-								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'home' }"> Cancel </router-link>
+								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'feed' }"> Cancel </router-link>
 							</div>
 						</form>
 					</div>
@@ -77,10 +77,10 @@
 				formData.append('isPublished', this.post.isPublished);
 				formData.append('fileName', this.post.file.name);
 
-				postService.addNew(formData)
+				postService.create(formData)
 				.then(() => {
 
-					this.$router.push({ name: 'posts' })
+					this.$router.push({ name: 'feed' })
 					
 				})
 				.catch(error => console.error(error))

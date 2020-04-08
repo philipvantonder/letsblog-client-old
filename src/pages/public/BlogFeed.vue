@@ -7,7 +7,7 @@
 				<div class="col-md-12">
 					<div v-if="posts.length" class="card-deck">
 						<div class="col-md-4 mb-4 d-flex" v-for="post in posts" :key="post._id">
-							<router-link :to="{ name: 'single-post', params: { 'id': post._id } }" tag="div" class="card shadow">
+							<router-link :to="{ name: 'read-post', params: { 'id': post._id } }" tag="div" class="card shadow">
 								<img class="card-img-top card-height" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="Card image cap">
 
 								<div class="card-body">
@@ -50,7 +50,7 @@ export default {
 
     created() {
 		
-		postService.fetchAllPublished()
+		postService.fetchPublishedPosts()
 		.then(response => {
 
 			let { code, posts } = response.data;

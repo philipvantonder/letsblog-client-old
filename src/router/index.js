@@ -4,12 +4,14 @@ import store from '@/store/index';
 
 Vue.use(VueRouter);
 
-import Login from '@/components/auth/Login';
-import Register from '@/components/auth/Register';
+import LoginPage from '@/pages/auth/Login';
+import RegisterPage from '@/pages/auth/Register';
+import BlogFeed from '@/pages/public/BlogFeed';
+import BlogPost from '@/pages/public/BlogPost';
 
 import Navbar from '@/components/layout/Navbar';
 
-import userService from '@/services/user';
+// import userService from '@/services/user';
 import { lazyLoad } from '@/model/utilities';
 
 Vue.component('navbar', Navbar);
@@ -23,43 +25,52 @@ const router = new VueRouter({
 		{
 			name: 'login',
 			path: '/login',
-			component: Login
+			component: LoginPage
 		},
 
 		{
 			name: 'register',
 			path: '/register',
-			component: Register
+			component: RegisterPage
 		},
 
 		{
-			name: 'home',
+			name: 'feed',
 			path: '/',
-			component: lazyLoad('components/Home')
+			component: BlogFeed,
+		},
+
+		{
+			name: 'read-post',
+			path: '/post/:id',
+			component: BlogPost,
 		},
 
 		{
 			name: 'add-post',
 			path: '/add-post',
-			component: lazyLoad('components/post/AddPost')
+			component: lazyLoad('pages/post/Add'),
+			meta: {
+				requiresAuth: true 
+			}
 		},
 
 		{
 			name: 'edit-post',
 			path: '/edit-post/:id',
-			component: lazyLoad('components/post/EditPost')
+			component: lazyLoad('pages/post/Edit'),
+			meta: {
+				requiresAuth: true 
+			}
 		},
 
 		{
-			name: 'single-post',
-			path: '/single-post/:id',
-			component: lazyLoad('components/post/SinglePost')
-		},
-
-		{
-			name: 'posts',
-			path: '/posts',
-			component: lazyLoad('components/post/AllPosts')
+			name: 'post-list',
+			path: '/post-list',
+			component: lazyLoad('pages/post/List'),
+			meta: {
+				requiresAuth: true 
+			}
 		},
 
 	]
@@ -68,43 +79,64 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 
-	const unAuthenticatedRoutes = ['login', 'register', 'home', 'single-post'];
+	if (to.matched.some(record => record.meta.requiresAuth)) {
 
-	// these routes do not need authentication
-	if (unAuthenticatedRoutes.includes(to.name)) {
-		next();
-	} else {
+		if (!store.getters['users/isLoggedIn']) {
 
-		// If token is not setted redirect to login
-		if (localStorage.getItem('token') === null) {
-			next({ name: 'login' });
+			console.log("Routes: You are not logged in");
+
+			next({ name: 'feed' });
+		} else {
+			next();
 		}
 
-		// check if the token that is provide is valid
-		userService.isAuthenticated()
-		.then(response => {
-
-			let { code } = response.data;
-			
-			if (code === 1) {
-
-				localStorage.removeItem('token');
-
-				store.dispatch('users/logout');
-				
-				next({ name: 'login' });
-
-			} else if (code === 0) {
-
-				next();
-			}
-
-		})
-		.catch(error => console.error(error));
-
+	} else {
 		next();
-
 	}
+
+	// const unAuthenticatedRoutes = ['login', 'register', 'home', 'single-post'];
+
+	// these routes do not need authentication
+	// if (unAuthenticatedRoutes.includes(to.name)) {
+	// 	next();
+	// } else {
+
+		// If token is not setted redirect to login
+		// if (localStorage.getItem('token') === null) {
+		// 	next({ name: 'login' });
+		// }
+
+		// console.log(store.getters['users/isLoggedIn']);
+
+		// if (store.getters['users/isLoggedIn']) {
+			
+		// }
+
+		// check if the token that is provide is valid
+		// userService.isAuthenticated()
+		// .then(response => {
+
+		// 	let { code } = response.data;
+			
+		// 	if (code === 1) {
+
+		// 		localStorage.removeItem('token');
+
+		// 		store.dispatch('users/logout');
+				
+		// 		next({ name: 'login' });
+
+		// 	} else if (code === 0) {
+
+		// 		next();
+		// 	}
+
+		// })
+		// .catch(error => console.error(error));
+
+		// next();
+
+	// }
 
 })
 

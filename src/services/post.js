@@ -10,10 +10,11 @@ if (token) {
 
 export default {
 
-	async fetchAll() {
+	async fetchUserPosts() {
 
 		try {
-			const reponse = await axios.get('/posts');
+
+			const reponse = await axios.get('/posts/user');
 
 			return reponse;
 
@@ -23,23 +24,39 @@ export default {
 
 	},
 
-	async fetchAllPublished() {
+	async fetchFeedPost(id) {
+
+		try {
+
+			const response = await axios.get('/posts/feedPost/' + id);
+
+			return response;
+
+		} catch (error) {
+			console.log(error);
+		}
+
+	},
+
+	async fetchPublishedPosts() {
 			
 		try {
+
 			const reponse = await axios.get('/posts/published');
 
 			return reponse;
+
 		} catch (error) {
 			console.error(error);
 		}
 
 	},
 
-	async addNew(data) {
+	async create(data) {
 
 		try {
 
-			const reponse = await axios.post('/posts/add', data,
+			const reponse = await axios.post('/posts/create', data,
 				{
 					headers: {
 						'Content-Type': 'multipart/form-data'
@@ -69,7 +86,7 @@ export default {
 
 	},
 
-	async remove (id) {
+	async delete (id) {
 
 		try {
 

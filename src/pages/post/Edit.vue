@@ -30,7 +30,7 @@
 
 							<div class="form-group">
 								<button class="btn btn-outline-primary"> Save </button>
-								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'posts' }"> Cancel </router-link>
+								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
 							</div>
 
 						</form>
@@ -59,11 +59,11 @@ export default {
 
         let uri = `http://localhost:4000/posts/edit/${this.$route.params.id}`;
 
-        this.axios.get(uri).then((response) => {
+        this.$http.get(uri).then((response) => {
 
 			let { code, post } = response.data;
 
-			if (code == 0) {
+			if (code === 0) {
 				this.post = post;
 			}
 			
@@ -77,8 +77,8 @@ export default {
 
             let uri = `http://localhost:4000/posts/update/${this.$route.params.id}`;
 
-            this.axios.post(uri, this.post).then(() => {
-                this.$router.push({name: 'posts'});
+            this.$http.post(uri, this.post).then(() => {
+                this.$router.push({ name: 'post-list' });
             });
             
 		},

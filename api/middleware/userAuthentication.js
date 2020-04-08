@@ -6,11 +6,7 @@ module.exports = {
 
 	isLoggedIn: function(req, res, next) {
 
-		let token = req.headers['x-access-token'] || req.headers['authorization']
-
-		if (token.startsWith('Bearer ')) {
-			token = token.slice(7, token.length)
-		}
+		let token = req.headers['authorization'];
 
 		if (token) {
 
@@ -19,9 +15,9 @@ module.exports = {
 				if (err) {
 					
 					res.status(200).send({
-						code: 1,
+						code: 'INVALID_TOKEN',
 						message: 'Invalid token'
-					})
+					});
 					
 				}
 				
@@ -29,25 +25,25 @@ module.exports = {
 				.then(user => {
 
 					if (user) {
-						next()
+						next();
 					} else {
 						res.status(200).send({ 
-							code: 1, 
+							code: 1,
 							message: 'Could not find user' 
-						})
+						});
 					}
 
 				})
-				.catch(() => res.status(200).send({ code: 1, message: 'Error retreiving user' }))
+				.catch(() => res.status(200).send({ code: 1, message: 'Error retreiving user' }));
 
 			})
 
 		} else {
 
 			res.status(200).send({
-				code: 1,
+				code: 'EXPIRED_TOKEN',
 				message: 'Token is expired'
-			})
+			});
 
 		}
 

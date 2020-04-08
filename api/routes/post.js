@@ -85,7 +85,27 @@ const fileUpload = multer({
 
 // })
 
-postRoutes.route('/add').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
+
+	let token = req.headers['authorization'];
+
+	let { code, message, posts } = await PostService.getUserPosts(token);
+
+	res.send({ code, message, posts });
+
+});
+
+postRoutes.route('/feedPost/:id').get(async (req, res) => { 	
+
+	let { id } = req.params;
+
+	let { code, message, post } = await PostService.getFeedPost(id);
+
+	res.send({ code, message, post });
+
+});
+
+postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 
 	let token = req.headers['authorization'];
 
@@ -107,19 +127,9 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
 
 });
 
-postRoutes.route('/').get(userAuthentication.isLoggedIn, async (req, res) => { 	
-
-	let token = req.headers['authorization'];
-
-	let { code, message, posts } = await PostService.getAllPosts(token);
-
-	res.send({ code, message, posts });
-
-});
-
 postRoutes.route('/published').get(async (req, res) => { 	
 
-	let { code, message, posts } = await PostService.getPublishedPosts()
+	let { code, message, posts } = await PostService.getPublishedPosts();
 
 	res.send({ code, message, posts })
 })

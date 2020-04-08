@@ -68,7 +68,7 @@ export default {
 			let response = await this.login(this.user);
 
 			if (response.code == 0) {
-				this.$router.push({ name: 'home' });
+				this.$router.push({ name: 'feed' });
 			}
 
 		}

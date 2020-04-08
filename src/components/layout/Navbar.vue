@@ -11,10 +11,10 @@
 					<router-link to="/" class="nav-link text-white">Home</router-link>
 				</li> -->
 				<li class="nav-item" v-if="isLoggedIn">
-					<router-link to="/add-post" class="nav-link text-white">Create Post</router-link>
+					<router-link :to="{ name: 'add-post' }" class="nav-link text-white">Create Post</router-link>
 				</li>
 				<li class="nav-item" v-if="isLoggedIn">
-					<router-link to="/posts" class="nav-link text-white">Posts</router-link>
+					<router-link :to="{ name: 'post-list' }" class="nav-link text-white">Posts</router-link>
 				</li>
 			</ul>
 			<ul class="navbar-nav">

@@ -38,7 +38,7 @@
 
 			let id = this.$route.params.id;
 
-			let response = await PostService.edit(id);
+			let response = await PostService.fetchFeedPost(id);
 
 			let { code, post } = response.data;
 
