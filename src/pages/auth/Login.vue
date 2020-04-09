@@ -56,7 +56,7 @@ export default {
 
 	methods: {
 
-		...mapActions('users', ['login']),
+		...mapActions('user', ['login']),
 
 		async signIn() {
 

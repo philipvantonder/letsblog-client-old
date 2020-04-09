@@ -43,7 +43,7 @@ export default {
 
 				localStorage.removeItem('token');
 				
-				this.$store.dispatch('users/logout');
+				this.$store.dispatch('user/logout');
 
 				this.$router.push({ name: 'login' });
 			}
@@ -53,7 +53,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters('users', ['isLoggedIn']),
+		...mapGetters('user', ['isLoggedIn']),
 	}
 
 }

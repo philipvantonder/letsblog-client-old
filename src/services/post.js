@@ -24,13 +24,13 @@ export default {
 
 	},
 
-	async fetchFeedPost(id) {
+	async fetchPublishedPost(id) {
 
 		try {
 
 			const response = await axios.get('/posts/feedPost/' + id);
 
-			return response;
+			return response.data;
 
 		} catch (error) {
 			console.log(error);
@@ -42,9 +42,9 @@ export default {
 			
 		try {
 
-			const reponse = await axios.get('/posts/published');
+			const response = await axios.get('/posts/published');
 
-			return reponse;
+			return response.data;
 
 		} catch (error) {
 			console.error(error);

@@ -23,13 +23,13 @@ Axios.interceptors.response.use(response => {
 
 	if (code === "INVALID_TOKEN") {
 
-		if (store.getters['users/isLoggedIn']) {
+		if (store.getters['user/isLoggedIn']) {
 			
-			console.log("You are logged in and the token is invalid. Remove token and logout");
+			console.error("Routes: You are not logged in. Redirect you to the Feed Page");
 			
 			localStorage.removeItem('token');
 			
-			store.dispatch('users/logout');
+			store.dispatch('user/logout');
 			
 			router.push({ name: 'feed' });
 		

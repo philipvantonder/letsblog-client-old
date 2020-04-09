@@ -11,7 +11,7 @@ module.exports = {
 
 			let post = await PostModel.findOne({ _id: id });
 			
-			return  { code: 0, message: 'feed post', post };
+			return { code: 0, message: 'feed post', post };
 
 		} catch (error) {
 			return { code: 1, message: 'Could not get post feed' };
@@ -25,7 +25,7 @@ module.exports = {
 
 			let posts = await PostModel.find({ isPublished: true});
 			
-			return  { code: 0, message: 'Published posts', posts };
+			return { code: 0, message: 'Published posts', posts };
 
 		} catch (error) {
 			return { code: 1, message: 'Could not get published posts' };

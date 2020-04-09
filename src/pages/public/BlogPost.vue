@@ -2,15 +2,15 @@
     <div>
         <navbar />
 
-		<div v-if="post" class="container">
+		<div v-if="publishedPost" class="container">
 			<div class="row pt-4">
 				<div class="col-lg-12">
 
-					<h1> {{ post.title }} </h1>
+					<h1> {{ publishedPost.title }} </h1>
 					
-					<img :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" class="img-fluid" > 	
+					<img :src="'http://localhost:4000/posts/image/' + publishedPost.user + '/' + publishedPost.fileName" alt="post image" class="img-fluid" > 	
 
-					<p class="text-break mt-3"> {{ post.body }} </p>
+					<p class="text-break mt-3"> {{ publishedPost.body }} </p>
 
 				</div>
 			</div>
@@ -20,32 +20,20 @@
 
 <script>
 
-	import PostService from '@/services/post';
+	import { mapActions, mapState } from 'vuex';
 
     export default {
 
-		data() {
+		computed: {
+			...mapState('posts', ['publishedPost'])
+		},
 
-			return {
-
-				post: false
-
-			}
-
+		methods: {
+			...mapActions('posts', ['setPublishedPost'])
 		},
 
 		async created() {
-
-			let id = this.$route.params.id;
-
-			let response = await PostService.fetchFeedPost(id);
-
-			let { code, post } = response.data;
-
-			if (code === 0) {
-				this.post = post;
-			}
-
+			await this.setPublishedPost(this.$route.params.id);
 		}
 
     }

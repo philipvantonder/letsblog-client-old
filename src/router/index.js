@@ -81,9 +81,9 @@ router.beforeEach((to, from, next) => {
 
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 
-		if (!store.getters['users/isLoggedIn']) {
+		if (!store.getters['user/isLoggedIn']) {
 
-			console.log("Routes: You are not logged in");
+			console.error("Routes: You are not logged in. Redirect you to the Feed Page");
 
 			next({ name: 'feed' });
 		} else {

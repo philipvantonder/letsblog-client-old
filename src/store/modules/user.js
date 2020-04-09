@@ -11,7 +11,7 @@ export default {
 
 	mutations: {
 
-		SET_AUTH(state, token) {
+		SET_AUTH_TOKEN(state, token) {
 			state.token = token;
 		}
 
@@ -33,7 +33,7 @@ export default {
 				
 				if (code === 0) {
 
-					commit('SET_AUTH', token);
+					commit('SET_AUTH_TOKEN', token);
 
 					localStorage.setItem('token', token);
 				
@@ -59,7 +59,7 @@ export default {
 		},
 
 		logout({ commit }) {
-			commit('SET_AUTH', false);
+			commit('SET_AUTH_TOKEN', false);
 		}
 
 	}
