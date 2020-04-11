@@ -2,19 +2,28 @@
     <div>
         <navbar />
 
-		<div v-if="publishedPost" class="container">
-			<div class="row pt-4">
-				<div class="col-lg-12">
+		<div v-if="!loading" >
+			<div v-if="blogPost" class="container">
+				<div class="row pt-4">
+					<div class="col-lg-12">
 
-					<h1> {{ publishedPost.title }} </h1>
-					
-					<img :src="'http://localhost:4000/posts/image/' + publishedPost.user + '/' + publishedPost.fileName" alt="post image" class="img-fluid" > 	
+						<h1> {{ blogPost.title }} </h1>
+						
+						<img :src="'http://localhost:4000/posts/image/' + blogPost.user + '/' + blogPost.fileName" alt="post image" class="img-fluid" > 	
 
-					<p class="text-break mt-3"> {{ publishedPost.body }} </p>
+					</div>
+				</div>
+			</div>
 
+			<div v-if="blogPost" class="container">
+				<div class="row pt-4">
+					<div class="col-lg-12">
+						<p class="text-break mt-3" v-html="blogPost.body"> </p>
+					</div>
 				</div>
 			</div>
 		</div>
+
     </div>
 </template>
 
@@ -24,18 +33,44 @@
 
     export default {
 
+		data() {
+			return {
+				loading: true
+			}
+		},
+
 		computed: {
-			...mapState('posts', ['publishedPost'])
+			...mapState('posts', ['blogPost'])
 		},
 
 		methods: {
-			...mapActions('posts', ['setPublishedPost'])
+			...mapActions('posts', ['setBlogPost'])
 		},
 
 		async created() {
-			await this.setPublishedPost(this.$route.params.id);
+
+			let { id } = this.$route.params;
+
+			let response = await this.setBlogPost(id);
+
+			if (response.code === 0) {
+				this.loading = false;
+			}
+
 		}
 
     }
 
 </script>
+
+<style>
+
+.language-php {
+	background: #f5f2f0;
+	padding: 1em;
+    margin: .5em 0;
+	overflow: auto;
+	
+}
+
+</style>

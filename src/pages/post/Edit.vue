@@ -2,38 +2,42 @@
     <div>
         <navbar />
 
-		<div class="container">
-			<div class="row pt-4">
-				<div v-if="post" class="col-lg-12">
-					<div class="shadow rounded p-5">
-						<h1>Edit</h1>
-						<form @submit.prevent="updatePost">
-							<div class="form-group">
-								<input type="text" class="form-control" v-model="post.title" placeholder="Title">
+		<div v-if="!loading">
+			<div class="container">
+				<div class="row pt-4">
+					<div v-if="post" class="col-lg-12">
+						<div class="shadow rounded p-5">
+							<h1>Edit</h1>
+
+							<div v-if="message" class="alert alert-warning" role="alert">
+								{{ message }}
 							</div>
 
-							<div class="form-group">
-								<textarea class="form-control" v-model="post.body" rows="5" placeholder="Body"></textarea>
-							</div>
+							<form enctype="multipart/form-data"> 
+								<div class="form-group">
+									<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }" placeholder="Title">
+								</div>
 
-							<div class="form-group">
-								<label> <input type="checkbox" v-model="post.isPublished" > Publish </label>
-							</div>
+								<div class="form-group">
+									<vue-editor v-model="post.body" ></vue-editor>
+								</div>
 
-							<div class="form-group">
-								<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
-							</div>
+								<div class="form-group">
+									<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
+								</div>
 
-							<div class="form-group">
-								<input type="file" class="form-control" id="file" ref="file" @change="onSelect()" >
-							</div>	
+								<div class="form-group">
+									<input type="file" class="form-control" id="file" ref="file" @change="onSelect()" >
+								</div>	
 
-							<div class="form-group">
-								<button class="btn btn-outline-primary"> Save </button>
-								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
-							</div>
+								<div class="form-group">
+									<button class="btn btn-outline-primary" @click.prevent="savePost({ publish: false })"> Save </button>
+									<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="savePost({ publish: true })"> {{ publisedText }} </button>
+									<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
+								</div>
 
-						</form>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -43,59 +47,114 @@
 
 <script>
 
+import { required } from  'vuelidate/lib/validators';
+import { mapActions, mapState } from 'vuex';
+
+import { VueEditor } from "vue2-editor";
+import Alert from '@/model/Alert'; 
+
 export default {
 
-    data() {
+	data() {
 
-        return {
+		return {
 
-            post: false
+			loading: true,
+			fileError: false,
+			message: ''
 
-        }
-        
-    },
+		}
 
-    created() {
+	},
 
-        let uri = `http://localhost:4000/posts/edit/${this.$route.params.id}`;
+	components: {
+		VueEditor
+	},
 
-        this.$http.get(uri).then((response) => {
+	computed: {
+		...mapState('posts', ['post']),
 
-			let { code, post } = response.data;
-
-			if (code === 0) {
-				this.post = post;
-			}
-			
-        });
-
-    },
+		publisedText() {
+			return this.post.isPublished ? 'unPublish' : 'Publish';
+		},
+	},
 
     methods: {
+		...mapActions('posts', ['setPost', 'updatePost']),
 
-        updatePost() {
+        async submitPost() {
 
-            let uri = `http://localhost:4000/posts/update/${this.$route.params.id}`;
+			let formData = new FormData();
+		
+			formData.append('title', this.post.title);
+			formData.append('body', this.post.body);
+			formData.append('isPublished', this.post.isPublished);
 
-            this.$http.post(uri, this.post).then(() => {
-                this.$router.push({ name: 'post-list' });
-            });
+			if (this.$refs.file.value) {
+				formData.append('file', this.post.file)
+				formData.append('fileName', this.post.file.name);
+			}
+
+			let { id } = this.$route.params;
+
+			let response = await this.updatePost({ id, post: formData })
+
+			if (response.code === 0) {
+				this.$router.push({ name: 'post-list' });
+			}
+
+		},
+        async savePost(data) {
+			
+			this.$v.$touch();
+			if (this.$v.$invalid || this.fileError) {
+				return;
+			}
+
+			if (data.publish) {
+
+				let message = "Are you sure you want to Publish this post?";
+				let tosts_message = "Post have been Published.";
+				if (this.post.isPublished) {
+					message = "Are you sure you want to unPublish this post?";
+					tosts_message = "Post have been unPublished.";
+				}
+
+				const response = await Alert.confirm({ title: message });
+
+				if (response) {
+
+					this.post.isPublished = !this.post.isPublished;
+
+					this.submitPost();
+
+					Alert.message({ title: tosts_message, backdrop: false, time: 1500, position: 'top-right' });
+				}
+
+			} else {
+
+				this.submitPost();
+
+			}
             
 		},
 
 		onSelect() {
 
+			this.fileError = false;
 			this.message = '';
 
 			const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 			const file = this.$refs.file.files[0];
 
 			if (!allowedTypes.includes(file.type)) {
+				this.fileError = true;
 				this.message = 'Only images are required';
 			}
 
 			if (file.size > 500000) {
-				this.message = 'Too large, max size is 500KB';
+				this.fileError = true;
+				this.message = 'File is too large, max size is 500KB';
 			}
 
 			this.post.fileName = file.name;
@@ -104,6 +163,29 @@ export default {
 		}
 
 	},
+
+	async created() {
+
+		let { id } = this.$route.params;
+
+		let response = await this.setPost(id);
+
+		if (response.code === 0) {
+			this.loading = false;
+		}
+
+	},
+	
+	validations: {
+
+		post: {
+
+			title: { required },
+			body: { required },
+
+		}
+		
+	}
 
 }
 

@@ -14,6 +14,6 @@ let User = new Schema({
     password: {
         type: String
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model('User', User);

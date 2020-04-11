@@ -85,6 +85,7 @@ const fileUpload = multer({
 
 // })
 
+// Get posts that are linked to a user
 postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
 
 	let token = req.headers['authorization'];
@@ -95,16 +96,18 @@ postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) =>
 
 });
 
-postRoutes.route('/feedPost/:id').get(async (req, res) => { 	
+// Get single blog post
+postRoutes.route('/blogPost/:id').get(async (req, res) => { 	
 
 	let { id } = req.params;
 
-	let { code, message, post } = await PostService.getFeedPost(id);
+	let { code, message, post } = await PostService.getBlogPost(id);
 
 	res.send({ code, message, post });
 
 });
 
+// Create new post
 postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 
 	let token = req.headers['authorization'];
@@ -117,6 +120,7 @@ postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.singl
 
 })
 
+// fetch blog post image
 postRoutes.route('/image/:id/:file').get((req, res) => {
 
 	let { id, file } = req.params
@@ -127,33 +131,37 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
 
 });
 
-postRoutes.route('/published').get(async (req, res) => { 	
+// Get all published posts
+postRoutes.route('/publishedBlogs').get(async (req, res) => { 	
 
-	let { code, message, posts } = await PostService.getPublishedPosts();
+	let { code, message, posts } = await PostService.getPublishedBlogPosts();
 
 	res.send({ code, message, posts })
 })
 
-postRoutes.route('/edit/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
-
-    let { id } = req.params;
-
-	let { code, message, post } = await PostService.edit(id);
-
+// get single blog post
+postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
+	
+	let { id } = req.params;
+	
+	let { code, message, post } = await PostService.getPost(id);
+	
 	res.send({ code, message, post });
-
+	
 })
 
-postRoutes.route('/update/:id').post(userAuthentication.isLoggedIn, (req, res) => {
+// Update blog post
+postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 	
 	let { id } = req.params;
 
-	let { code, message } = PostService.update(id, req.body);
+	let { code, message } = await PostService.update(id, req.body);
 
 	res.send({ code, message });
 	
 })
 
+// Delete blog post
 postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
 
 	let { id } = req.params;
@@ -164,9 +172,7 @@ postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req
 		await PostService.removeUserPostFile(post);
 	}
 
-	let { posts } = await PostService.getAllPosts();
-
-	res.send({ code, message, posts });
+	res.send({ code, message });
 
 })
 

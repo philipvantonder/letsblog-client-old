@@ -1,9 +1,20 @@
 $theme-colors: (
 	"primary": #18799a,
+	"secondary": #6c757d,
 	"success": #3c9f66,
-	"info": #142224,
+	"info": #17a2b8 ,
 	"warning": #ba8f2e,
 	"danger": #f44336,
+
 );
 
 @import "node_modules/bootstrap/scss/bootstrap";
+
+$bootstrap-primary: #18799a;
+$bootstrap-secondary: #6c757d;
+$bootstrap-success: #3c9f66;
+$bootstrap-info: #17a2b8 ;
+$bootstrap-warning: #070707;
+$bootstrap-danger: #f44336;
+
+@import '~@sweetalert2/theme-bootstrap-4/bootstrap-4.scss';

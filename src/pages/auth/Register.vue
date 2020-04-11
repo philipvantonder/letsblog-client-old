@@ -100,11 +100,11 @@
 					if (code === 0) {
 
 						Alert.message({
-							icon: 'success',
 							title: 'Completed', 
 							text: message,
 							confirmBtnText: 'Login',
-							redirect: '/login'
+							redirect: '/login',
+							confirmButton: true
 						})
 
 					}

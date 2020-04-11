@@ -8,19 +8,11 @@ let Post = new Schema({
 		type: Boolean,
 		default: false,
 	},
-	dateAdded: {
-		type: Date, 
-		default: Date.now()
-	},
-	dateUpdated: {
-		type: Date,
-		default: null
-	},
 	fileName: String,
 	user: { 
 		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'User' 
-	}
-});
+	},
+}, { timestamps: true });
 
 module.exports = mongoose.model('Post', Post);

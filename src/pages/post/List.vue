@@ -7,27 +7,34 @@
 				<div class="col-lg-12">
 					<h1>Posts</h1>
 
-					<table class="table table-hover mt-4">
+					<table v-if="userPosts.length" class="table table-bordered table-hover table-striped mt-4">
 						<thead>
 						<tr>
 							<th>Title</th>
 							<th>Body</th>
 							<th>File</th>
 							<th>Published</th>
+							<th>Date Added</th>
+							<th>Date last updated</th>
 							<th colspan="2">Actions</th>
 						</tr>
 						</thead>
 						<tbody>
-							<tr v-for="post in posts" :key="post._id">
+							<tr v-for="post in userPosts" :key="post._id">
 								<td>{{ post.title }}</td>
 								<td>{{ post.body | LimitText(50) }}</td>
 								<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
 								<td>{{ post.isPublished | BooleanText }}</td>
-								<td><router-link :to="{ name: 'edit-post', params: { id: post._id } }" class="btn btn-primary">Edit</router-link></td>
-								<td><button class="btn btn-danger" @click="deletePost(post._id)">Delete</button></td>
+								<td>{{ post.createdAt | Date }}</td>
+								<td>{{ post.updatedAt | Date }}</td>
+								<td class="text-center" colspan="2">
+									<router-link :to="{ name: 'edit-post', params: { id: post._id } }" class="btn btn-primary">Edit</router-link>
+									<button class="ml-2 btn btn-danger" @click="deletePost(post._id)">Delete</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>
+					<p v-else> No posts loaded.</p>
 				</div>
 			</div>
 		</div>
@@ -36,42 +43,51 @@
 
 <script>
 
-import PostService from '@/services/post';
+import { mapActions, mapState } from 'vuex';
+import Alert from '@/model/Alert';
 
 export default {
+	
+	computed: {
+		...mapState('posts', ['userPosts'])
+	},
 
-    data() {
-        return {
-            posts: []
-        }
-    },
+	methods: {
+		
+		...mapActions('posts', ['setUserPosts', 'removePost']),
 
-    async created() {
+		async deletePost(id) {
+			
+			let post_index = this.userPosts.map(post => post._id).indexOf(id);
 
-		let response = await PostService.fetchUserPosts()
+			let post = this.userPosts[post_index];
 
-		let { code, posts } = response.data;
+			if (post.isPublished) {
 
-		if (code === 0) {
-			this.posts = posts;
-		}
+				let response = await Alert.confirm({ title: "This post is Published.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
 
-    },
+				if (response) {
+					this.$router.push({ name: 'edit-post', params: { id: id } })
+				}
 
-    methods: {
-        
-        async deletePost(id) {
+			} else {
+	
+				let response = await Alert.confirm({ title: "Are you sure you want to remove this post?" });
 
-			let response = await PostService.delete(id);
+				if (response) {
+					await this.removePost(id);
+				}
 
-			let { code, posts } = response.data;
-
-			if (code === 0) {
-				this.posts = posts;
 			}
 
         }
-    }
+	},
+	
+	async created() {
+
+		await this.setUserPosts();
+
+	},
 
 }
 
@@ -82,10 +98,6 @@ export default {
 .img-thumb {
 	max-width: 200px;
 	max-height: 200px;
-}
-
-td {
-    width:33%;
 }
 
 </style>

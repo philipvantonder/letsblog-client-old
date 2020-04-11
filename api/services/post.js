@@ -5,13 +5,13 @@ const fs = require('fs');
 
 module.exports = {
 
-	getFeedPost: async (id) => {
+	getBlogPost: async (id) => {
 
 		try {
 
-			let post = await PostModel.findOne({ _id: id });
+			let post = await PostModel.findOne({ _id: id, isPublished: true });
 			
-			return { code: 0, message: 'feed post', post };
+			return { code: 0, message: 'Blog post', post };
 
 		} catch (error) {
 			return { code: 1, message: 'Could not get post feed' };
@@ -19,11 +19,11 @@ module.exports = {
 
 	},
 
-	getPublishedPosts: async () => {
+	getPublishedBlogPosts: async () => {
 
 		try {
 
-			let posts = await PostModel.find({ isPublished: true});
+			let posts = await PostModel.find({ isPublished: true });
 			
 			return { code: 0, message: 'Published posts', posts };
 
@@ -55,15 +55,11 @@ module.exports = {
 
 			const { user } = await UserService.getUserByToken(token);
 
-			if (postDTO.isPublished == 'undefined') {
-				postDTO.isPublished = false;
-			}
-
 			let post = new PostModel({
 				title: postDTO.title,
 				body: postDTO.body,
-				isPublished: postDTO.isPublished,
 				fileName: postDTO.filename,
+				isPublished: postDTO.isPublished,
 				user: user._id
 			})
 
@@ -77,7 +73,7 @@ module.exports = {
 
 	},
 
-	edit: async (id) => {
+	getPost: async (id) => {
 
 		try {
 
@@ -104,7 +100,11 @@ module.exports = {
 			post.title = postDTO.title;
 			post.body = postDTO.body;
 			post.isPublished = postDTO.isPublished;
-			post.dateUpdated = moment().format('YYYY-MM-DD hh:mm:ss');
+
+			// This means the file was not changed.
+			if (postDTO.fileName !== undefined) {
+				post.fileName = postDTO.fileName;
+			}
 
 			await post.save();
 

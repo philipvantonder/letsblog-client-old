@@ -41,7 +41,7 @@ const router = new VueRouter({
 		},
 
 		{
-			name: 'read-post',
+			name: 'blog-post',
 			path: '/post/:id',
 			component: BlogPost,
 		},
@@ -93,50 +93,6 @@ router.beforeEach((to, from, next) => {
 	} else {
 		next();
 	}
-
-	// const unAuthenticatedRoutes = ['login', 'register', 'home', 'single-post'];
-
-	// these routes do not need authentication
-	// if (unAuthenticatedRoutes.includes(to.name)) {
-	// 	next();
-	// } else {
-
-		// If token is not setted redirect to login
-		// if (localStorage.getItem('token') === null) {
-		// 	next({ name: 'login' });
-		// }
-
-		// console.log(store.getters['users/isLoggedIn']);
-
-		// if (store.getters['users/isLoggedIn']) {
-			
-		// }
-
-		// check if the token that is provide is valid
-		// userService.isAuthenticated()
-		// .then(response => {
-
-		// 	let { code } = response.data;
-			
-		// 	if (code === 1) {
-
-		// 		localStorage.removeItem('token');
-
-		// 		store.dispatch('users/logout');
-				
-		// 		next({ name: 'login' });
-
-		// 	} else if (code === 0) {
-
-		// 		next();
-		// 	}
-
-		// })
-		// .catch(error => console.error(error));
-
-		// next();
-
-	// }
 
 })
 

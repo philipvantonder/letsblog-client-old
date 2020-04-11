@@ -46,6 +46,7 @@ export default {
 						title: 'Login failed', 
 						text: message,
 						confirmBtnText: 'Try again',
+						confirmButton: true
 					})
 
 				}

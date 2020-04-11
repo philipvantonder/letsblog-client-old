@@ -16,5 +16,10 @@ Vue.filter("LimitText", (text, length_val) => {
 })
 
 Vue.filter("Date", value => {
+	
+	if (!value) {
+		return "";
+	}
+
 	return moment(value).format('YYYY-MM-DD HH:MM:SS')
 })

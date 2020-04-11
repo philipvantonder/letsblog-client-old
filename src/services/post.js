@@ -16,7 +16,7 @@ export default {
 
 			const reponse = await axios.get('/posts/user');
 
-			return reponse;
+			return reponse.data;
 
 		} catch(error) {
 			console.error(error);
@@ -24,11 +24,11 @@ export default {
 
 	},
 
-	async fetchPublishedPost(id) {
+	async fetchBlogPost(id) {
 
 		try {
 
-			const response = await axios.get('/posts/feedPost/' + id);
+			const response = await axios.get('/posts/blogPost/' + id);
 
 			return response.data;
 
@@ -38,16 +38,30 @@ export default {
 
 	},
 
-	async fetchPublishedPosts() {
+	async fetchPublishedBlogPosts() {
 			
 		try {
 
-			const response = await axios.get('/posts/published');
+			const response = await axios.get('/posts/publishedBlogs');
 
 			return response.data;
 
 		} catch (error) {
 			console.error(error);
+		}
+
+	},
+
+	async fetchPost(id) {
+
+		try {
+
+			const response = await axios.get('/posts/post/' + id);
+
+			return response.data;
+
+		} catch (error) {
+			console.log(error);
 		}
 
 	},
@@ -64,24 +78,10 @@ export default {
 				}
 			);
 
-			return reponse;
+			return reponse.data;
 
 		} catch(error) {
 			console.error(error);
-		}
-
-	},
-
-	async edit(id) {
-
-		try {
-
-			const response = await axios.get('/posts/edit/' + id);
-
-			return response;
-
-		} catch (error) {
-			console.log(error);
 		}
 
 	},
@@ -92,12 +92,32 @@ export default {
 
 			const response = await axios.delete('/posts/delete/' + id);
 
-			return response;
+			return response.data;
 
 		} catch (error) {
 			console.log(error);
 		}
 		
+	},
+
+	async update (id, post) {
+
+		try {
+		
+			const response = await axios.put('/posts/update/' + id, post,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				}
+			);		
+
+			return response.data;
+
+		} catch (error) {
+			console.error(error);
+		}
+
 	},
 
 	async getImage (post) {
