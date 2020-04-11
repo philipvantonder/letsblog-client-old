@@ -75,7 +75,7 @@ export default {
 		...mapState('posts', ['post']),
 
 		publisedText() {
-			return this.post.isPublished ? 'unPublish' : 'Publish';
+			return this.post.isPublished ? 'Unpublish' : 'Publish';
 		},
 	},
 
@@ -116,8 +116,8 @@ export default {
 				let message = "Are you sure you want to Publish this post?";
 				let tosts_message = "Post have been Published.";
 				if (this.post.isPublished) {
-					message = "Are you sure you want to unPublish this post?";
-					tosts_message = "Post have been unPublished.";
+					message = "Are you sure you want to Unpublish this post?";
+					tosts_message = "Post have been Unpublish.";
 				}
 
 				const response = await Alert.confirm({ title: message });

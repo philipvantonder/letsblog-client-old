@@ -34,7 +34,7 @@ class Alert {
 			
 			Swal.fire({
 				position: options.position || '',
-				icon: options.icon || 'info',
+				icon: options.icon || 'question',
 				title: options.title,
 				confirmButtonText: options.confirmButtonText || 'Yes',
 				showCancelButton:  (options.cancelButton !== undefined ? options.cancelButton : true)

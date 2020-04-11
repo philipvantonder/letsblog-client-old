@@ -64,7 +64,7 @@ export default {
 
 			if (post.isPublished) {
 
-				let response = await Alert.confirm({ title: "This post is Published.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
+				let response = await Alert.confirm({ title: "Cannot remove Published Post.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
 
 				if (response) {
 					this.$router.push({ name: 'edit-post', params: { id: id } })
