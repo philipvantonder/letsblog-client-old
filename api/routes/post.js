@@ -132,7 +132,7 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
 });
 
 // Get all published posts
-postRoutes.route('/publishedBlogs').get(async (req, res) => { 	
+postRoutes.route('/publishedBlogs').get(async (req, res) => {
 
 	let { code, message, posts } = await PostService.getPublishedBlogPosts();
 
