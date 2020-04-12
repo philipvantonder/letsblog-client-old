@@ -32,8 +32,8 @@
 							</div>	
 
 							<div class="form-group">
-								<button class="btn btn-outline-primary" @click.prevent="submitPost({ published: false })"> Save as Draft</button>
-								<button class="btn btn-outline-success ml-1" @click.prevent="submitPost({ published: true })"> Publish </button>
+								<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save as Draft</button>
+								<button class="btn btn-outline-success ml-1" @click.prevent="addPost({ published: true })"> Publish </button>
 								<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'feed' }"> Cancel </router-link>
 							</div>
 						</form>
@@ -83,54 +83,49 @@
 
         methods: {
 
-			...mapActions('posts', ['addPost']),
+			...mapActions('posts', ['createPost']),
 
-			async submitPost (data) {
+			async addPost (data) {
 
 				this.$v.$touch();
 				if (this.$v.$invalid) {
 					return;
 				}
 
-				let formData = new FormData();
-
 				if (data.published) {
-					let response = await Alert.confirm("Are You sure you want to publish this post?");
+
+					let response = await Alert.confirm({ title: "Are You sure you want to publish this post?" });
 
 					if (response) {
 						
 						this.post.isPublished = true;
-
-						formData.append('title', this.post.title);
-						formData.append('body', this.post.body);
-						formData.append('isPublished', this.post.isPublished);
-						formData.append('file', this.post.file)
-						formData.append('fileName', this.post.file.name);
-		
-						let { code } = await this.addPost(formData);
-		
-						if (code === 0) {
-							this.$router.push({ name: 'feed' })
-						}
+						this.submitPost();
 
 					}
 
 				} else {
-
-					this.post.isPublished = false;
 					
-					formData.append('title', this.post.title);
-					formData.append('body', this.post.body);
-					formData.append('isPublished', this.post.isPublished);
-					formData.append('file', this.post.file)
-					formData.append('fileName', this.post.file.name);
-	
-					let { code } = await this.addPost(formData);
-	
-					if (code === 0) {
-						this.$router.push({ name: 'feed' })
-					}
+					this.post.isPublished = false;
+					this.submitPost();
 
+				}
+
+			},
+
+			async submitPost() {
+
+				let formData = new FormData();
+					
+				formData.append('title', this.post.title);
+				formData.append('body', this.post.body);
+				formData.append('isPublished', this.post.isPublished);
+				formData.append('file', this.post.file)
+				formData.append('fileName', this.post.file.name);
+
+				let { code } = await this.createPost(formData);
+
+				if (code === 0) {
+					this.$router.push({ name: 'feed' })
 				}
 
 			},

@@ -130,7 +130,7 @@ export default {
 
 		},
 
-		async addPost(context, post) {
+		async createPost(context, post) {
 
 			try {
 

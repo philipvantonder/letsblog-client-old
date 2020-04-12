@@ -1,4 +1,5 @@
 import UserService from '@/services/user';
+import JWTService from '@/services/jwt';
 import Alert from '@/model/Alert';
 
 export default {
@@ -18,16 +19,26 @@ export default {
 	},
 
 	getters: {
+
 		isLoggedIn: state => !!state.token,
+
+		async getUserDetails(state) {
+
+			let { user } = await JWTService.getUserInfo(state.token);
+
+			return user;
+
+		}
+
 	},
 
 	actions: {
 
-		async login({ commit }, user) {
+		async login({ commit }, userDTO) {
 
 			try {
 
-				let response = await UserService.signIn(user);
+				let response = await UserService.signIn(userDTO);
 				
 				let { code, message, token } = response.data 
 				

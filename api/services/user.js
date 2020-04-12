@@ -64,7 +64,7 @@ module.exports = {
 				return { code: 1, message: 'Password or username does not match.' };
 			}
 
-			let signed_token = await jwt.sign({ 'userId': getUser._id }, jwt_secret);
+			let signed_token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
 
 			return { code: 0, message: 'Logged in', token: signed_token };
 

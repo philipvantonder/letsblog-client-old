@@ -13,12 +13,8 @@
 								<div class="card-body">
 									<h5 class="card-title" title="View post"> {{ post.title }} </h5>
 
-									<p class="card-text"> {{ post.body | LimitText(200) }}</p>
+									<p class="card-text" v-html="$options.filters.LimitText(post.body, 200)"> </p>
 								</div>
-
-								<!-- <div class="card-footer">
-									<small class="text-muted">Date published: {{ post.dateAdded | Date }} </small>
-								</div> -->
 							</router-link>
 						</div>
 					</div>

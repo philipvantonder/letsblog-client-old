@@ -1,13 +1,11 @@
 const express = require('express');
-const app = express();
-
 const bodyParser = require('body-parser');
-
-const cors = require('cors');
 const mongoose = require('mongoose');
-
 const postRoute = require('./routes/post');
 const userRoute = require('./routes/user');
+
+const cors = require('cors');
+const app = express();
 
 const { port, mongo_url } = require('./config/index');
 

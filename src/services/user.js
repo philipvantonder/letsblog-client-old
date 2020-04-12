@@ -14,7 +14,7 @@ export default {
 
 		try {
 			
-			const response  = await axios.post('/users/login', user);
+			const response = await axios.post('/users/login', user);
 
 			return response;
 
@@ -50,6 +50,6 @@ export default {
 			console.error(error);
 		}
 
-	}
+	},
 
 }
