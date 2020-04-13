@@ -1,23 +1,24 @@
 <template>
-    <div class="container w-25 shadow p-3 mt-5 rounded">
+    <div class="container">
+		<div class="mx-auto w-50 shadow p-3 mt-5 rounded">
+			<h2> Lets Blog </h2>
 
-        <h2> Lets Blog </h2>
+			<form @submit.prevent="signIn()">
+				<div class="form-group">
+					<label for="exampleInputEmail1">Email</label>
+					<input type="email" class="form-control" :class="{ 'is-invalid': $v.user.email.$error }" v-model="user.email" >
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Password</label>
+					<input type="password" class="form-control" :class="{ 'is-invalid': $v.user.password.$error }" v-model="user.password" >
+				</div>
 
-        <form @submit.prevent="signIn()">
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" :class="{ 'is-invalid': $v.user.email.$error }" v-model="user.email" >
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" :class="{ 'is-invalid': $v.user.password.$error }" v-model="user.password" >
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-outline-primary">Login</button>
-                <router-link :to="{ name: 'register' }" class="btn btn-outline-secondary">Register</router-link>
-            </div>
-        </form>
+				<div class="d-flex justify-content-between">
+					<button class="btn btn-outline-primary"> Login </button>
+					<router-link :to="{ name: 'register' }" class="btn btn-outline-secondary"> Register </router-link>
+				</div>
+			</form>
+		</div>
     </div>
 </template>
 

@@ -52,6 +52,25 @@ class Alert {
 		});
 
 	}
+
+	static toast(options) {
+
+		const Toast = Swal.mixin({
+			toast: true,
+			position: options || 'top-end',
+			timer: options.timer || 3000,
+			onOpen: (toast) => {
+				toast.addEventListener('mouseenter', Swal.stopTimer)
+				toast.addEventListener('mouseleave', Swal.resumeTimer)
+			}
+		});
+
+		Toast.fire({
+			icon: options.icon || 'success',
+			title: options.title
+		});
+
+	}
 	
 }
 

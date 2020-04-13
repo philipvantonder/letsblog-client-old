@@ -1,7 +1,5 @@
 <template>
     <div>
-        <navbar />
-
 		<div v-if="!loading" >
 			<div v-if="blogPost" class="container">
 				<div class="row pt-4">

@@ -1,7 +1,5 @@
 <template>
     <div>
-        <navbar />
-
 		<div v-if="!loading">
 			<div class="container">
 				<div class="row pt-4">
@@ -104,6 +102,7 @@ export default {
 			}
 
 		},
+		
         async savePost(data) {
 			
 			this.$v.$touch();

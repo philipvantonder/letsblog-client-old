@@ -10,11 +10,12 @@ import BlogFeed from '@/pages/public/BlogFeed';
 import BlogPost from '@/pages/public/BlogPost';
 
 import Navbar from '@/components/layout/Navbar';
+import Sidebar from '@/components/layout/Sidebar';
 
-// import userService from '@/services/user';
 import { lazyLoad } from '@/model/utilities';
 
 Vue.component('navbar', Navbar);
+Vue.component('sidebar', Sidebar);
 
 const router = new VueRouter({
 

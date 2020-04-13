@@ -22,11 +22,15 @@ export default {
 
 		isLoggedIn: state => !!state.token,
 
-		async getUserDetails(state) {
+		async getUserDetails(state, getters) {
 
-			let { user } = await JWTService.getUserInfo(state.token);
-
-			return user;
+			if (getters.isLoggedIn) {
+	
+				let { user } = await JWTService.getUserInfo(state.token);
+				
+				return user;
+			
+			}
 
 		}
 
