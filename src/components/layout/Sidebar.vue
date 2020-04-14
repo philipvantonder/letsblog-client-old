@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide">
-		<div v-if="isOpen" class="w-64 flex-none bg-primary z-50 overflow-auto">
+		<div v-if="isOpen" class="w-64 flex-none bg-primary z-50 overflow-auto h-100 position-fixed">
 			<ul class="navbar-nav">
 				<li class="nav-item" v-if="isLoggedIn">
 					<router-link tag="a" :to="{ name: 'add-post' }" class="nav-link text-white pl-2rem"> Create Post </router-link>

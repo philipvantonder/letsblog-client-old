@@ -7,13 +7,18 @@ export default {
 	namespaced: true,
 
 	state: {
-		token: localStorage.getItem('token') || false
+		token: localStorage.getItem('token') || false,
+		loggedInUser: ''
 	},
 
 	mutations: {
 
 		SET_AUTH_TOKEN(state, token) {
 			state.token = token;
+		},
+
+		SET_USER_DETAILS(state, user) {
+			state.loggedInUser = user.name + ' ' + user.surname;
 		}
 
 	},
@@ -22,17 +27,7 @@ export default {
 
 		isLoggedIn: state => !!state.token,
 
-		async getUserDetails(state, getters) {
-
-			if (getters.isLoggedIn) {
-	
-				let { user } = await JWTService.getUserInfo(state.token);
-				
-				return user;
-			
-			}
-
-		}
+		loggedInUser: state => state.loggedInUser
 
 	},
 
@@ -51,6 +46,10 @@ export default {
 					commit('SET_AUTH_TOKEN', token);
 
 					localStorage.setItem('token', token);
+
+					let user = await JWTService.getUserInfo(token);
+
+					commit('SET_USER_DETAILS', user);
 				
 				}
 

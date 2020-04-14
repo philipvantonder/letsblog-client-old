@@ -1,10 +1,10 @@
 <template>
 	<div class="container">
 		<div class="row pt-4">
-			<div class="col-md-12">
+			<div class="col-lg-12">
 				<div v-if="publishedBlogPosts.length" class="card-deck">
-					<div class="col-md-4 mb-4 d-flex" v-for="post in publishedBlogPosts" :key="post._id">
-						<router-link :to="{ name: 'blog-post', params: { 'id': post._id } }" tag="div" class="card shadow border-0">
+					<div class="col-xs-12 col-sm-6 col-lg-4 mb-4 d-flex" v-for="post in publishedBlogPosts" :key="post._id">
+						<router-link :to="{ name: 'blog-post', params: { 'id': post._id } }" tag="div" class="card w-100 shadow border-0">
 							<img class="card-img-top card-height" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="Card image cap">
 
 							<div class="card-body">

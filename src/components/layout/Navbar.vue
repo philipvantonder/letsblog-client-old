@@ -24,7 +24,7 @@
 
 				<li class="nav-item dropdown d-none d-lg-block">
 					<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						{{ loggedInPerson.name }} {{ loggedInPerson.surname }}
+						{{ loggedInUser }}
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<router-link :to="{ name: '' }" class="dropdown-item"> Profile </router-link>
@@ -47,8 +47,7 @@ export default {
 
 		return  {
 			
-			isOpen: false,
-			loggedInPerson: ''
+			isOpen: false
 
 		}
 
@@ -72,13 +71,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters('user', ['isLoggedIn', 'getUserDetails']),
-	},
-
-	async created () {
-
-		this.loggedInPerson = await this.getUserDetails;
-
+		...mapGetters('user', ['isLoggedIn', 'loggedInUser']),
 	}
 
 }

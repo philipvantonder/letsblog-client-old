@@ -1,28 +1,16 @@
 <template>
-    <div>
-		<div v-if="!loading" >
-			<div v-if="blogPost" class="container">
-				<div class="row pt-4">
-					<div class="col-lg-12">
+	<div v-if="!loading" class="container">
+		<div v-if="blogPost" class="row pt-4">
+			<div class="col-lg-12">
 
-						<h1> {{ blogPost.title }} </h1>
-						
-						<img :src="'http://localhost:4000/posts/image/' + blogPost.user + '/' + blogPost.fileName" alt="post image" class="img-fluid" > 	
+				<h1> {{ blogPost.title }} </h1>
+				
+				<img :src="'http://localhost:4000/posts/image/' + blogPost.user + '/' + blogPost.fileName" alt="post image" class="img-fluid w-100" > 	
 
-					</div>
-				</div>
-			</div>
-
-			<div v-if="blogPost" class="container">
-				<div class="row pt-4">
-					<div class="col-lg-12">
-						<p class="text-break mt-3" v-html="blogPost.body"> </p>
-					</div>
-				</div>
+				<div class="text-break mt-3" v-html="blogPost.body"> </div>
 			</div>
 		</div>
-
-    </div>
+	</div>
 </template>
 
 <script>

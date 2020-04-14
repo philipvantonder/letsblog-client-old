@@ -8,7 +8,7 @@ export default {
 		
 			let user = await jsonwebtoken.verify(token, process.env.VUE_APP_JWT_SECRET);
 
-			return { user };
+			return user;
 
 		} catch (error) {
 			console.error(error)
