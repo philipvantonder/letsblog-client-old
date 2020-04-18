@@ -30,7 +30,7 @@ export default {
 
 			const response = await axios.post('users/register', user);
 
-			return response;
+			return response.data;
 			
 		} catch(error) {
 			console.error(error);
@@ -51,5 +51,33 @@ export default {
 		}
 
 	},
+
+	async fetchUser() {
+
+		try {
+		
+			const response = await axios.get('users/getUser');
+
+			return response.data;
+
+		} catch (error) {
+			console.error(error)
+		}
+
+	},
+
+	async update(userDTO) {
+
+		try {
+		
+			const response = await axios.post('users/update', userDTO);
+
+			return response.data;
+
+		} catch (error) {
+			console.error(error)
+		}
+
+	}
 
 }

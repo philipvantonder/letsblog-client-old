@@ -78,7 +78,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['setUserDetails']),
+		...mapActions('user', ['setUserDetailsFromToken']),
 
 		logout() {
 
@@ -101,7 +101,7 @@ export default {
 
 	created() {
 
-		this.setUserDetails();
+		this.setUserDetailsFromToken();
 
 		const handleEscape = (e) => {
 			if (e.key === 'Esc' || e.key === 'Escape') {

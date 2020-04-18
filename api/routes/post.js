@@ -20,13 +20,13 @@ var storage = multer.diskStorage({
 
 		let { user } = await UserService.getUserByToken(token);
 
-		postsImageDir = 'images/' + user._id
+		postsImageDir = 'images/' + user._id;
 
 		if (!fs.existsSync(postsImageDir)) {
-			fs.mkdirSync(postsImageDir, { recursive: true })
+			fs.mkdirSync(postsImageDir, { recursive: true });
 		}
 
-		cb(null, postsImageDir + '/')
+		cb(null, postsImageDir + '/');
 		
 	},
 	
@@ -36,23 +36,23 @@ var storage = multer.diskStorage({
 		if (fs.existsSync(postsImageDir + '/' + originalname)) {
 			let fileName = path.parse(originalname).name;
 			let fileExtension = path.parse(originalname).ext;
-			originalname = fileName + '-' + Date.now() + '.' + fileExtension
+			originalname = fileName + '-' + Date.now() + '.' + fileExtension;
 		}
 
-		cb(null, originalname) 
+		cb(null, originalname);
 	}
 	
 });
 
 const fileFilter = (req, file, cb) => {
 
-	const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
+	const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
 	if (!allowedTypes.includes(file.mimetype)) {
-		const error = new Error('Incorrect file type')
-		error.code = "INCORRECT_FILETYPE"
+		const error = new Error('Incorrect file type');
+		error.code = "INCORRECT_FILETYPE";
 
-		return cb(error, false)
+		return cb(error, false);
 	}
 
 	cb(null, true)
@@ -118,7 +118,7 @@ postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.singl
 
 	res.send({ code, message, post });
 
-})
+});
 
 // fetch blog post image
 postRoutes.route('/image/:id/:file').get((req, res) => {
@@ -136,8 +136,9 @@ postRoutes.route('/publishedBlogs').get(async (req, res) => {
 
 	let { code, message, posts } = await PostService.getPublishedBlogPosts();
 
-	res.send({ code, message, posts })
-})
+	res.send({ code, message, posts });
+	
+});
 
 // get single blog post
 postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
@@ -148,7 +149,7 @@ postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res
 	
 	res.send({ code, message, post });
 	
-})
+});
 
 // Update blog post
 postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
@@ -159,7 +160,7 @@ postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.si
 
 	res.send({ code, message });
 	
-})
+});
 
 // Delete blog post
 postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
@@ -174,6 +175,6 @@ postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req
 
 	res.send({ code, message });
 
-})
+});
 
-module.exports = postRoutes
+module.exports = postRoutes;

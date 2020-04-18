@@ -1,6 +1,5 @@
 const PostModel = require('../models/post')
 const UserService = require('../services/user')
-const moment = require('moment');
 const fs = require('fs');
 
 module.exports = {
@@ -60,6 +59,7 @@ module.exports = {
 				body: postDTO.body,
 				fileName: postDTO.filename,
 				isPublished: postDTO.isPublished,
+				slug: postDTO.slug,
 				user: user._id
 			})
 

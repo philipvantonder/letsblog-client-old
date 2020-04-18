@@ -1,21 +1,24 @@
 <template>
-	<div>
-		<div class="d-flex align-items-center">
-			<div>
-				<font-awesome-layers full-width class="fa-fw fa-1x py-1"> <font-awesome-icon icon="link" /> </font-awesome-layers>
-			</div>
-
-			<div class="pl-2">
-				<span>{{ url }}</span>
-				<span>{{ subdirectory }}</span>
-				<span class="slug" v-show="slug">{{ slug }}</span>
-			</div>
-
-			<div class="pl-2">
-				<button class="btn btn-secondary btn-sm" @click.prevent="alert('awe');" > Edit</button>
-			</div>
-
+	<div class="d-flex align-items-center">
+		<div>
+			<font-awesome-layers full-width class="fa-fw fa-1x py-1"> <font-awesome-icon icon="link" /> </font-awesome-layers>
 		</div>
+
+		<div class="pl-2 d-flex align-items-center">
+			<span>{{ url }}</span>
+			<span>{{ subdirectory }}</span>
+			<span class="slug" v-show="slug && !isEditMode">{{ slug }}</span>
+			<div v-show="isEditMode" class="ml-2">
+				<input type="text" name="slug-edit" class="form-control" v-model="customSlug">
+			</div>
+		</div>
+
+		<div class="pl-2">
+			<button class="btn btn-secondary" @click.prevent="editSlug()" > Edit </button>
+			<button class="btn btn-danger ml-2" @click.prevent="resetSlug()" v-show="isEditMode" > Reset </button>
+			<button class="btn btn-primary ml-2" @click.prevent="saveSlug()" v-show="isEditMode"> Save </button>
+		</div>
+
 	</div>
 </template>
 
@@ -45,7 +48,10 @@ export default {
 	data() {
 
 		return {
-			slug: this.convertTitle()
+			slug: this.convertTitle(),
+			isEditMode: false,
+			customSlug: '',
+			wasEdited: false
 		}
 
 	},
@@ -53,7 +59,11 @@ export default {
 	watch: {
 
 		title: _.debounce(function () {
-			this.slug = this.convertTitle();
+			
+			if (!this.wasEdited) {
+				this.slug = this.convertTitle();
+			}
+
 		}, 250),
 
 		slug: function(val) {
@@ -63,6 +73,33 @@ export default {
 	},
 
 	methods: {
+
+		editSlug() {
+
+			this.customSlug = this.slug;
+			this.isEditMode = true;
+
+		},
+
+		saveSlug() {
+
+			// if a custom slug has been editted, lock the change
+			if (this.customSlug !== this.slug) {
+				this.wasEdited = true;
+			}
+
+			this.slug = this.stringToSlug(this.customSlug);
+			this.isEditMode = false;
+
+		},
+
+		resetSlug() {
+
+			this.slug = this.convertTitle();
+			this.wasEdited = false;
+			this.isEditMode = false;
+
+		},
 
 		convertTitle() {
 			return this.stringToSlug(this.title);
@@ -91,12 +128,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-
-.slug {
-	background-color: #fdfd96;
-	padding: 3px 5px;
-}
-
-</style>

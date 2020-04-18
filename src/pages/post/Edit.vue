@@ -127,7 +127,7 @@ export default {
 
 					this.submitPost();
 
-					Alert.toast({ title: tosts_message });
+					Alert.toast({ title: tosts_message, customClass: 'mt-7' });
 				}
 
 			} else {

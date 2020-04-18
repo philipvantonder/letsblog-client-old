@@ -2,7 +2,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 export default {
 
-	async getUserInfo(token) {
+	async getUserBasicInfo(token) {
 
 		try {
 		

@@ -8,7 +8,8 @@ export default {
 
 	state: {
 		token: localStorage.getItem('token') || false,
-		loggedInUser: ''
+		loggedInUser: '',
+		user: ''
 	},
 
 	mutations: {
@@ -17,8 +18,12 @@ export default {
 			state.token = token;
 		},
 
-		SET_USER_DETAILS(state, user) {
+		SET_LOGGED_IN_USER(state, user) {
 			state.loggedInUser = user.name + ' ' + user.surname;
+		},
+
+		SET_USER (state, user) {
+			state.user = user;
 		}
 
 	},
@@ -57,14 +62,14 @@ export default {
 						text: message,
 						confirmBtnText: 'Try again',
 						confirmButton: true
-					})
+					});
 
 				}
 
-				return { code: code }
+				return { code };
 
 			} catch (error) {
-				return { code: 1, error: error };
+				return { code: 1, error };
 			}
 
 		},
@@ -73,11 +78,53 @@ export default {
 			commit('SET_AUTH_TOKEN', false);
 		},
 
-		async setUserDetails({ commit, state }) {
+		async setUserDetailsFromToken({ commit, state }) {
 
-			let user = await JWTService.getUserInfo(state.token);
+			try {
 
-			commit('SET_USER_DETAILS', user);
+				if (state.token) {
+		
+					let user = await JWTService.getUserBasicInfo(state.token);
+					
+					commit('SET_LOGGED_IN_USER', user);
+					
+				}
+
+			} catch (error) {
+				return { code: 1, error: error };
+			}
+
+		},
+
+		async setUser({ commit }) {
+
+			try {
+
+				let { code, user } = await UserService.fetchUser();
+
+				if (code === 0) {
+					commit('SET_USER', user);
+				}
+
+				return { code };
+
+			} catch (error) {
+				return { code: 1, error: error };
+			}
+
+		},
+
+		async updateUser(context, postDTO) {
+
+			try {
+
+				const { code, user } = await UserService.update(postDTO);
+
+				return { code, user };
+
+			} catch (error) {
+				return { code: 1, error: error };
+			}
 
 		}
 

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-		<div class="mx-auto w-50 shadow p-3 mt-5 rounded">
+		<div class="mx-auto w-50 shadow p-3 mt-5 radius-10 bg-white">
 			<h2> Lets Blog </h2>
 
 			<form @submit.prevent="signIn()">
@@ -66,10 +66,12 @@ export default {
 				return;
 			}
 
-			let response = await this.login(this.user);
+			let { code } = await this.login(this.user);
 
-			if (response.code == 0) {
+			if (code === 0) {
+
 				this.$router.push({ name: 'feed' });
+
 			}
 
 		}

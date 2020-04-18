@@ -59,6 +59,7 @@ class Alert {
 			toast: true,
 			position: options.position || 'top-end',
 			timer: options.timer || 3000,
+			customClass: options.customClass || '',
 			showConfirmButton: false,
 			onOpen: (toast) => {
 				toast.addEventListener('mouseenter', Swal.stopTimer)

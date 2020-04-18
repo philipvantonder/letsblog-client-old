@@ -14,7 +14,15 @@ let User = new Schema({
 		type: String,
 		required: true,
 		unique: true
-    },
+	},
+	cellnumber: {
+		type: String,
+		default: null
+	},
+	bio: {
+		type: String,
+		default: ''
+	},
     password: {
 		type: String,
 		required: true,

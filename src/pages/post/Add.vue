@@ -20,7 +20,7 @@
 
 						<div class="form-group">
 							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="post.title" />
-							<input type="hidden" name="slug" v-model="slug" />
+							<input type="hidden" v-model="post.slug" />
 						</div>
 
 						<div class="form-group">
@@ -32,7 +32,7 @@
 						</div>	
 
 						<div class="form-group">
-							<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save as Draft</button>
+							<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save Draft</button>
 							<button class="btn btn-outline-success ml-1" @click.prevent="addPost({ published: true })"> Publish </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" tag="a" :to="{ name: 'feed' }"> Cancel </router-link>
 						</div>
@@ -74,9 +74,9 @@
 				message: '',
 				fileError: false,
 				post: {
-					title: ''
-				},
-				slug: ''
+					title: '',
+					slug: ''
+				}
 
             }
 
@@ -126,12 +126,13 @@
 				formData.append('body', this.post.body);
 				formData.append('isPublished', this.post.isPublished);
 				formData.append('file', this.post.file)
+				formData.append('slug', this.post.slug)
 				formData.append('fileName', this.post.file.name);
 
 				let { code } = await this.createPost(formData);
 
 				if (code === 0) {
-					this.$router.push({ name: 'feed' })
+					this.$router.push({ name: 'feed' });
 				}
 
 			},
@@ -160,7 +161,7 @@
 			},
 
 			updateSlug(val) {
-				this.slug = val;
+				this.post.slug = val;
 			}
 
 		},

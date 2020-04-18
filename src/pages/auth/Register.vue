@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-		<div class="mx-auto w-50 shadow p-3 mt-5 rounded">
+		<div class="mx-auto w-50 radius-10 p-3 mt-5 bg-white">
 			<h2> Lets Blog </h2>
 
 			<form @submit.prevent="registerUser()">
@@ -50,7 +50,7 @@
 
 	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
 	import Alert from '@/model/Alert';
-	import userService from '@/services/user';
+	import UserService from '@/services/user';
 
     export default {
 
@@ -86,32 +86,25 @@
 
         methods: {
 
-            registerUser() {
+            async registerUser() {
 
                 this.$v.$touch()
                 if (this.$v.$invalid) {
                     return;
 				}
 
-				userService.register(this.user)
-				.then(response => {
+				let { code, message } = await UserService.register(this.user)
 
-					let { code, message } = response.data;
+				if (code === 0) {
 
-					if (code === 0) {
+					Alert.message({
+						text: message,
+						confirmBtnText: 'Login',
+						redirect: '/login',
+						confirmButton: true
+					});
 
-						Alert.message({
-							title: 'Completed', 
-							text: message,
-							confirmBtnText: 'Login',
-							redirect: '/login',
-							confirmButton: true
-						})
-
-					}
-
-				})
-				.catch(error => console.error(error));
+				}
 
             }
 
