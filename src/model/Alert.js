@@ -9,7 +9,7 @@ class Alert {
 			title: options.title || '',
 			text: options.text,
 			confirmButtonText: options.confirmBtnText || 'Ok',
-			position: options.position || '',
+			position: options.position || 'center',
 			showConfirmButton: (options.confirmButton !== undefined ? options.confirmButton : false), 
 			timer: options.time || false,
 			backdrop: (options.backdrop !== undefined ? options.backdrop : true)
@@ -33,7 +33,7 @@ class Alert {
 		return new Promise((resolve, reject) => {
 			
 			Swal.fire({
-				position: options.position || '',
+				position: options.position || 'center',
 				icon: options.icon || 'question',
 				title: options.title,
 				confirmButtonText: options.confirmButtonText || 'Yes',
@@ -57,8 +57,9 @@ class Alert {
 
 		const Toast = Swal.mixin({
 			toast: true,
-			position: options || 'top-end',
+			position: options.position || 'top-end',
 			timer: options.timer || 3000,
+			showConfirmButton: false,
 			onOpen: (toast) => {
 				toast.addEventListener('mouseenter', Swal.stopTimer)
 				toast.addEventListener('mouseleave', Swal.resumeTimer)

@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 let Post = new Schema({
     title: String,
-    body: String,
+	body: String,
+	slug: {
+		type: String,
+		unique: true
+	},
 	isPublished: {
 		type: Boolean,
 		default: false,

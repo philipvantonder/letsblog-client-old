@@ -6,8 +6,11 @@ Vue.use(VueRouter);
 
 import LoginPage from '@/pages/auth/Login';
 import RegisterPage from '@/pages/auth/Register';
+import ProfilePage from '@/pages/profile/profile';
+
 import BlogFeed from '@/pages/public/BlogFeed';
 import BlogPost from '@/pages/public/BlogPost';
+
 
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
@@ -21,6 +24,8 @@ const router = new VueRouter({
 
 	mode: 'history',
 
+	linkActiveClass: 'font-weight-bold is-active-link',
+
 	routes: [
 
 		{
@@ -33,6 +38,12 @@ const router = new VueRouter({
 			name: 'register',
 			path: '/register',
 			component: RegisterPage
+		},
+
+		{
+			name: 'profile',
+			path: '/profile',
+			component: ProfilePage
 		},
 
 		{

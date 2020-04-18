@@ -1,20 +1,23 @@
 <template>
-	<div class="container-fluid">
-		<div class="row pt-4">
-			<div class="col-lg-12">
-				<h1>Posts</h1>
+	<div class="container-fluid px-4 pb-4">
+				
+		<div class="row py-2 no-gutters">
+			<h1>Posts</h1>
+		</div>
 
-				<table v-if="userPosts.length" class="table table-bordered table-hover table-striped mt-4">
+		<div class="row py-2">
+			<div class="col-lg-12">
+				<table v-if="userPosts.length" class="table table-borderless table-hover table-striped bg-white radius-10 shadow">
 					<thead>
-					<tr>
-						<th>Title</th>
-						<th>Body</th>
-						<th>File</th>
-						<th>Published</th>
-						<th>Date Added</th>
-						<th>Date last updated</th>
-						<th colspan="2">Actions</th>
-					</tr>
+						<tr>
+							<th>Title</th>
+							<th>Body</th>
+							<th>File</th>
+							<th>Published</th>
+							<th>Date Added</th>
+							<th>Date last updated</th>
+							<th colspan="2">Actions</th>
+						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="post in userPosts" :key="post._id">
@@ -88,12 +91,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-
-.img-thumb {
-	max-width: 200px;
-	max-height: 200px;
-}
-
-</style>

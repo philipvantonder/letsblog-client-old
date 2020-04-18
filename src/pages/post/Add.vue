@@ -1,15 +1,13 @@
 <template>
-	<div class="px-4 pb-4 container-fluid">
+	<div class="container-fluid px-4 pb-4">
 
-		<div class="row py-4 no-gutters">
-			<div class="text-center text-sm-left mb-4 mb-sm-0 col-sm-4 col">
-				<h3>Add New Post</h3>
-			</div>
+		<div class="row py-2 mt-2 no-gutters">
+			<h3>Add New Blog Post</h3>
 		</div>
 
-		<div class="row">
+		<div class="row py-2">
 			<div class="col-md-12 col-lg-9">
-				<div class="shadow rounded p-5 radius-10">
+				<div class="shadow p-5 radius-10 bg-white">
 
 					<div v-if="message" class="alert alert-warning" role="alert">
 						{{ message }}
@@ -18,6 +16,11 @@
 					<form enctype="multipart/form-data">
 						<div class="form-group">
 							<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }" placeholder="Title">
+						</div>
+
+						<div class="form-group">
+							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="post.title" />
+							<input type="hidden" name="slug" v-model="slug" />
 						</div>
 
 						<div class="form-group">
@@ -31,14 +34,14 @@
 						<div class="form-group">
 							<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save as Draft</button>
 							<button class="btn btn-outline-success ml-1" @click.prevent="addPost({ published: true })"> Publish </button>
-							<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'feed' }"> Cancel </router-link>
+							<router-link class="btn btn-outline-secondary ml-1 float-right" tag="a" :to="{ name: 'feed' }"> Cancel </router-link>
 						</div>
 					</form>
 				</div>
 			</div>
 
-			<div class="col-md-12 col-lg-3">
-				<div class="border-0 p-5 shadow radius-10">
+			<div class="col-md-12 col-lg-3 mt-4 mt-lg-0">
+				<div class="border-0 p-5 shadow radius-10 bg-white">
 					<ul class="list-group">
 						<li class="list-group-item disabled" aria-disabled="true">Cras justo odio</li>
 						<li class="list-group-item">Dapibus ac facilisis in</li>
@@ -60,6 +63,8 @@
 	import { VueEditor } from "vue2-editor";
 	import Alert from '@/model/Alert';
 
+	import SlugWidget from '@/components/SlugWidget.vue';
+
     export default {
 
         data() {
@@ -67,14 +72,19 @@
             return {
 
 				message: '',
-				post: {}
+				fileError: false,
+				post: {
+					title: ''
+				},
+				slug: ''
 
             }
 
 		},
 
 		components: {
-			VueEditor
+			VueEditor,
+			SlugWidget
 		},
 
         methods: {
@@ -84,7 +94,7 @@
 			async addPost (data) {
 
 				this.$v.$touch();
-				if (this.$v.$invalid) {
+				if (this.$v.$invalid || this.fileError) {
 					return;
 				}
 
@@ -128,22 +138,29 @@
 			
 			onSelect() {
 
+				this.fileError = false;
 				this.message = '';
 
 				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 				const file = this.$refs.file.files[0];
 
 				if (!allowedTypes.includes(file.type)) {
+					this.fileError = true;
 					this.message = 'Only images are required';
 				}
 
 				if (file.size > 500000) {
+					this.fileError = true;
 					this.message = 'Too large, max size is 500KB';
 				}
 
 				this.post.fileName = file.name;
 				this.post.file = file;
 
+			},
+
+			updateSlug(val) {
+				this.slug = val;
 			}
 
 		},
@@ -167,7 +184,7 @@
 <style scoped>
 
 .radius-10 {
-	border-radius: .625rem;
+	border-radius: .625rem !important;
 }
 
 </style>

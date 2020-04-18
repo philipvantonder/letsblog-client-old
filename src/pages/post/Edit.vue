@@ -1,46 +1,46 @@
 <template>
-    <div>
-		<div v-if="!loading">
-			<div class="container">
-				<div class="row pt-4">
-					<div v-if="post" class="col-lg-12">
-						<div class="shadow rounded p-5">
-							<h1>Edit</h1>
+	<div v-if="!loading" class="container px-4 pb-4">
 
-							<div v-if="message" class="alert alert-warning" role="alert">
-								{{ message }}
-							</div>
+		<div class="row py-2 mt-2 no-gutters">
+			<h1>Edit New Blog Post</h1>
+		</div>
 
-							<form enctype="multipart/form-data"> 
-								<div class="form-group">
-									<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }" placeholder="Title">
-								</div>
+		<div class="row py-2">
+			<div v-if="post" class="col-lg-12">
+				<div class="shadow radius-10 p-5 bg-white">
 
-								<div class="form-group">
-									<vue-editor v-model="post.body" ></vue-editor>
-								</div>
-
-								<div class="form-group">
-									<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
-								</div>
-
-								<div class="form-group">
-									<input type="file" class="form-control" id="file" ref="file" @change="onSelect()" >
-								</div>	
-
-								<div class="form-group">
-									<button class="btn btn-outline-primary" @click.prevent="savePost({ publish: false })"> Save </button>
-									<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="savePost({ publish: true })"> {{ publisedText }} </button>
-									<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
-								</div>
-
-							</form>
-						</div>
+					<div v-if="message" class="alert alert-warning" role="alert">
+						{{ message }}
 					</div>
+
+					<form enctype="multipart/form-data"> 
+						<div class="form-group">
+							<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }" placeholder="Title">
+						</div>
+
+						<div class="form-group">
+							<vue-editor v-model="post.body" ></vue-editor>
+						</div>
+
+						<div class="form-group">
+							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
+						</div>
+
+						<div class="form-group">
+							<input type="file" class="form-control" id="file" ref="file" @change="onSelect()" >
+						</div>	
+
+						<div class="form-group">
+							<button class="btn btn-outline-primary" @click.prevent="savePost({ publish: false })"> Save </button>
+							<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="savePost({ publish: true })"> {{ publisedText }} </button>
+							<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
+						</div>
+
+					</form>
 				</div>
 			</div>
 		</div>
-    </div>
+	</div>
 </template>
 
 <script>
@@ -127,7 +127,7 @@ export default {
 
 					this.submitPost();
 
-					Alert.message({ title: tosts_message, backdrop: false, time: 1500, position: 'top-right' });
+					Alert.toast({ title: tosts_message });
 				}
 
 			} else {
@@ -189,12 +189,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-
-.img-thumb {
-	max-width: 200px;
-	max-height: 200px;
-}
-
-</style>

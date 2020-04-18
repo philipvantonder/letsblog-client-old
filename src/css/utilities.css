@@ -1,0 +1,86 @@
+body {
+	background-color: #eff3f9 !important;
+}
+
+.overflow-y-hidden {
+	overflow-y: hidden !important;
+}
+
+.feed-content::-webkit-scrollbar {
+	width: 12px;
+	background-color: #fff;
+}
+
+.feed-content::-webkit-scrollbar-thumb {
+	width: 12px;
+	background-color: #95999c;
+	border-radius: 50rem;
+}
+
+.img-thumb {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+.radius-10 {
+	border-radius: .625rem !important;
+}
+
+#menu-bar {
+	fill: #FFF;
+}
+
+.h-8 {
+    height: 2rem;
+}
+
+.w-8 {
+    width: 2rem;
+}
+
+.h-6 {
+	height: 1.5rem;;
+}
+
+.w-6 {
+	width: 1.5rem;;
+}
+
+.obj-fit {
+	object-fit: cover;
+}
+
+.inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.z-10 {
+    z-index: 10;
+}
+
+.z-15 {
+    z-index: 15;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.bg-black {
+    background-color: #000;
+}
+
+.cursor-default {
+    cursor: default !important;
+}
+
+.pl-2rem {
+	padding-left: 2rem !important;
+}
+
+.w-64 {
+	width: 16rem;
+}

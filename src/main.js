@@ -10,8 +10,20 @@ import router from './router/index';
 import './css/style.scss';
 import 'bootstrap';
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faLink } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
+
+library.add(faLink)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-layers', FontAwesomeLayers)
+
 /* Filters */
 import '@/model/filters/index';
+
+/* Directives */
+import '@/model/directives/index';
 
 Vue.use(Vuelidate);
 

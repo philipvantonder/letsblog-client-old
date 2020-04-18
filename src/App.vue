@@ -1,12 +1,11 @@
 <template>
 	<div class="vh-100 d-flex flex-column">
 
-		<navbar @toggleSidebar="updateSideBarStatus($event)"/>
+		<navbar @toggleSidebar="updateSidebarStatus($event)" :navBarStatus="isOpen" />
+
+		<sidebar @toggleNavbarStatus="updateNavbarStatus($event)" v-if="isLoggedIn" :sideBarStatus="isOpen" />
 
 		<div class="d-flex flex-grow-1 overflow-y-hidden">
-
-			<sidebar v-if="isLoggedIn" :isOpen="sideBarStatus" />
-			
 			<div class="d-flex flex-grow-1 overflow-auto feed-content">
 				<router-view ></router-view>
 			</div>
@@ -19,6 +18,7 @@
 <script>
 
 import { mapGetters } from 'vuex';
+import './css/utilities.css'
 
 export default {
 
@@ -28,7 +28,7 @@ export default {
 
 		return {
 
-			sideBarStatus: false
+			isOpen: false,
 
 		}
 
@@ -40,29 +40,15 @@ export default {
 
 	methods: {
 
-		updateSideBarStatus(status) {
-			this.sideBarStatus = status
+		updateSidebarStatus(status) {
+			this.isOpen = status;
+		},
+
+		updateNavbarStatus(status) {
+			this.isOpen = status;
 		}
 
 	}
 
 }
 </script>
-
-<style>
-
-.overflow-y-hidden {
-	overflow-y: hidden !important;
-}
-
-.feed-content::-webkit-scrollbar {
-	width: 15px;
-	background-color: #fff;
-}
-
-.feed-content::-webkit-scrollbar-thumb {
-	width: 15px;
-	background-color: #95999c;
-}
-
-</style>

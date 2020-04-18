@@ -1,12 +1,18 @@
 <template>
 	<transition name="slide">
-		<div v-if="isOpen" class="w-64 flex-none bg-primary z-50 overflow-auto h-100 position-fixed">
-			<ul class="navbar-nav">
-				<li class="nav-item" v-if="isLoggedIn">
-					<router-link tag="a" :to="{ name: 'add-post' }" class="nav-link text-white pl-2rem"> Create Post </router-link>
+		<div v-if="isOpen" class="w-64 bg-primary z-15 overflow-auto vh-100 position-fixed">
+			<div class="d-flex align-items-center pl-2rem pt-4">
+				<a v-if="isLoggedIn" href="javascript:void(0)" @click="toggleSideBarStatus()" class="z-15">
+					<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="fill-current w-6 h-6"><path id="menu-bar" d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
+				</a>
+			</div>
+
+			<ul class="navbar-nav pt-4">
+				<li class="nav-item hover-white" v-if="isLoggedIn">
+					<router-link tag="a" :to="{ name: 'add-post' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Create Post </router-link>
 				</li>
-				<li class="nav-item" v-if="isLoggedIn">
-					<router-link tag="a" :to="{ name: 'post-list' }" class="nav-link text-white pl-2rem"> Posts </router-link>
+				<li class="nav-item hover-white" v-if="isLoggedIn">
+					<router-link tag="a" :to="{ name: 'post-list' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Posts </router-link>
 				</li>
 			</ul>
 		</div>
@@ -21,9 +27,37 @@ export default {
 
 	props: {
 
-		isOpen: {
+		sideBarStatus: {
+
 			type: Boolean,
 			required: true
+
+		}
+
+	},
+
+	data() {
+
+		return  {
+			
+			isOpen: false
+
+		}
+
+	},
+
+	watch: {
+
+		sideBarStatus: function (status) {
+			this.isOpen = status;
+		}
+
+	},
+
+	methods: {
+
+		toggleSideBarStatus() {
+			this.$emit('toggleNavbarStatus', this.isOpen = !this.isOpen);
 		}
 
 	},
@@ -37,37 +71,26 @@ export default {
 
 <style scoped>
 
-.w-64 {
-	width: 16rem;
+.hover-white:hover {
+	background-color: #FFF;
 }
 
-.h-6 {
-	height: 1.5rem;;
+.hover-white a:hover {
+	color: #000 !important;
 }
 
-.w-6 {
-	width: 1.5rem;;
-}
-
-.pl-2rem {
-	padding-left: 2rem !important;
-}
-
-.z-50 {
-	z-index: 50;
+.is-active-link {
+	background-color: #FFF;
+	color: #000 !important;
 }
 
 .slide-enter-active, .slide-leave-active{
-	transition: transform 0.2s ease;
+	transition: transform 0.4s ease;
 }
 
 .slide-enter, .slide-leave-to {
 	transform: translateX(-100%);
 	transition: all 150ms ease-in 0s
-}
-
-.flex-none {
-	flex: none;
 }
 
 </style>

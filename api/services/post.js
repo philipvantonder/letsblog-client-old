@@ -23,7 +23,7 @@ module.exports = {
 
 		try {
 
-			let posts = await PostModel.find({ isPublished: true });
+			let posts = await PostModel.find({ isPublished: true }).sort({ createdAt: 'desc' });
 			
 			return { code: 0, message: 'Published posts', posts };
 
@@ -101,7 +101,7 @@ module.exports = {
 			post.body = postDTO.body;
 			post.isPublished = postDTO.isPublished;
 
-			// This means the file was not changed.
+			// check if a new file are being uploaded.
 			if (postDTO.fileName !== undefined) {
 				post.fileName = postDTO.fileName;
 			}

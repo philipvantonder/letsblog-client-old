@@ -27,7 +27,7 @@ export default {
 
 		isLoggedIn: state => !!state.token,
 
-		loggedInUser: state => state.loggedInUser
+		loggedInUser: state => state.loggedInUser,
 
 	},
 
@@ -46,10 +46,6 @@ export default {
 					commit('SET_AUTH_TOKEN', token);
 
 					localStorage.setItem('token', token);
-
-					let user = await JWTService.getUserInfo(token);
-
-					commit('SET_USER_DETAILS', user);
 				
 				}
 
@@ -75,6 +71,14 @@ export default {
 
 		logout({ commit }) {
 			commit('SET_AUTH_TOKEN', false);
+		},
+
+		async setUserDetails({ commit, state }) {
+
+			let user = await JWTService.getUserInfo(state.token);
+
+			commit('SET_USER_DETAILS', user);
+
 		}
 
 	}
