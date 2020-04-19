@@ -15,7 +15,11 @@
 
 				<div class="d-flex justify-content-between">
 					<button class="btn btn-outline-primary"> Login </button>
-					<router-link :to="{ name: 'register' }" class="btn btn-outline-secondary"> Register </router-link>
+
+					<div class="d-flex align-items-center">
+						<router-link :to="{ name: 'forgot-password' }" class="btn btn-link"> Forgot Password </router-link>
+						<router-link :to="{ name: 'register' }" tag="a" class="btn btn-outline-secondary ml-2"> Register </router-link>
+					</div>
 				</div>
 			</form>
 		</div>

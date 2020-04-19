@@ -14,4 +14,6 @@ module.exports = {
 	jwt_secret: process.env.JWT_SECRET,
 	port: process.env.PORT,
 	mongo_url: process.env.MONGO_URL,
+	sendgrid_api_key: process.env.SENDGRID_API_KEY,
+	from_email: process.env.FROM_EMAIL,
 }

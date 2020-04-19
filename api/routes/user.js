@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserService = require('../services/user');
+const EmailService =  require('../services/email');
 const userAuthentication = require('../middleware/userAuthentication');
 
 router.route('/isAuthenticated').get(async (req, res) => {
@@ -42,7 +43,7 @@ router.route('/register').post(async (req, res) => {
 		return res.status(200).send({ code, message });
 		
 	} catch (error) {
-		return res.status(500).send({ message: error.message })	
+		return res.status(500).send({ message: error.message });
 	}
 
 });
@@ -58,7 +59,7 @@ router.route('/getUser').get(async (req, res) => {
 		return res.status(200).send({ code: 0, message: 'User details', user });
 
 	} catch (error) {
-		return res.status(500).send({ message: 'Something went wrong' })	
+		return res.status(500).send({ message: 'Something went wrong' });
 	}
 
 });
@@ -76,9 +77,27 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 		return res.status(200).send({ code, message, user });
 
 	} catch (error) {
-		return res.status(500).send({ message: 'Something went wrong' })	
+		return res.status(500).send({ message: 'Something went wrong' });
 	}
 
 });
 
-module.exports = router
+router.route('/sendPasswordReset').post(async (req, res) => {
+
+	try {
+		
+		await EmailService.sendEmail(
+			'pvantonder157@gmail.com',
+			'Password change request',
+			`Hi Philip`,
+		);
+
+		return res.status(200).send({ code: 0, message: 'Email send' });
+
+	} catch (error) {
+		return res.status(500).send({ message: error.message });		
+	}
+
+});
+
+module.exports = router;

@@ -78,6 +78,20 @@ export default {
 			console.error(error)
 		}
 
+	},
+
+	async sendPasswordReset(userDTO) {
+
+		try {
+
+			const response = await axios.post('users/sendPasswordReset', userDTO);
+
+			return response.data;
+			
+		} catch (error) {
+			console.error(error);
+		}
+
 	}
 
 }

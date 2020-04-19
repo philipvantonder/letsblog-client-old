@@ -126,6 +126,20 @@ export default {
 				return { code: 1, error: error };
 			}
 
+		},
+
+		async PasswordReset (context, postDTO) {
+
+			try {
+				
+				const { code } = await UserService.sendPasswordReset(postDTO);
+
+				return { code };
+
+			} catch (error) {
+				return { code: 1, error: error };
+			}
+
 		}
 
 	}
