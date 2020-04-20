@@ -1,6 +1,5 @@
-const UserModel = require('../models/user');
 const sendGrid = require('@sendgrid/mail');
-const { sendgrid_api_key, from_email } = require('../config/index');
+const { sendgrid_api_key, from_email, test_user_email,  node_env } = require('../config/index');
 sendGrid.setApiKey(sendgrid_api_key);
 
 module.exports = {
@@ -8,6 +7,10 @@ module.exports = {
 	sendEmail: async (to, subject, text) =>  {
 
 		try {
+
+			if (node_env === 'development') {
+				to = test_user_email;
+			}
 
 			const mailOptions = {
 				to: to,

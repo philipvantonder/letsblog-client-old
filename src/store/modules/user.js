@@ -128,16 +128,38 @@ export default {
 
 		},
 
-		async PasswordReset (context, postDTO) {
+		async passwordReset (context, postDTO) {
 
 			try {
 				
-				const { code } = await UserService.sendPasswordReset(postDTO);
+				const { code, message } = await UserService.sendPasswordReset(postDTO);
 
-				return { code };
+				return { code, message };
 
 			} catch (error) {
-				return { code: 1, error: error };
+				if (error.message) {
+					throw new Error(error.message);
+				} else {
+					throw new Error("Something went wrong.");
+				}
+			}
+			
+		},
+		
+		async changePassword(context, postDTO) {
+			
+			try {
+				
+				const { code, message } = await UserService.changePassword(postDTO);
+
+				return { code, message };
+
+			} catch (error) {
+				if (error.message) {
+					throw new Error(error.message);
+				} else {
+					throw new Error("Something went wrong.");
+				}
 			}
 
 		}

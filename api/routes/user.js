@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const UserService = require('../services/user');
-const EmailService =  require('../services/email');
 const userAuthentication = require('../middleware/userAuthentication');
 
 router.route('/isAuthenticated').get(async (req, res) => {
@@ -15,7 +14,7 @@ router.route('/isAuthenticated').get(async (req, res) => {
 		res.status(200).send({ code, message });
 
 	} catch (error) {
-		return res.status(500).send({ message: 'Something went wrong' });
+		return res.status(500).send({ message: error.message });
 	}
 
 });
@@ -29,7 +28,7 @@ router.route('/login').post(async (req, res) => {
 		return res.status(200).send({ code, message, token });
 		
 	} catch (error) {
-		return res.status(500).send({ message: 'Something went wrong' });
+		return res.status(500).send({ message: error.message });
 	}
 
 });
@@ -59,7 +58,7 @@ router.route('/getUser').get(async (req, res) => {
 		return res.status(200).send({ code: 0, message: 'User details', user });
 
 	} catch (error) {
-		return res.status(500).send({ message: 'Something went wrong' });
+		return res.status(500).send({ message: error.message });
 	}
 
 });
@@ -77,7 +76,7 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 		return res.status(200).send({ code, message, user });
 
 	} catch (error) {
-		return res.status(500).send({ message: 'Something went wrong' });
+		return res.status(500).send({ message: error.message });
 	}
 
 });
@@ -85,17 +84,15 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 router.route('/sendPasswordReset').post(async (req, res) => {
 
 	try {
-		
-		await EmailService.sendEmail(
-			'pvantonder157@gmail.com',
-			'Password change request',
-			`Hi Philip`,
-		);
 
-		return res.status(200).send({ code: 0, message: 'Email send' });
+		let { email } = req.body;
+
+		await UserService.sendPasswordResetEmail(email);
+
+		return res.status(200).send({ code: 0, message: `Email have been sent to <strong>${email}</strong>.` });
 
 	} catch (error) {
-		return res.status(500).send({ message: error.message });		
+		return res.status(500).send({ message: error.message });
 	}
 
 });

@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 import LoginPage from '@/pages/auth/Login';
 import RegisterPage from '@/pages/auth/Register';
 import ForgotPasswordPage from '@/pages/auth/ForgotPassword';
+import ChangePasswordPage from '@/pages/auth/ChangePassword';
 
 import BlogFeed from '@/pages/public/BlogFeed';
 import BlogPost from '@/pages/public/BlogPost';
@@ -43,6 +44,12 @@ const router = new VueRouter({
 			name: 'forgot-password',
 			path: '/forgot-password',
 			component: ForgotPasswordPage
+		},
+		
+		{
+			name: 'change-password',
+			path: '/change-password',
+			component: ChangePasswordPage
 		},
 
 		{

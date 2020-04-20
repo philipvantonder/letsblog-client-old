@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const Schema = mongoose.Schema;
 
-let User = new Schema({
+let UserSchema = new mongoose.Schema({
     name: {
         type: String,
 		required: true,
@@ -41,9 +40,9 @@ let User = new Schema({
 	}
 }, { timestamps: true });
 
-User.method.generatePasswordReset = function() {
+UserSchema.methods.generatePasswordReset = function() {
 	this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
 	this.resetPasswordExpires = Date.now() + 3600000;
 };
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('User', UserSchema);

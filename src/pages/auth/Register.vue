@@ -26,7 +26,9 @@
 				<div class="form-group">
 					<label for="password">Password</label>
 					<input type="password" class="form-control" :class="{ 'is-invalid': $v.user.password.$error }" v-model="user.password">
-					<span v-if="!$v.user.password.minLength" >Password must have at least 6 letters.</span>
+					<div class="invalid-feedback">
+						<span v-if="!$v.user.password.minLength" >Password must have at least 6 letters.</span>
+					</div>
 				</div>
 
 				<div class="form-group">

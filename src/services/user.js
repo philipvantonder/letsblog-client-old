@@ -89,6 +89,24 @@ export default {
 			return response.data;
 			
 		} catch (error) {
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
+		}
+
+	},
+
+	async changePassword(userDTO) {
+
+		try {
+
+			const response = await axios.post('users/changePassword', userDTO);
+
+			return response.data;
+			
+		} catch (error) {
 			console.error(error);
 		}
 

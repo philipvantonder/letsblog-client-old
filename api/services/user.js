@@ -1,7 +1,8 @@
 const UserModel = require('../models/user');
+const EmailService =  require('../services/email');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { jwt_secret } = require('../config/index');
+const { jwt_secret, client_url } = require('../config/index');
 
 module.exports = {
 
@@ -20,7 +21,7 @@ module.exports = {
 			return { code: 0, message: 'User is logged in' }
 		
 		} catch (error) {
-			return { code: 1, message: 'Token is invalid' };
+			throw new Error("Token is invalid.");
 		}
 
 	},
@@ -43,7 +44,11 @@ module.exports = {
 			return { code: 0, message: 'Registration successfully' };
 
 		} catch(error) {
-			throw new Error("Something went wrong");
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -69,7 +74,7 @@ module.exports = {
 			return { code: 0, message: 'Logged in', token: signed_token };
 
 		} catch(error) {
-			return { code: 1, message: 'Something went wrong' };
+			throw new Error("Something went wrong.");
 		}
 
 	},
@@ -89,7 +94,7 @@ module.exports = {
 			return { code: 0, message: 'User found', user };
 
 		} catch(error) {
-			return { code: 1, message: 'Something went wrong' };
+			throw new Error("Something went wrong.");
 		}
 
 	},
@@ -115,7 +120,41 @@ module.exports = {
 			return { code: 0, message: 'User have been updated' };
 
 		} catch(error) {
-			return { code: 1, message: 'Something went wrong' };
+			throw new Error("Something went wrong.");
+		}
+
+	},
+
+	sendPasswordResetEmail: async (email) => {
+
+		try {
+
+			let user = await UserModel.findOne({ email: email });
+
+			if (!user) {
+				throw new Error("Email does not exists.");
+			}
+
+			user.generatePasswordReset();
+
+			await user.save();
+
+			let link = client_url + '/change-password';
+
+			await EmailService.sendEmail(
+				user.email,
+				'Password Change Request',
+				`Hi ${user.name} \n 
+				Please click on the following link ${link} to reset your password. \n\n 
+				If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+			);
+
+		} catch (error) {
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	}
