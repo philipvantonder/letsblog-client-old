@@ -81,6 +81,11 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 
 });
 
+/**
+ * @route POST api/user/sendPasswordReset
+ * @desc Recover Password - Generates token and Sends password reset email
+ * @access Public
+ */
 router.route('/sendPasswordReset').post(async (req, res) => {
 
 	try {
@@ -91,6 +96,28 @@ router.route('/sendPasswordReset').post(async (req, res) => {
 
 		return res.status(200).send({ code: 0, message: `Email have been sent to <strong>${email}</strong>.` });
 
+	} catch (error) {
+		return res.status(500).send({ message: error.message });
+	}
+
+});
+
+
+/**
+ * @route POST api/user/changePassword
+ * @desc Reset Password - if token is valid update user's password
+ * @access Public
+ */
+router.route('/changePassword').post(async (req, res) => {
+	
+	const { token, password } = req.body;
+
+	try {
+
+		await UserService.resetPassword(token, password);
+
+		return res.status(200).send({ code: 0, message: 'Password have been updated.' });
+		
 	} catch (error) {
 		return res.status(500).send({ message: error.message });
 	}

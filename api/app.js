@@ -24,8 +24,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/posts', postRoute);
-app.use('/users', userRoute);
+app.use('/api/posts', postRoute);
+app.use('/api/users', userRoute);
 
 app.listen(port, function() {
     console.log(`Server listenig at: http://localhost:${port}`);

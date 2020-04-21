@@ -139,15 +139,16 @@ module.exports = {
 
 			await user.save();
 
-			let link = client_url + '/change-password';
+			let link = client_url + '/change-password/' + user.resetPasswordToken;
 
-			await EmailService.sendEmail(
-				user.email,
-				'Password Change Request',
-				`Hi ${user.name} \n 
-				Please click on the following link ${link} to reset your password. \n\n 
-				If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-			);
+			await EmailService.sendEmail({
+				to: user.email,
+				subject: 'Password Change Request',
+				body: `Hi ${user.name} \n 
+					Please click on the following link <a href='${link}'> Click Here </a> to reset your password. \n\n 
+					If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+				html: true
+			});
 
 		} catch (error) {
 			if (error.message) {
@@ -155,6 +156,31 @@ module.exports = {
 			} else {
 				throw new Error("Something went wrong.");
 			}
+		}
+
+	},
+
+	resetPassword: async (token, password) => {
+
+		try {
+
+			const user = await UserModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
+
+			if (!user) {
+				throw new Error("Password token is invalid or has expires");
+			}
+
+			await user.resetPassword(password);
+
+			await user.save();
+			
+		} catch (error) {
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
+		
 		}
 
 	}

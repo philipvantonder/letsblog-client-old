@@ -104,12 +104,7 @@ export default {
 				}
 
 			} catch (error) {
-				this.loading = false;
-				this.message = 'Something went wrong.';
-				
-				// if (error.message) {
-				// 	this.message = error.message;
-				// }
+				console.error(error);
 			}
 
 		}

@@ -82,7 +82,7 @@ export default {
 
 			try {
 
-				let { code, posts } = await PostService.fetchUserPosts()
+				let { code, posts } = await PostService.fetchUserPosts();
 
 				if (code === 0) {
 					commit('SET_USER_POSTS', posts);

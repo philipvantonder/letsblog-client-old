@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'http://localhost:4000/api';
 
 const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
 
@@ -107,7 +107,11 @@ export default {
 			return response.data;
 			
 		} catch (error) {
-			console.error(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	}

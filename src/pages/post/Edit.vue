@@ -23,7 +23,7 @@
 						</div>
 
 						<div class="form-group">
-							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
+							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
 						</div>
 
 						<div class="form-group">

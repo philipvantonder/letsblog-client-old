@@ -51,6 +51,10 @@ export default {
 					commit('SET_AUTH_TOKEN', token);
 
 					localStorage.setItem('token', token);
+
+					let user = await JWTService.getUserBasicInfo(token);
+					
+					commit('SET_LOGGED_IN_USER', user);
 				
 				}
 

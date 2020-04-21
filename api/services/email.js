@@ -4,9 +4,13 @@ sendGrid.setApiKey(sendgrid_api_key);
 
 module.exports = {
 
-	sendEmail: async (to, subject, text) =>  {
+	sendEmail: async ({ to, subject, body, html }) =>  {
 
 		try {
+			
+			if (html === undefined) {
+				html = false;
+			}
 
 			if (node_env === 'development') {
 				to = test_user_email;
@@ -16,13 +20,22 @@ module.exports = {
 				to: to,
 				from: from_email,
 				subject: subject,
-				text: text
 			};
+
+			if (html) {
+				mailOptions.html = body;
+			} else {
+				mailOptions.text = body;
+			}	
 
 			await sendGrid.send(mailOptions);
 
 		} catch (error) {
-			throw new Error("There was a problem sending the email.");
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("There was a problem sending the email.");
+			}
 		}
 
 	}

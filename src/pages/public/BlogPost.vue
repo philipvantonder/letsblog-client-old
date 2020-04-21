@@ -5,7 +5,7 @@
 
 				<h1> {{ blogPost.title }} </h1>
 				
-				<img :src="'http://localhost:4000/posts/image/' + blogPost.user + '/' + blogPost.fileName" alt="post image" class="img-fluid w-100" > 	
+				<img :src="'http://localhost:4000/api/posts/image/' + blogPost.user + '/' + blogPost.fileName" alt="post image" class="img-fluid w-100" > 	
 
 				<div class="text-break mt-3" v-html="blogPost.body"> </div>
 			</div>

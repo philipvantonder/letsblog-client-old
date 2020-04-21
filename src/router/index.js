@@ -48,8 +48,20 @@ const router = new VueRouter({
 		
 		{
 			name: 'change-password',
-			path: '/change-password',
+			path: '/change-password/:token',
 			component: ChangePasswordPage
+		},
+
+		{
+			name: 'feed',
+			path: '/',
+			component: BlogFeed,
+		},
+
+		{
+			name: 'blog-post',
+			path: '/post/:id',
+			component: BlogPost,
 		},
 
 		{
@@ -68,18 +80,6 @@ const router = new VueRouter({
 			meta: {
 				requiresAuth: true 
 			}
-		},
-
-		{
-			name: 'feed',
-			path: '/',
-			component: BlogFeed,
-		},
-
-		{
-			name: 'blog-post',
-			path: '/post/:id',
-			component: BlogPost,
 		},
 
 		{

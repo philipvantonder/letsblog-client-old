@@ -32,6 +32,7 @@
 
 import { required, sameAs, minLength } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
+import Alert from '@/model/Alert';
 
 export default {
 
@@ -42,6 +43,7 @@ export default {
 			user: {
 				password: '',
 				confirmPassword: '',
+				token: '',
 			}
 			
 		}
@@ -76,15 +78,34 @@ export default {
 				return;
 			}
 
-			// let { code } = await this.changePassword(this.user);
+			try {
 
-			// console.log(code);
+				const { code, message } = await this.changePassword(this.user);
 
-			// if (code === 0) {
-			// 	this.$router.push({ name: 'feed' });
-			// }
+				if (code === 0) {
+					
+					Alert.message({
+						text: message,
+						confirmBtnText: 'Login',
+						redirect: '/login',
+						confirmButton: true
+					});
+
+				}
+
+			} catch (error) {
+				console.error(error);
+			}
 
 		}
+
+	},
+	
+	created() {
+
+		const { token } = this.$route.params;
+
+		this.user.token = token;
 
 	}
 
