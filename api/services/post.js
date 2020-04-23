@@ -8,12 +8,16 @@ module.exports = {
 
 		try {
 
-			let post = await PostModel.findOne({ _id: id, isPublished: true });
+			const post = await PostModel.findOne({ _id: id, isPublished: true });
 			
 			return { code: 0, message: 'Blog post', post };
 
 		} catch (error) {
-			return { code: 1, message: 'Could not get post feed' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -22,12 +26,16 @@ module.exports = {
 
 		try {
 
-			let posts = await PostModel.find({ isPublished: true }).sort({ createdAt: 'desc' });
+			const posts = await PostModel.find({ isPublished: true }).sort({ createdAt: 'desc' });
 			
 			return { code: 0, message: 'Published posts', posts };
 
 		} catch (error) {
-			return { code: 1, message: 'Could not get published posts' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -36,14 +44,18 @@ module.exports = {
 
 		try {
 
-			let { user } = await UserService.getUserByToken(token);
+			const { user } = await UserService.getUserByToken(token);
 			
-			let posts = await PostModel.find({ user: user._id });
+			const posts = await PostModel.find({ user: user._id });
 			
 			return { code: 0, message: 'posts', posts: posts };
 
 		} catch (error) {
-			return { code: 1, message: 'Could not get posts' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -54,7 +66,7 @@ module.exports = {
 
 			const { user } = await UserService.getUserByToken(token);
 
-			let post = new PostModel({
+			const post = new PostModel({
 				title: postDTO.title,
 				body: postDTO.body,
 				fileName: postDTO.filename,
@@ -63,12 +75,16 @@ module.exports = {
 				user: user._id
 			})
 
-			let newPost = await post.save();
+			const newPost = await post.save();
 
 			return { code: 0, message: 'Post created', post: newPost };
 
 		} catch (error) {
-			return { code: 1, message: 'Could not create post' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -77,12 +93,16 @@ module.exports = {
 
 		try {
 
-			let post = await PostModel.findById({ _id: id });
+			const post = await PostModel.findById({ _id: id });
 	
 			return { code: 0, message: 'Post', post: post };
 
 		} catch (error) {
-			return { code: 1, message: 'Could not find post' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -91,7 +111,7 @@ module.exports = {
 
 		try {
 
-			let post = await PostModel.findById({ _id: id });
+			const post = await PostModel.findById({ _id: id });
 
 			if (!post) {
 				return { code: 1, message: 'Post not found' };
@@ -111,7 +131,11 @@ module.exports = {
 			return { code: 0, message: 'Post have been updated' };
 			
 		} catch(error) {
-			return { code: 1, message: 'User could not be updated' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -120,12 +144,16 @@ module.exports = {
 
 		try {
 
-			let post = await PostModel.findByIdAndRemove({ _id: id });
+			const post = await PostModel.findByIdAndRemove({ _id: id });
 
 			return { code: 0, message: 'Post have been removed', post: post };
 
 		} catch (error) {
-			return { code: 1, message: 'Unable to remove post' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		} 
 
 	},
@@ -141,7 +169,33 @@ module.exports = {
 			}
 
 		} catch(error) {
-			return { code: 1, message: 'Unable to remove file' };
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
+		}
+
+	},
+
+	unique: async (slug) => {
+
+		try {
+
+			const post = await PostModel.findOne({ slug: slug });
+
+			if (post) {
+				return { code: 1, message: 'The Slug exists' };
+			}
+
+			return { code: 0, message: 'The Slug is available'  };
+
+		} catch (error) {
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	}

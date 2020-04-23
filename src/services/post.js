@@ -19,7 +19,11 @@ export default {
 			return reponse.data;
 
 		} catch(error) {
-			console.error(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -33,7 +37,11 @@ export default {
 			return response.data;
 
 		} catch (error) {
-			console.log(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -47,7 +55,11 @@ export default {
 			return response.data;
 
 		} catch (error) {
-			console.error(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -61,7 +73,11 @@ export default {
 			return response.data;
 
 		} catch (error) {
-			console.log(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -81,7 +97,11 @@ export default {
 			return reponse.data;
 
 		} catch(error) {
-			console.error(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -95,7 +115,11 @@ export default {
 			return response.data;
 
 		} catch (error) {
-			console.log(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 		
 	},
@@ -115,7 +139,11 @@ export default {
 			return response.data;
 
 		} catch (error) {
-			console.error(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	},
@@ -126,10 +154,32 @@ export default {
 
 			const response = await axios.get('/posts/image/' + post.user + '/' + post.fileName);
 
-			return response;
+			return response.data;
 
 		} catch (error) {
-			console.log(error);
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
+		}
+
+	},
+
+	async checkUnique(postDTO) {
+
+		try {
+			
+			const response = await axios.post('/posts/unique', postDTO);
+
+			return response.data;
+
+		} catch (error) {
+			if (error.message) {
+				throw new Error(error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
 		}
 
 	}

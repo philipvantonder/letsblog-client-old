@@ -33,7 +33,8 @@ Axios.interceptors.response.use(response => {
 
 	let { code } = response.data;
 
-	if (code === "INVALID_TOKEN" || code === "EXPIRED_TOKEN") {
+	// code === "EXPIRED_TOKEN"
+	if (code === "INVALID_TOKEN") {
 
 		if (store.getters['user/isLoggedIn']) {
 			

@@ -10,9 +10,9 @@ module.exports = {
 
 		try {
 	
-			let verify = await jwt.verify(token, jwt_secret);
+			const verify = await jwt.verify(token, jwt_secret);
 
-			let user = await UserModel.findOne({ _id: verify.userId });
+			const user = await UserModel.findOne({ _id: verify.userId });
 
 			if (!user) {
 				return { code: 1, message: 'User not found' };
@@ -32,7 +32,7 @@ module.exports = {
 
 			userDTO.password = await bcrypt.hash(userDTO.password, 10);
 
-			let User = new UserModel({
+			const User = new UserModel({
 				'name': userDTO.name,
 				'surname': userDTO.surname,
 				'email': userDTO.email,
@@ -57,19 +57,19 @@ module.exports = {
 		
 		try {
 
-			let getUser = await UserModel.findOne({ email: user.email });
+			const getUser = await UserModel.findOne({ email: user.email });
 			
 			if (!getUser) {
 				return { code: 1, message: 'Password or username does not match.' };
 			}
 
-			let findUser = await bcrypt.compare(user.password, getUser.password);
+			const findUser = await bcrypt.compare(user.password, getUser.password);
 
 			if (!findUser) {
 				return { code: 1, message: 'Password or username does not match.' };
 			}
 
-			let signed_token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
+			const signed_token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
 
 			return { code: 0, message: 'Logged in', token: signed_token };
 
@@ -83,9 +83,9 @@ module.exports = {
 
 		try {
 
-			let token_verify = await jwt.verify(token, jwt_secret);
+			const token_verify = await jwt.verify(token, jwt_secret);
 			
-			let user = await UserModel.findById({ _id: token_verify.userId });
+			const user = await UserModel.findById({ _id: token_verify.userId });
 
 			if (!user) {
 				return { code: 0, message: 'could not find user' };
@@ -129,7 +129,7 @@ module.exports = {
 
 		try {
 
-			let user = await UserModel.findOne({ email: email });
+			const user = await UserModel.findOne({ email: email });
 
 			if (!user) {
 				throw new Error("Email does not exists.");
@@ -139,7 +139,7 @@ module.exports = {
 
 			await user.save();
 
-			let link = client_url + '/change-password/' + user.resetPasswordToken;
+			const link = client_url + '/change-password/' + user.resetPasswordToken;
 
 			await EmailService.sendEmail({
 				to: user.email,

@@ -16,9 +16,9 @@ var storage = multer.diskStorage({
 
 	destination: async function (req, file, cb) {
 
-		let token = req.headers['authorization'];
+		const token = req.headers['authorization'];
 
-		let { user } = await UserService.getUserByToken(token);
+		const { user } = await UserService.getUserByToken(token);
 
 		postsImageDir = 'images/' + user._id;
 
@@ -87,93 +87,162 @@ const fileUpload = multer({
 
 // Get posts that are linked to a user
 postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
+	
+	try {
 
-	let token = req.headers['authorization'];
+		const token = req.headers['authorization'];
+	
+		const { code, message, posts } = await PostService.getUserPosts(token);
 
-	let { code, message, posts } = await PostService.getUserPosts(token);
+		res.status(200).send({ code, message, posts });
 
-	res.send({ code, message, posts });
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 
 });
 
 // Get single blog post
 postRoutes.route('/blogPost/:id').get(async (req, res) => { 	
 
-	let { id } = req.params;
+	try {
 
-	let { code, message, post } = await PostService.getBlogPost(id);
+		const { id } = req.params;
+		
+		const { code, message, post } = await PostService.getBlogPost(id);
 
-	res.send({ code, message, post });
+		res.status(200).send({ code, message, post });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 
 });
 
 // Create new post
 postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 
-	let token = req.headers['authorization'];
+	try {
 
-	const userDTO = { ...req.body, ...req.file };
+		const token = req.headers['authorization'];
+	
+		const userDTO = { ...req.body, ...req.file };
+		
+		const { code, message, post } = await PostService.create(userDTO, token);
 
-	let { code, message, post } = await PostService.create(userDTO, token);
+		res.status(200).send({ code, message, post });
 
-	res.send({ code, message, post });
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 
 });
 
 // fetch blog post image
 postRoutes.route('/image/:id/:file').get((req, res) => {
 
-	let { id, file } = req.params
+	try {
 
-	fileDir = 'images/' + id + '/' + file
+		const { id, file } = req.params
 
-	res.sendFile(path.join(__dirname, '../' + fileDir))
+		fileDir = 'images/' + id + '/' + file;
+		
+		res.sendFile(path.join(__dirname, '../' + fileDir));
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 
 });
 
 // Get all published posts
 postRoutes.route('/publishedBlogs').get(async (req, res) => {
 
-	let { code, message, posts } = await PostService.getPublishedBlogPosts();
+	try {
+		
+		const { code, message, posts } = await PostService.getPublishedBlogPosts();
 
-	res.send({ code, message, posts });
+		res.status(200).send({ code, message, posts });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 	
 });
 
 // get single blog post
 postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
 	
-	let { id } = req.params;
-	
-	let { code, message, post } = await PostService.getPost(id);
-	
-	res.send({ code, message, post });
+	try {
+
+		const { id } = req.params;
+		
+		const { code, message, post } = await PostService.getPost(id);
+
+		res.status(200).send({ code, message, post });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 	
 });
 
 // Update blog post
 postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 	
-	let { id } = req.params;
+	try {
 
-	let { code, message } = await PostService.update(id, req.body);
+		const { id } = req.params;
+		
+		const { code, message } = await PostService.update(id, req.body);
 
-	res.send({ code, message });
-	
+		res.status(200).send({ code, message });
+		
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+
 });
 
 // Delete blog post
 postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
 
-	let { id } = req.params;
+	try {
 
-	let { code, message, post } = await PostService.delete(id);
+		const { id } = req.params;
+	
+		const { code, message, post } = await PostService.delete(id);
+		
+		if (code === 0) {
+			await PostService.removeUserPostFile(post);
+		}
 
-	if (code === 0) {
-		await PostService.removeUserPostFile(post);
+		res.status(200).send({ code, message });
+		
+	} catch (error) {
+		res.status(500).send({ message: error.message });
 	}
 
-	res.send({ code, message });
+});
+
+/**
+ * @route POST api/posts/unique
+ * @desc Check if the post slug is unique.
+ * @access Logged in user
+ */
+postRoutes.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => {
+
+	try {
+
+		const { slug } = req.body;
+		
+		const { code, message } = await PostService.unique(slug);
+
+		res.status(200).send({ code, message });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
 
 });
 

@@ -14,7 +14,7 @@ router.route('/isAuthenticated').get(async (req, res) => {
 		res.status(200).send({ code, message });
 
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });
@@ -25,10 +25,10 @@ router.route('/login').post(async (req, res) => {
 
 		const { code, message, token } = await UserService.signIn(req, res, req.body);
 		
-		return res.status(200).send({ code, message, token });
+		res.status(200).send({ code, message, token });
 		
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });
@@ -39,10 +39,10 @@ router.route('/register').post(async (req, res) => {
 
 		const { code, message } = await UserService.createUser(req.body);
 
-		return res.status(200).send({ code, message });
+		res.status(200).send({ code, message });
 		
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });
@@ -53,12 +53,12 @@ router.route('/getUser').get(async (req, res) => {
 
 		const token = req.headers['authorization'];
 
-		let { user } = await UserService.getUserByToken(token);
+		const { user } = await UserService.getUserByToken(token);
 
-		return res.status(200).send({ code: 0, message: 'User details', user });
+		res.status(200).send({ code: 0, message: 'User details', user });
 
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });
@@ -69,14 +69,14 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 
 		const token = req.headers['authorization']; 
 
-		let { user } = await UserService.getUserByToken(token);
+		const { user } = await UserService.getUserByToken(token);
 
 		const { code, message } = await UserService.update(user._id, req.body);
 
-		return res.status(200).send({ code, message, user });
+		res.status(200).send({ code, message, user });
 
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });
@@ -90,14 +90,14 @@ router.route('/sendPasswordReset').post(async (req, res) => {
 
 	try {
 
-		let { email } = req.body;
+		const { email } = req.body;
 
 		await UserService.sendPasswordResetEmail(email);
 
-		return res.status(200).send({ code: 0, message: `Email have been sent to <strong>${email}</strong>.` });
+		res.status(200).send({ code: 0, message: `Email have been sent to <strong>${email}</strong>.` });
 
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });
@@ -116,10 +116,10 @@ router.route('/changePassword').post(async (req, res) => {
 
 		await UserService.resetPassword(token, password);
 
-		return res.status(200).send({ code: 0, message: 'Password have been updated.' });
+		res.status(200).send({ code: 0, message: 'Password have been updated.' });
 		
 	} catch (error) {
-		return res.status(500).send({ message: error.message });
+		res.status(500).send({ message: error.message });
 	}
 
 });

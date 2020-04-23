@@ -134,6 +134,8 @@ export default {
 
 				this.submitPost();
 
+				Alert.toast({ title: 'Post have been updated.', customClass: 'mt-7' });
+
 			}
             
 		},

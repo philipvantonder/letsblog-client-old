@@ -158,7 +158,21 @@ export default {
 				return { code: 1, error: error };
 			}
 
-		}
+		},
+
+		async checkUnique (context, postDTO) {
+
+			try {
+
+				let { code, message } = await PostService.checkUnique(postDTO);
+
+				return { code, message };
+
+			} catch (error) {
+				return { code: 1, error: error };
+			}
+
+		} 
  
 	}
 

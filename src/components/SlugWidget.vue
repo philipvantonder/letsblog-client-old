@@ -25,6 +25,7 @@
 <script>
 
 import _ from 'lodash';
+import { mapActions } from 'vuex';
 
 export default {
 
@@ -48,7 +49,7 @@ export default {
 	data() {
 
 		return {
-			slug: this.convertTitle(),
+			slug: this.setSlug(this.title),
 			isEditMode: false,
 			customSlug: '',
 			wasEdited: false
@@ -61,18 +62,16 @@ export default {
 		title: _.debounce(function () {
 			
 			if (!this.wasEdited) {
-				this.slug = this.convertTitle();
+				this.setSlug(this.title);
 			}
 
 		}, 250),
 
-		slug: function(val) {
-			this.$emit('slugChanged', val);
-		}
-
 	},
 
 	methods: {
+
+		...mapActions('posts', ['checkUnique']),
 
 		editSlug() {
 
@@ -88,14 +87,14 @@ export default {
 				this.wasEdited = true;
 			}
 
-			this.slug = this.stringToSlug(this.customSlug);
+			this.setSlug(this.customSlug);
 			this.isEditMode = false;
 
 		},
 
 		resetSlug() {
 
-			this.slug = this.convertTitle();
+			this.setSlug(this.title);
 			this.wasEdited = false;
 			this.isEditMode = false;
 
@@ -122,6 +121,30 @@ export default {
 				.replace(/-+/g, '-'); // collapse dashes
 
 			return str;
+		},
+
+		async setSlug(newVal, count = 0) {
+
+			const slug = this.stringToSlug(newVal + (count > 0 ? `-${count}` : ''));
+
+			// if (slug) {
+
+				console.log("Checking if slug exists");
+
+				const { code, message } = await this.checkUnique({ slug });
+
+				console.log(code);
+				console.log(message);
+
+				if (code === 0) {
+					this.slug = slug;
+					this.$emit('slugChanged', slug);
+				} else {
+					this.setSlug(slug, count+1);
+				}
+
+			// }
+
 		}
 
 	}

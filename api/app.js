@@ -29,4 +29,4 @@ app.use('/api/users', userRoute);
 
 app.listen(port, function() {
     console.log(`Server listenig at: http://localhost:${port}`);
-})
+});
