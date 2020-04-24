@@ -3,6 +3,11 @@ const router = express.Router();
 const UserService = require('../services/user');
 const userAuthentication = require('../middleware/userAuthentication');
 
+/**
+ * @route GET api/users/isAuthenticated
+ * @desc check if token is valid.
+ * @access Public
+ */
 router.route('/isAuthenticated').get(async (req, res) => {
 
 	try {
@@ -19,6 +24,11 @@ router.route('/isAuthenticated').get(async (req, res) => {
 
 });
 
+/**
+ * @route POST api/users/login
+ * @desc login function
+ * @access Public
+ */
 router.route('/login').post(async (req, res) => {	
 
 	try {
@@ -33,6 +43,11 @@ router.route('/login').post(async (req, res) => {
 
 });
 
+/**
+ * @route POST api/users/register
+ * @desc Register function
+ * @access Public
+ */
 router.route('/register').post(async (req, res) => {
 
 	try {
@@ -47,6 +62,11 @@ router.route('/register').post(async (req, res) => {
 
 });
 
+/**
+ * @route GET api/users/getUser
+ * @desc fetch user by using token
+ * @access Public
+ */
 router.route('/getUser').get(async (req, res) => {
 
 	try {
@@ -63,6 +83,11 @@ router.route('/getUser').get(async (req, res) => {
 
 });
 
+/**
+ * @route POST api/users/update
+ * @desc update user's details
+ * @access Private
+ */
 router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => {
 
 	try {
@@ -82,7 +107,7 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 });
 
 /**
- * @route POST api/user/sendPasswordReset
+ * @route POST api/users/sendPasswordReset
  * @desc Recover Password - Generates token and Sends password reset email
  * @access Public
  */
@@ -104,8 +129,8 @@ router.route('/sendPasswordReset').post(async (req, res) => {
 
 
 /**
- * @route POST api/user/changePassword
- * @desc Reset Password - if token is valid update user's password
+ * @route POST api/users/changePassword
+ * @desc Reset Password - if token is valid update password
  * @access Public
  */
 router.route('/changePassword').post(async (req, res) => {

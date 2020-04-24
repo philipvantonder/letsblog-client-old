@@ -85,7 +85,11 @@ const fileUpload = multer({
 
 // })
 
-// Get posts that are linked to a user
+/**
+ * @route GET api/posts/user
+ * @desc fetch all posts linked to a user.
+ * @access Public
+ */
 postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
 	
 	try {
@@ -102,7 +106,11 @@ postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) =>
 
 });
 
-// Get single blog post
+/**
+ * @route GET api/posts/blogPost/:id
+ * @desc fetch single blog post.
+ * @access Public
+ */
 postRoutes.route('/blogPost/:id').get(async (req, res) => { 	
 
 	try {
@@ -119,7 +127,11 @@ postRoutes.route('/blogPost/:id').get(async (req, res) => {
 
 });
 
-// Create new post
+/**
+ * @route GET api/posts/create
+ * @desc Create new blog post.
+ * @access Private
+ */
 postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 
 	try {
@@ -138,7 +150,11 @@ postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.singl
 
 });
 
-// fetch blog post image
+/**
+ * @route GET api/posts/image/:id/:file
+ * @desc fetch blog post image.
+ * @access Public
+ */
 postRoutes.route('/image/:id/:file').get((req, res) => {
 
 	try {
@@ -155,7 +171,11 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
 
 });
 
-// Get all published posts
+/**
+ * @route GET api/posts/publishedBlogs
+ * @desc fetch all published blog posts.
+ * @access Public
+ */
 postRoutes.route('/publishedBlogs').get(async (req, res) => {
 
 	try {
@@ -170,7 +190,11 @@ postRoutes.route('/publishedBlogs').get(async (req, res) => {
 	
 });
 
-// get single blog post
+/**
+ * @route GET api/posts/post:id
+ * @desc fetch single blog post.
+ * @access Private
+ */
 postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
 	
 	try {
@@ -187,7 +211,11 @@ postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res
 	
 });
 
-// Update blog post
+/**
+ * @route PUT api/posts/update:id
+ * @desc Update blog post.
+ * @access Private
+ */
 postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 	
 	try {
@@ -204,7 +232,11 @@ postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.si
 
 });
 
-// Delete blog post
+/**
+ * @route DELETE api/posts/delete:id
+ * @desc Remove blog post.
+ * @access Private
+ */
 postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
 
 	try {
@@ -227,8 +259,8 @@ postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req
 
 /**
  * @route POST api/posts/unique
- * @desc Check if the post slug is unique.
- * @access Logged in user
+ * @desc Check if the Slug is unique.
+ * @access Private
  */
 postRoutes.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => {
 
