@@ -10,7 +10,7 @@
 							<div class="card-body">
 								<h5 class="card-title" title="View post"> {{ post.title }} </h5>
 
-								<p class="card-text" v-html="$options.filters.LimitText(post.body, 200)"> </p>
+								<p class="card-text" v-html="$options.filters.LimitText(post.body, 80)"> </p>
 							</div>
 						</router-link>
 					</div>

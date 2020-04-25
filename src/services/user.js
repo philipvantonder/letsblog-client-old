@@ -70,7 +70,14 @@ export default {
 
 		try {
 		
-			const response = await axios.post('users/update', userDTO);
+			const response = await axios.post('users/update', userDTO, 
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+
+				}
+			);
 
 			return response.data;
 

@@ -18,8 +18,11 @@
 						</div>
 					</div>
 					
-					<div v-if="!sentEmail" class="d-flex align-items-center">
-						<button class="btn btn-outline-primary" :disabled="loading"> {{ buttonText }} </button>
+					<div class="d-flex alig-items center justify-content-between">
+						<div v-if="!sentEmail" >
+							<button class="btn btn-outline-primary" :disabled="loading"> {{ buttonText }} </button>
+						</div>
+						<router-link tag="a" :to="{ name: 'login' }" >Back to Login</router-link>
 					</div>
 				</form>
 			</div>

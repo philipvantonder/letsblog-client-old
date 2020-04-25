@@ -57,13 +57,13 @@ export default {
 
 		async deletePost(id) {
 			
-			let post_index = this.userPosts.map(post => post._id).indexOf(id);
+			const post_index = this.userPosts.map(post => post._id).indexOf(id);
 
-			let post = this.userPosts[post_index];
+			const post = this.userPosts[post_index];
 
 			if (post.isPublished) {
 
-				let response = await Alert.confirm({ title: "Cannot remove Published Post.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
+				const response = await Alert.confirm({ title: "Cannot remove Published Post.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
 
 				if (response) {
 					this.$router.push({ name: 'edit-post', params: { id: id } })
@@ -71,10 +71,14 @@ export default {
 
 			} else {
 	
-				let response = await Alert.confirm({ title: "Are you sure you want to remove this post?" });
+				const response = await Alert.confirm({ title: "Are you sure you want to remove this post?" });
 
 				if (response) {
-					await this.removePost(id);
+					const {code } = await this.removePost(id);
+
+					if (code === 0) {
+						Alert.toast({ title: 'Post have been removed.', customClass: 'mt-7' });
+					}
 				}
 
 			}

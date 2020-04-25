@@ -7,7 +7,7 @@ const path = require('path');
 const multer = require('multer');
 const userAuthentication = require('../middleware/userAuthentication');
 
-const postRoutes = express.Router();
+const router = express.Router();
 const app = express();
 
 var postsImageDir;
@@ -20,7 +20,7 @@ var storage = multer.diskStorage({
 
 		const { user } = await UserService.getUserByToken(token);
 
-		postsImageDir = 'images/' + user._id;
+		postsImageDir = 'images/blog/' + user._id;
 
 		if (!fs.existsSync(postsImageDir)) {
 			fs.mkdirSync(postsImageDir, { recursive: true });
@@ -36,7 +36,7 @@ var storage = multer.diskStorage({
 		if (fs.existsSync(postsImageDir + '/' + originalname)) {
 			let fileName = path.parse(originalname).name;
 			let fileExtension = path.parse(originalname).ext;
-			originalname = fileName + '-' + Date.now() + '.' + fileExtension;
+			originalname = fileName + '-' + Date.now() + fileExtension;
 		}
 
 		cb(null, originalname);
@@ -90,7 +90,7 @@ const fileUpload = multer({
  * @desc fetch all posts linked to a user.
  * @access Public
  */
-postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
+router.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
 	
 	try {
 
@@ -111,7 +111,7 @@ postRoutes.route('/user').get(userAuthentication.isLoggedIn, async (req, res) =>
  * @desc fetch single blog post.
  * @access Public
  */
-postRoutes.route('/blogPost/:id').get(async (req, res) => { 	
+router.route('/blogPost/:id').get(async (req, res) => { 	
 
 	try {
 
@@ -132,7 +132,7 @@ postRoutes.route('/blogPost/:id').get(async (req, res) => {
  * @desc Create new blog post.
  * @access Private
  */
-postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 
 	try {
 
@@ -155,15 +155,15 @@ postRoutes.route('/create').post(userAuthentication.isLoggedIn, fileUpload.singl
  * @desc fetch blog post image.
  * @access Public
  */
-postRoutes.route('/image/:id/:file').get((req, res) => {
+router.route('/image/:id/:file').get((req, res) => {
 
 	try {
 
 		const { id, file } = req.params
 
-		fileDir = 'images/' + id + '/' + file;
+		fileDir = '../images/blog/' + id + '/' + file;
 		
-		res.sendFile(path.join(__dirname, '../' + fileDir));
+		res.sendFile(path.join(__dirname, fileDir));
 
 	} catch (error) {
 		res.status(500).send({ message: error.message });
@@ -176,7 +176,7 @@ postRoutes.route('/image/:id/:file').get((req, res) => {
  * @desc fetch all published blog posts.
  * @access Public
  */
-postRoutes.route('/publishedBlogs').get(async (req, res) => {
+router.route('/publishedBlogs').get(async (req, res) => {
 
 	try {
 		
@@ -195,7 +195,7 @@ postRoutes.route('/publishedBlogs').get(async (req, res) => {
  * @desc fetch single blog post.
  * @access Private
  */
-postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
 	
 	try {
 
@@ -216,7 +216,7 @@ postRoutes.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res
  * @desc Update blog post.
  * @access Private
  */
-postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+router.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 	
 	try {
 
@@ -237,7 +237,7 @@ postRoutes.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.si
  * @desc Remove blog post.
  * @access Private
  */
-postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
 
 	try {
 
@@ -262,7 +262,7 @@ postRoutes.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req
  * @desc Check if the Slug is unique.
  * @access Private
  */
-postRoutes.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => {
 
 	try {
 
@@ -278,4 +278,4 @@ postRoutes.route('/unique').post(userAuthentication.isLoggedIn, async (req, res)
 
 });
 
-module.exports = postRoutes;
+module.exports = router;

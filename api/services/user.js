@@ -101,62 +101,51 @@ module.exports = {
 
 	update: async (id, userDTO) => {
 
-		try {
+		const user = await UserModel.findById({ _id: id });
 
-			const user = await UserModel.findById({ _id: id });
-
-			if (!user) {
-				return { code: 1, message: 'User not found' };
-			}
-
-			user.name = userDTO.name;
-			user.surname = userDTO.surname;
-			user.email = userDTO.email;
-			user.cellnumber = userDTO.cellnumber;
-			user.bio = userDTO.bio;
-
-			await user.save();
-
-			return { code: 0, message: 'User have been updated' };
-
-		} catch(error) {
-			throw new Error("Something went wrong.");
+		if (!user) {
+			return { code: 1, message: 'User not found' };
 		}
+
+		user.name = userDTO.name;
+		user.surname = userDTO.surname;
+		user.email = userDTO.email;
+		user.cellnumber = userDTO.cellnumber;
+		user.bio = userDTO.bio;
+
+		// check if a new file are being uploaded.
+		if (userDTO.fileName !== undefined) {
+			user.profileImage = userDTO.fileName;
+		}
+
+		await user.save();
+
+		return { code: 0, message: 'User have been updated' };
 
 	},
 
 	sendPasswordResetEmail: async (email) => {
 
-		try {
+		const user = await UserModel.findOne({ email: email });
 
-			const user = await UserModel.findOne({ email: email });
-
-			if (!user) {
-				throw new Error("Email does not exists.");
-			}
-
-			user.generatePasswordReset();
-
-			await user.save();
-
-			const link = client_url + '/change-password/' + user.resetPasswordToken;
-
-			await EmailService.sendEmail({
-				to: user.email,
-				subject: 'Password Change Request',
-				body: `Hi ${user.name} \n 
-					Please click on the following link <a href='${link}'> Click Here </a> to reset your password. \n\n 
-					If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-				html: true
-			});
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
+		if (!user) {
+			throw new Error("Email does not exists.");
 		}
+
+		user.generatePasswordReset();
+
+		await user.save();
+
+		const link = client_url + '/change-password/' + user.resetPasswordToken;
+
+		await EmailService.sendEmail({
+			to: user.email,
+			subject: 'Password Change Request',
+			body: `Hi ${user.name} \n 
+				Please click on the following link <a href='${link}'> Click Here </a> to reset your password. \n\n 
+				If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+			html: true
+		});
 
 	},
 

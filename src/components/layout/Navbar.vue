@@ -17,17 +17,17 @@
 		</div>
 
 		<ul class="navbar-nav">
-			<li class="nav-item" v-if="!isLoggedIn">
-				<router-link :to="{ name: 'login' }" class="nav-link text-white"> Login </router-link>
+			<li class="nav-item d-flex align-items-center" v-if="!isLoggedIn">
+				<router-link :to="{ name: 'login' }" class="nav-link text-white"> Sign In </router-link>
 			</li>
 
 			<div v-if="isLoggedIn" class="d-flex align-items-center">
-				<div class="">
-					<img class="rounded-circle h-8 w-8 obj-fit" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" />
+				<div class="cursor-pointer" id="navbarDropdown" data-toggle="dropdown">
+					<img class="rounded-circle h-10 w-10 obj-fit profile-border" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" />
 				</div>
 
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle text-white" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link text-white" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						{{ loggedInUser }}
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -62,6 +62,7 @@ export default {
 
 		return  {
 			
+			showModal: false,
 			isOpen: false
 
 		}
@@ -91,6 +92,10 @@ export default {
 				this.$router.push({ name: 'login' });
 			}
 
+		},
+
+		updateModalState(state) {
+			this.showModal = state;
 		}
 
 	},

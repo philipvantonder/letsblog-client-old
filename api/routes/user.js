@@ -2,6 +2,70 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../services/user');
 const userAuthentication = require('../middleware/userAuthentication');
+const multer = require("multer");
+const fs = require('fs');
+const path = require('path');
+
+var imageDir;
+
+var storage = multer.diskStorage({
+
+	destination: async function (req, file, cb) {
+
+		const token = req.headers['authorization'];
+
+		const { user } = await UserService.getUserByToken(token);
+
+		imageDir = 'images/user/' + user._id;
+
+		if (!fs.existsSync(imageDir)) {
+			fs.mkdirSync(imageDir, { recursive: true });
+		}
+
+		cb(null, imageDir + '/');
+		
+	},
+	
+	filename: function (req, file, cb) {
+
+		var originalname = file.originalname;
+		if (fs.existsSync(imageDir + '/' + originalname)) {
+			let fileName = path.parse(originalname).name;
+			let fileExtension = path.parse(originalname).ext;
+			originalname = fileName + '-' + Date.now() + '.' + fileExtension;
+		}
+
+		cb(null, originalname);
+	}
+	
+});
+
+const fileFilter = (req, file, cb) => {
+
+	const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+	if (!allowedTypes.includes(file.mimetype)) {
+		const error = new Error('Incorrect file type');
+		error.code = "INCORRECT_FILETYPE";
+
+		return cb(error, false);
+	}
+
+	cb(null, true)
+
+}
+
+const fileUpload = multer({ 
+	
+	storage: storage, 
+	
+	fileFilter,
+	
+	limits: {
+		fileSize: 500000
+	}
+
+});
 
 /**
  * @route GET api/users/isAuthenticated
@@ -88,7 +152,7 @@ router.route('/getUser').get(async (req, res) => {
  * @desc update user's details
  * @access Private
  */
-router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/update').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
 
 	try {
 
@@ -127,6 +191,30 @@ router.route('/sendPasswordReset').post(async (req, res) => {
 
 });
 
+/**
+ * @route GET api/posts/image/:id/:file
+ * @desc fetch blog post image.
+ * @access Public
+ */
+router.route('/image/:id/:file').get((req, res) => {
+
+	try {
+
+		const { id, file } = req.params
+
+		let fileDir = '../images/user/' + id + '/' + file;
+		
+		if (!fs.existsSync(path.join(__dirname, fileDir))) {
+			fileDir = '../images/placeholder/user-placeholder.jpg';
+		}
+		
+		res.sendFile(path.join(__dirname, fileDir));
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+
+});
 
 /**
  * @route POST api/users/changePassword

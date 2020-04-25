@@ -6,7 +6,7 @@ module.exports = {
 
 	sendEmail: async ({ to, subject, body, html }) =>  {
 
-		try {
+		// try {
 			
 			if (html === undefined) {
 				html = false;
@@ -30,13 +30,13 @@ module.exports = {
 
 			await sendGrid.send(mailOptions);
 
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("There was a problem sending the email.");
-			}
-		}
+		// } catch (error) {
+		// 	if (error.message) {
+		// 		throw new Error(error.message);
+		// 	} else {
+		// 		throw new Error("There was a problem sending the email.");
+		// 	}
+		// }
 
 	}
 
