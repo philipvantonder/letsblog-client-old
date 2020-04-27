@@ -23,7 +23,7 @@
 
 			<div v-if="isLoggedIn" class="d-flex align-items-center">
 				<div class="cursor-pointer" id="navbarDropdown" data-toggle="dropdown">
-					<img class="rounded-circle h-10 w-10 obj-fit profile-border" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" />
+					<img class="rounded-circle h-10 w-10 obj-fit profile-border" :src="'http://localhost:4000/api/users/image/' + user._id + '/' + user.profileImage" />
 				</div>
 
 				<li class="nav-item dropdown">
@@ -43,7 +43,7 @@
 
 <script>
 
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 
 export default {
 
@@ -79,7 +79,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['setUserDetailsFromToken']),
+		...mapActions('user', ['setUserDetailsFromToken', 'setUser']),
 
 		logout() {
 
@@ -102,9 +102,13 @@ export default {
 
 	computed: {
 		...mapGetters('user', ['isLoggedIn', 'loggedInUser']),
+
+		...mapState('user', ['user'])
 	},
 
 	created() {
+
+		this.setUser();
 
 		this.setUserDetailsFromToken();
 

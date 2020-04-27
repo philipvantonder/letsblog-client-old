@@ -12,175 +12,93 @@ export default {
 
 	async fetchUserPosts() {
 
-		try {
+		const reponse = await axios.get('/posts/user');
 
-			const reponse = await axios.get('/posts/user');
-
-			return reponse.data;
-
-		} catch(error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+		return reponse.data;
 
 	},
 
 	async fetchBlogPost(id) {
 
-		try {
+		const response = await axios.get('/posts/blogPost/' + id);
 
-			const response = await axios.get('/posts/blogPost/' + id);
+		return response.data;
 
-			return response.data;
+	},
 
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+	async fetchBlogPostBySlug(slug) {
+
+		const response = await axios.get('/posts/slug/' + slug);
+
+		return response.data;
 
 	},
 
 	async fetchPublishedBlogPosts() {
 			
-		try {
+		const response = await axios.get('/posts/publishedBlogs');
 
-			const response = await axios.get('/posts/publishedBlogs');
-
-			return response.data;
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+		return response.data;
 
 	},
 
 	async fetchPost(id) {
 
-		try {
+		const response = await axios.get('/posts/post/' + id);
 
-			const response = await axios.get('/posts/post/' + id);
-
-			return response.data;
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+		return response.data;
 
 	},
 
 	async create(data) {
 
-		try {
-
-			const reponse = await axios.post('/posts/create', data,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
+		const reponse = await axios.post('/posts/create', data,
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data'
 				}
-			);
-
-			return reponse.data;
-
-		} catch(error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
 			}
-		}
+		);
+
+		return reponse.data;
 
 	},
 
 	async delete (id) {
 
-		try {
+		const response = await axios.delete('/posts/delete/' + id);
 
-			const response = await axios.delete('/posts/delete/' + id);
+		return response.data;
 
-			return response.data;
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
-		
 	},
 
 	async update (id, post) {
 
-		try {
-		
-			const response = await axios.put('/posts/update/' + id, post,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
+		const response = await axios.put('/posts/update/' + id, post,
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data'
 				}
-			);		
-
-			return response.data;
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
 			}
-		}
+		);		
+
+		return response.data;
 
 	},
 
 	async getImage (post) {
 
-		try {
+		const response = await axios.get('/posts/image/' + post.user + '/' + post.fileName);
 
-			const response = await axios.get('/posts/image/' + post.user + '/' + post.fileName);
-
-			return response.data;
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+		return response.data;
 
 	},
 
 	async checkUnique(postDTO) {
 
-		try {
-			
-			const response = await axios.post('/posts/unique', postDTO);
+		const response = await axios.post('/posts/unique', postDTO);
 
-			return response.data;
-
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+		return response.data;
 
 	}
 

@@ -128,6 +128,27 @@ router.route('/blogPost/:id').get(async (req, res) => {
 });
 
 /**
+ * @route GET api/posts/slug/:slug
+ * @desc fetch single blog post using slug.
+ * @access Public
+ */
+router.route('/slug/:slug').get(async (req, res) => { 	
+
+	try {
+
+		const { slug } = req.params;
+		
+		const { code, message, post } = await PostService.getBlogPostBySlug(slug);
+
+		res.status(200).send({ code, message, post });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+
+});
+
+/**
  * @route GET api/posts/create
  * @desc Create new blog post.
  * @access Private

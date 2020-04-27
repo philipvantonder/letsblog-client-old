@@ -12,6 +12,14 @@ module.exports = {
 
 	},
 
+	getBlogPostBySlug: async (slug) => {
+
+		const post = await PostModel.findOne({ slug: slug, isPublished: true });
+		
+		return { code: 0, message: 'Blog post', post };
+
+	},
+
 	getPublishedBlogPosts: async () => {
 
 		const posts = await PostModel.find({ isPublished: true }).sort({ createdAt: 'desc' });

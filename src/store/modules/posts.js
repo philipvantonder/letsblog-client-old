@@ -60,11 +60,11 @@ export default {
 
 		},
 
-		async setBlogPost({ commit }, id) {
+		async setBlogPostBySlug({ commit }, id) {
 
 			try {
 
-				let { code, post } = await PostService.fetchBlogPost(id);
+				let { code, post } = await PostService.fetchBlogPostBySlug(id);
 
 				if (code === 0) {
 					commit('SET_BLOG_POST', post);
