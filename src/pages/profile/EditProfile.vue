@@ -29,8 +29,8 @@
 						</div>
 					</div>
 
-					<div class="d-flex justify-content-center">
-						<button class="btn btn-outline-secondary btn-sm mt-1" @click="changeProfilePicture = !changeProfilePicture">  {{ changeProfileText }} </button>
+					<div class="d-flex justify-content-center mt-3">
+						<button class="btn btn-outline-secondary btn-sm" @click="changeProfilePicture = !changeProfilePicture">  {{ changeProfileText }} </button>
 					</div>
 
 				</div>

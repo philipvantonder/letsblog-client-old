@@ -138,9 +138,9 @@ router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('f
 
 		const token = req.headers['authorization'];
 	
-		const userDTO = { ...req.body, ...req.file };
+		const postDTO = { ...req.body, ...req.file };
 		
-		const { code, message, post } = await PostService.create(userDTO, token);
+		const { code, message, post } = await PostService.create(postDTO, token);
 
 		res.status(200).send({ code, message, post });
 
@@ -155,13 +155,15 @@ router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('f
  * @desc fetch blog post image.
  * @access Public
  */
-router.route('/image/:id/:file').get((req, res) => {
+router.route('/image/:id').get(async (req, res) => {
 
 	try {
 
-		const { id, file } = req.params
+		const { id } = req.params;
 
-		fileDir = '../images/blog/' + id + '/' + file;
+		const { post } = await PostService.getPost(id);
+
+		fileDir = '../images/blog/' + post.user + '/' + post.fileName;
 		
 		res.sendFile(path.join(__dirname, fileDir));
 
@@ -266,11 +268,11 @@ router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => 
 
 	try {
 
-		const { slug } = req.body;
+		const postDTO = req.body;
 		
-		const { code, message } = await PostService.unique(slug);
+		const { code, newSlug } = await PostService.unique(postDTO);
 
-		res.status(200).send({ code, message });
+		res.status(200).send({ code, newSlug });
 
 	} catch (error) {
 		res.status(500).send({ message: error.message });

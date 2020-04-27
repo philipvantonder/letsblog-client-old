@@ -28,8 +28,11 @@
 						</div>
 
 						<div class="form-group">
-							<input type="file" class="form-control" ref="file" :class="{ 'is-invalid': $v.post.file.$error }" @change="onSelect()" >
-						</div>	
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" :class="{ 'is-invalid': $v.post.file.$error }" ref="file" @change="onSelect()" >
+								<label class="custom-file-label" for="customFile"> {{ post.fileName }} </label>
+							</div>
+						</div>
 
 						<div class="form-group">
 							<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save Draft</button>
@@ -75,7 +78,8 @@
 				fileError: false,
 				post: {
 					title: '',
-					slug: ''
+					slug: '',
+					fileName: ''
 				}
 
             }

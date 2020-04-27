@@ -164,9 +164,9 @@ export default {
 
 			try {
 
-				let { code, message } = await PostService.checkUnique(postDTO);
+				let { code, newSlug } = await PostService.checkUnique(postDTO);
 
-				return { code, message };
+				return { code, newSlug };
 
 			} catch (error) {
 				return { code: 1, error: error };

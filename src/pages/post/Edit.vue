@@ -19,16 +19,23 @@
 						</div>
 
 						<div class="form-group">
+							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="slugTitle" :id="post._id" />
+						</div>
+
+						<div class="form-group">
 							<vue-editor v-model="post.body" ></vue-editor>
 						</div>
 
 						<div class="form-group">
-							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post.user + '/' + post.fileName" alt="post image"/>
+							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image"/>
 						</div>
 
 						<div class="form-group">
-							<input type="file" class="form-control" id="file" ref="file" @change="onSelect()" >
-						</div>	
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" ref="file" @change="onSelect()" >
+								<label class="custom-file-label" for="customFile"> {{ fileName }} </label>
+							</div>
+						</div>
 
 						<div class="form-group">
 							<button class="btn btn-outline-primary" @click.prevent="savePost({ publish: false })"> Save </button>
@@ -51,6 +58,8 @@ import { mapActions, mapState } from 'vuex';
 import { VueEditor } from "vue2-editor";
 import Alert from '@/model/Alert'; 
 
+import SlugWidget from '@/components/SlugWidget.vue';
+
 export default {
 
 	data() {
@@ -59,14 +68,25 @@ export default {
 
 			loading: true,
 			fileError: false,
-			message: ''
+			message: '',
+			fileName: '', // this property is use to show which new file you are uploading
+			slugTitle: ''
+		}
 
+	},
+
+	watch: {
+		'post.title': {
+			handler(newVal) {
+				this.slugTitle = newVal;
+			}
 		}
 
 	},
 
 	components: {
-		VueEditor
+		VueEditor,
+		SlugWidget
 	},
 
 	computed: {
@@ -75,6 +95,7 @@ export default {
 		publisedText() {
 			return this.post.isPublished ? 'Unpublish' : 'Publish';
 		},
+		
 	},
 
     methods: {
@@ -87,6 +108,7 @@ export default {
 			formData.append('title', this.post.title);
 			formData.append('body', this.post.body);
 			formData.append('isPublished', this.post.isPublished);
+			formData.append('slug', this.post.slug);
 
 			if (this.$refs.file.value) {
 				formData.append('file', this.post.file)
@@ -158,9 +180,14 @@ export default {
 				this.message = 'File is too large, max size is 500KB';
 			}
 
+			this.fileName = file.name;
 			this.post.fileName = file.name;
 			this.post.file = file;
 
+		},
+
+		updateSlug(val) {
+			this.post.slug = val;
 		}
 
 	},
@@ -173,6 +200,8 @@ export default {
 
 		if (response.code === 0) {
 			this.loading = false;
+
+			this.slugTitle = this.post.slug
 		}
 
 	},

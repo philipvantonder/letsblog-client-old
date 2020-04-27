@@ -23,7 +23,7 @@
 						<tr v-for="post in userPosts" :key="post._id">
 							<td>{{ post.title }}</td>
 							<td>{{ post.body | LimitText(50) }}</td>
-							<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post.user + '/' + post.fileName" alt="post image" /></td>
+							<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image" /></td>
 							<td>{{ post.isPublished | BooleanText }}</td>
 							<td>{{ post.createdAt | Date }}</td>
 							<td>{{ post.updatedAt | Date }}</td>

@@ -6,37 +6,27 @@ module.exports = {
 
 	sendEmail: async ({ to, subject, body, html }) =>  {
 
-		// try {
-			
-			if (html === undefined) {
-				html = false;
-			}
+		if (html === undefined) {
+			html = false;
+		}
 
-			if (node_env === 'development') {
-				to = test_user_email;
-			}
+		if (node_env === 'development') {
+			to = test_user_email;
+		}
 
-			const mailOptions = {
-				to: to,
-				from: from_email,
-				subject: subject,
-			};
+		const mailOptions = {
+			to: to,
+			from: from_email,
+			subject: subject,
+		};
 
-			if (html) {
-				mailOptions.html = body;
-			} else {
-				mailOptions.text = body;
-			}	
+		if (html) {
+			mailOptions.html = body;
+		} else {
+			mailOptions.text = body;
+		}	
 
-			await sendGrid.send(mailOptions);
-
-		// } catch (error) {
-		// 	if (error.message) {
-		// 		throw new Error(error.message);
-		// 	} else {
-		// 		throw new Error("There was a problem sending the email.");
-		// 	}
-		// }
+		await sendGrid.send(mailOptions);
 
 	}
 

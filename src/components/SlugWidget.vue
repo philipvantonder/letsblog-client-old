@@ -42,6 +42,11 @@ export default {
 		title: {
 			type: String,
 			required: true
+		},
+
+		id: {
+			type: String,
+			required: false,
 		}
 
 	},
@@ -123,27 +128,21 @@ export default {
 			return str;
 		},
 
-		async setSlug(newVal, count = 0) {
+		async setSlug(newVal) {
 
-			const slug = this.stringToSlug(newVal + (count > 0 ? `-${count}` : ''));
+			const slug = this.stringToSlug(newVal);
 
-			// if (slug) {
+			let id = false;
+			if (this.id) {
+				id = this.id;
+			}
 
-				console.log("Checking if slug exists");
+			const { code, newSlug } = await this.checkUnique({ slug, id });
 
-				const { code, message } = await this.checkUnique({ slug });
-
-				console.log(code);
-				console.log(message);
-
-				if (code === 0) {
-					this.slug = slug;
-					this.$emit('slugChanged', slug);
-				} else {
-					this.setSlug(slug, count+1);
-				}
-
-			// }
+			if (code === 0) {
+				this.slug = newSlug;
+				this.$emit('slugChanged', newSlug);
+			}
 
 		}
 

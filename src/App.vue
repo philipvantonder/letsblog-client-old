@@ -52,3 +52,17 @@ export default {
 
 }
 </script>
+
+<style>
+
+	::-moz-selection { /* Code for Firefox */
+		color: #FFF;
+		background: #18799a;
+	}
+
+	::selection {
+		color: #FFF;
+		background: #18799a;
+	}
+
+</style>

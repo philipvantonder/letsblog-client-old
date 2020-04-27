@@ -8,94 +8,66 @@ module.exports = {
 
 	isAuthenticated: async (token) => {
 
-		try {
-	
-			const verify = await jwt.verify(token, jwt_secret);
+		const verify = await jwt.verify(token, jwt_secret);
 
-			const user = await UserModel.findOne({ _id: verify.userId });
+		const user = await UserModel.findOne({ _id: verify.userId });
 
-			if (!user) {
-				return { code: 1, message: 'User not found' };
-			}
-
-			return { code: 0, message: 'User is logged in' }
-		
-		} catch (error) {
-			throw new Error("Token is invalid.");
+		if (!user) {
+			return { code: 1, message: 'User not found' };
 		}
+
+		return { code: 0, message: 'User is logged in' }
 
 	},
 
 	createUser: async (userDTO) => {
 
-		try {
+		userDTO.password = await bcrypt.hash(userDTO.password, 10);
 
-			userDTO.password = await bcrypt.hash(userDTO.password, 10);
+		const User = new UserModel({
+			'name': userDTO.name,
+			'surname': userDTO.surname,
+			'email': userDTO.email,
+			'password': userDTO.password
+		});
 
-			const User = new UserModel({
-				'name': userDTO.name,
-				'surname': userDTO.surname,
-				'email': userDTO.email,
-				'password': userDTO.password
-			});
+		await User.save();
 
-			await User.save();
-
-			return { code: 0, message: 'Registration successfully' };
-
-		} catch(error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		}
+		return { code: 0, message: 'Registration successfully' };
 
 	},
 
 	signIn: async (req, res, user) => {
+
+		const getUser = await UserModel.findOne({ email: user.email });
 		
-		try {
-
-			const getUser = await UserModel.findOne({ email: user.email });
-			
-			if (!getUser) {
-				return { code: 1, message: 'Password or username does not match.' };
-			}
-
-			const findUser = await bcrypt.compare(user.password, getUser.password);
-
-			if (!findUser) {
-				return { code: 1, message: 'Password or username does not match.' };
-			}
-
-			const signed_token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
-
-			return { code: 0, message: 'Logged in', token: signed_token };
-
-		} catch(error) {
-			throw new Error("Something went wrong.");
+		if (!getUser) {
+			return { code: 1, message: 'Password or username does not match.' };
 		}
+
+		const findUser = await bcrypt.compare(user.password, getUser.password);
+
+		if (!findUser) {
+			return { code: 1, message: 'Password or username does not match.' };
+		}
+
+		const signed_token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
+
+		return { code: 0, message: 'Logged in', token: signed_token };
 
 	},
 
 	getUserByToken: async (token) => {
 
-		try {
+		const token_verify = await jwt.verify(token, jwt_secret);
+		
+		const user = await UserModel.findById({ _id: token_verify.userId });
 
-			const token_verify = await jwt.verify(token, jwt_secret);
-			
-			const user = await UserModel.findById({ _id: token_verify.userId });
-
-			if (!user) {
-				return { code: 0, message: 'could not find user' };
-			}
-
-			return { code: 0, message: 'User found', user };
-
-		} catch(error) {
-			throw new Error("Something went wrong.");
+		if (!user) {
+			return { code: 0, message: 'could not find user' };
 		}
+
+		return { code: 0, message: 'User found', user };
 
 	},
 
@@ -151,26 +123,15 @@ module.exports = {
 
 	resetPassword: async (token, password) => {
 
-		try {
+		const user = await UserModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
 
-			const user = await UserModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
-
-			if (!user) {
-				throw new Error("Password token is invalid or has expires");
-			}
-
-			await user.resetPassword(password);
-
-			await user.save();
-			
-		} catch (error) {
-			if (error.message) {
-				throw new Error(error.message);
-			} else {
-				throw new Error("Something went wrong.");
-			}
-		
+		if (!user) {
+			throw new Error("Password token is invalid or has expires");
 		}
+
+		await user.resetPassword(password);
+
+		await user.save();
 
 	}
 
