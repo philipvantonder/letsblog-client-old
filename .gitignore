@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
 /public/images
-/api/images
+/api/images/blog
+/api/images/user
 /dist
 
 # local env files
