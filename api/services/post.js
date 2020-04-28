@@ -32,7 +32,7 @@ module.exports = {
 
 		const { user } = await UserService.getUserByToken(token);
 		
-		const posts = await PostModel.find({ user: user._id });
+		const posts = await PostModel.find({ user: user._id }).sort({ createdAt: 'desc' });
 		
 		return { code: 0, message: 'posts', posts: posts };
 
