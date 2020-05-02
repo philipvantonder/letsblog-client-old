@@ -1,5 +1,6 @@
-const PostModel = require('../models/post')
-const UserService = require('../services/user')
+const PostModel = require('../models/post');
+const CategoriesModel = require('../models/categories');
+const UserService = require('../services/user');
 const fs = require('fs');
 
 module.exports = {
@@ -118,12 +119,49 @@ module.exports = {
 		}
 
 		if (post) {
-			let newSlugVal = postDTO.slug + Math.floor((Math.random() * 100000) + 1);
+
+			const newSlugVal = postDTO.slug + Math.floor((Math.random() * 100000) + 1);
 
 			return { code: 0, newSlug: newSlugVal };
 		}
 
 		return { code: 0, newSlug: postDTO.slug };
+
+	},
+
+	uniqueCategory: async (postDTO) => {
+
+		const category = await CategoriesModel.findOne({ slug: postDTO.slug });
+
+		if (category) {
+
+			const newSlugVal = postDTO.slug + Math.floor((Math.random() * 100000) + 1);
+
+			return { code: 0, newSlug: newSlugVal };
+		}
+
+		return { code: 0, newSlug: postDTO.slug };
+
+	},
+
+	getCategories: async () => {
+
+		const categories = await CategoriesModel.find();
+
+		return { code: 0, categories };
+
+	},
+
+	addCategory: async (postDTO) => {
+
+		const category = new CategoriesModel({
+			name: postDTO.name,
+			slug: postDTO.slug,
+		});
+
+		await category.save();
+
+		return { code: 0, message: 'Category added' };
 
 	}
 

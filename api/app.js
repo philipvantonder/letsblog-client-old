@@ -6,6 +6,7 @@ const userRoute = require('./routes/user');
 
 const cors = require('cors');
 const app = express();
+const morgan = require('morgan');
 
 const { port, mongo_url } = require('./config/index');
 
@@ -26,6 +27,8 @@ app.use(bodyParser.json());
 
 app.use('/api/posts', postRoute);
 app.use('/api/users', userRoute);
+
+app.use(morgan('combined'));
 
 app.listen(port, function() {
     console.log(`Server listenig at: http://localhost:${port}`);

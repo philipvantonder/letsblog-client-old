@@ -51,12 +51,6 @@
 
 <style>
 
-.language-php {
-	background: #f5f2f0;
-	padding: 1em;
-    margin: .5em 0;
-	overflow: auto;
-	
-}
+
 
 </style>

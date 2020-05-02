@@ -50,7 +50,7 @@ const router = new VueRouter({
 			name: 'change-password',
 			path: '/change-password/:token',
 			component: ChangePasswordPage
-		},
+		},	
 
 		{
 			name: 'feed',
@@ -77,6 +77,15 @@ const router = new VueRouter({
 			name: 'edit-profile',
 			path: '/edit-profile',
 			component: lazyLoad('pages/profile/EditProfile'),
+			meta: {
+				requiresAuth: true 
+			}
+		},
+
+		{
+			name: 'categories',
+			path: '/categories',
+			component: lazyLoad('pages/post/categories/List'),
 			meta: {
 				requiresAuth: true 
 			}

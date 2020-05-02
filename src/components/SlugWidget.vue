@@ -47,6 +47,11 @@ export default {
 		id: {
 			type: String,
 			required: false,
+		},
+		type: {
+			type: String,
+			required: false,
+			default: ''
 		}
 
 	},
@@ -76,7 +81,7 @@ export default {
 
 	methods: {
 
-		...mapActions('posts', ['checkUnique']),
+		...mapActions('posts', ['checkUnique', 'checkUniqueCategory']),
 
 		editSlug() {
 
@@ -137,11 +142,24 @@ export default {
 				id = this.id;
 			}
 
-			const { code, newSlug } = await this.checkUnique({ slug, id });
+			if (this.type != '' && this.type === 'category') {
 
-			if (code === 0) {
-				this.slug = newSlug;
-				this.$emit('slugChanged', newSlug);
+				const { code, newSlug } = await this.checkUniqueCategory({ slug, id });
+
+				if (code === 0) {
+					this.slug = newSlug;
+					this.$emit('slugChanged', newSlug);
+				}
+
+			} else {
+				
+				const { code, newSlug } = await this.checkUnique({ slug, id });
+
+				if (code === 0) {
+					this.slug = newSlug;
+					this.$emit('slugChanged', newSlug);
+				}
+
 			}
 
 		}

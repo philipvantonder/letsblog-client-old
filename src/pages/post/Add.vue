@@ -53,7 +53,7 @@
 						<li class="list-group-item">Vestibulum at eros</li>
 					</ul>
 				</div>
-			</div>
+			</div>	
 
 		</div>
 	</div>

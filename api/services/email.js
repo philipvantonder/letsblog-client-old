@@ -1,5 +1,5 @@
 const sendGrid = require('@sendgrid/mail');
-const { sendgrid_api_key, from_email, test_user_email,  node_env } = require('../config/index');
+const { sendgrid_api_key, from_email, test_user_email, node_env } = require('../config/index');
 sendGrid.setApiKey(sendgrid_api_key);
 
 module.exports = {

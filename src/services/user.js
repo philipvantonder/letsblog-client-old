@@ -1,11 +1,15 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:4000/api';
+const axiosInstance = axios.create({
+	baseURL: 'http://localhost:4000/api/users'
+});
+
+// axios.defaults.baseURL = 'http://localhost:4000/api/users';
 
 const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
 
 if (token) {
-	axios.defaults.headers.common['authorization'] = token;
+	axiosInstance.defaults.headers.common['authorization'] = token;
 }
 
 export default {
@@ -14,7 +18,7 @@ export default {
 
 		try {
 			
-			const response = await axios.post('/users/login', user);
+			const response = await axiosInstance.post('/login', user);
 
 			return response;
 
@@ -28,7 +32,7 @@ export default {
 
 		try {
 
-			const response = await axios.post('users/register', user);
+			const response = await axiosInstance.post('/register', user);
 
 			return response.data;
 			
@@ -42,7 +46,7 @@ export default {
 
 		try {
 
-			const response = await axios.get('users/isAuthenticated');
+			const response = await axiosInstance.get('/isAuthenticated');
 
 			return response;
 
@@ -56,7 +60,7 @@ export default {
 
 		try {
 		
-			const response = await axios.get('users/getUser');
+			const response = await axiosInstance.get('/getUser');
 
 			return response.data;
 
@@ -70,7 +74,7 @@ export default {
 
 		try {
 		
-			const response = await axios.post('users/update', userDTO, 
+			const response = await axiosInstance.post('/update', userDTO, 
 				{
 					headers: {
 						'Content-Type': 'multipart/form-data'
@@ -91,7 +95,7 @@ export default {
 
 		try {
 
-			const response = await axios.post('users/sendPasswordReset', userDTO);
+			const response = await axiosInstance.post('/sendPasswordReset', userDTO);
 
 			return response.data;
 			
@@ -109,7 +113,7 @@ export default {
 
 		try {
 
-			const response = await axios.post('users/changePassword', userDTO);
+			const response = await axiosInstance.post('/changePassword', userDTO);
 
 			return response.data;
 			

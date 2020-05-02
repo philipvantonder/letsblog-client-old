@@ -192,8 +192,8 @@ router.route('/sendPasswordReset').post(async (req, res) => {
 });
 
 /**
- * @route GET api/posts/image/:id/:file
- * @desc fetch blog post image.
+ * @route GET api/users/image/:id/:file
+ * @desc fetch users image.
  * @access Public
  */
 router.route('/image/:id/:file').get((req, res) => {
