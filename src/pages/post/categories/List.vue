@@ -9,11 +9,19 @@
 		<div class="row py-2">
 			<div class="col">
 				<div class="shadow p-5 radius-10 bg-white"> 
-					<ul class="list-group">
-						<li class="list-group-item d-flex justify-content-between" v-for="category in categories" :key="category._id"> 
+					<ul v-if="categories.length" class="list-group">
+						<li class="list-group-item d-flex justify-content-between align-items-center" v-for="category in categories" :key="category._id"> 
 							{{ category.name }} 
-							<button class="btn btn-danger btn-sm" @click="remove()"> Remove </button>
+							
+							<div class="d-flex align-items-center">
+								<button class="btn btn-secondary btn-sm" > Edit </button>
+								<button class="btn btn-danger btn-sm ml-2" @click="remove(category._id)"> Remove </button>
+							</div>
+
 						</li>
+					</ul>
+					<ul v-else class="list-group">
+						<li class="list-group-item"> No data. </li>
 					</ul>
 
 					<div v-if="!addNew" class="mt-3">
@@ -47,10 +55,11 @@ import { mapActions, mapState } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 
 import SlugWidget from '@/components/SlugWidget.vue';
+import Alert from '@/model/Alert';
 
 export default {
 
-	name: 'Categories',
+	name: 'Category',
 
 	components: {
 		SlugWidget
@@ -67,7 +76,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions('posts', ['setCategories', 'createCategory']),
+		...mapActions('category', ['setCategories', 'createCategory', 'removeCategory']),
 
 		async submitForm() {
 
@@ -76,11 +85,16 @@ export default {
 				return;
 			}
 
-			await this.createCategory(this.category);
+			const { code } =  await this.createCategory(this.category);
 
-			await this.setCategories();
+			if (code === 0) {
 
-			this.resetAddNew();
+				Alert.toast({ title: 'New category added.', customClass: 'mt-7' });
+
+				await this.setCategories();
+
+				this.resetAddNew();
+			}
 
 		},
 
@@ -94,12 +108,28 @@ export default {
 			this.category.name = '';
 			this.category.slug = '';
 
+		},
+
+		async remove(id) {
+		
+			const response = await Alert.confirm({ title: "Are you sure you want to remove this category.", confirmButton: true});
+
+			if (response) {
+				
+				const { code } = await this.removeCategory(id);
+			
+				if (code === 0) {
+					Alert.toast({ title: 'Category have been removed.', customClass: 'mt-7' });
+				}
+
+			}
+
 		}
 
 	},
 
 	computed: {
-		...mapState('posts', ['categories'])
+		...mapState('category', ['categories'])
 	},
 
 	created() {

@@ -5,13 +5,15 @@ Vue.use(Vuex);
 
 import UserModule from './modules/user';
 import PostsModule from './modules/posts';
+import CategoryModule from './modules/category';
 
 export default new Vuex.Store({
 
 	modules: {
 
 		user: UserModule,
-		posts: PostsModule
+		posts: PostsModule,
+		category: CategoryModule
 
 	}
 

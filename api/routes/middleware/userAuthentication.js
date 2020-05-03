@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { jwt_secret } = require('../config/index');
-const User = require('../models/user');
+const { jwt_secret } = require('../../config/index');
+const UserModel = require('../../models/user');
 
 module.exports = {
 
@@ -21,7 +21,7 @@ module.exports = {
 					
 				}
 				
-				User.findOne({ _id: decoded.userId })
+				UserModel.findOne({ _id: decoded.userId })
 				.then(user => {
 
 					if (user) {

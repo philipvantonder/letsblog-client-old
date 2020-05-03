@@ -102,30 +102,6 @@ export default {
 
 		return response.data;
 
-	},
-
-	async checkUniqueCategory(postDTO) {
-
-		const response = await axiosInstance.post('/uniqueCategory', postDTO);
-
-		return response.data;
-
-	},
-
-	async getCategories () {
-
-		const response = await axiosInstance.get('/categories');
-
-		return response.data;
-
-	},
-
-	async createCategory (postDTO) {
-
-		const response = await axiosInstance.post('/addCategory', postDTO);
-
-		return response.data;
-
 	}
 
 }

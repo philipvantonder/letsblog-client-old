@@ -10,7 +10,6 @@ export default {
 		publishedBlogPosts: [], // Published posts for public feed
 		userPosts: [], // All user posts
 		post: false, // Editing of a single user post,
-		categories: [] // All blog psot different categories
 
 	},
 
@@ -35,10 +34,6 @@ export default {
 
 		SET_POST(state, post) {
 			state.post = post;
-		},
-
-		SET_CATEGORIES(state, categories) {
-			state.categories = categories;
 		}
 
 	},
@@ -175,52 +170,6 @@ export default {
 
 			} catch (error) {
 				return { code: 1, error: error };
-			}
-
-		},
-
-		async checkUniqueCategory (context, postDTO) {
-
-			try {
-
-				let { code, newSlug } = await PostService.checkUniqueCategory(postDTO);
-
-				return { code, newSlug };
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
-
-		},
-
-		async setCategories({ commit }) {
-
-			try {
-				
-				let { code, categories } = await PostService.getCategories();
-
-				if (code === 0) {
-					commit('SET_CATEGORIES', categories);
-				}
-
-				return { code, categories };
-
-			} catch (error) {
-				return { code: 1, message: error };
-			}
-
-		},
-
-		async createCategory (context, postDTO) {
-
-			try {
-
-				const { code, message } = await PostService.createCategory(postDTO);
-
-				return { code, message };
-
-			} catch (error) {
-				return { code: 1, message: error };
 			}
 
 		}

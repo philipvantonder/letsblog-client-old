@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserService = require('../services/user');
-const userAuthentication = require('../middleware/userAuthentication');
+const userAuthentication = require('./middleware/userAuthentication');
 const multer = require("multer");
 const fs = require('fs');
 const path = require('path');
@@ -207,7 +207,7 @@ router.route('/image/:id/:file').get((req, res) => {
 		if (!fs.existsSync(path.join(__dirname, fileDir))) {
 			fileDir = '../images/placeholder/user-placeholder.jpg';
 		}
-		
+
 		res.sendFile(path.join(__dirname, fileDir));
 
 	} catch (error) {

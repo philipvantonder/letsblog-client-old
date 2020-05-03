@@ -5,7 +5,7 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const userAuthentication = require('../middleware/userAuthentication');
+const userAuthentication = require('./middleware/userAuthentication');
 
 const router = express.Router();
 const app = express();
@@ -294,65 +294,6 @@ router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => 
 		const { code, newSlug } = await PostService.unique(postDTO);
 
 		res.status(200).send({ code, newSlug });
-
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
-
-});
-
-/**
- * @route POST api/posts/uniqueCategory
- * @desc Check if the Slug category is unique.
- * @access Private
- */
-router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, res) => {
-
-	try {
-
-		const postDTO = req.body;
-		
-		const { code, newSlug } = await PostService.uniqueCategory(postDTO);
-
-		res.status(200).send({ code, newSlug });
-
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
-
-});
-
-/**
- * @route GET api/get/categories
- * @desc Get all blog categories.
- * @access Private
- */
-router.route('/categories').get(userAuthentication.isLoggedIn, async (req, res) => {
-
-	try {
-		
-		const { code, categories } = await PostService.getCategories();
-
-		res.status(200).send({ code, categories });
-
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
-
-});
-
-/**
- * @route POST api/posts/addCategory
- * @desc Add new category.
- * @access Private
- */
-router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res) => {
-
-	try {
-	
-		const { code, message, categories } = await PostService.addCategory(req.body);
-
-		res.status(200).send({ code, message, categories });
 
 	} catch (error) {
 		res.status(500).send({ message: error.message });
