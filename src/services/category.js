@@ -42,6 +42,22 @@ export default {
 
 		return response.data;
 
+	},
+
+	async getCategory (id) {
+
+		const response = await axiosInstance.post('/category', { id });
+
+		return response.data;
+
+	},
+
+	async update (postDTO) {
+
+		const response = await axiosInstance.post('/update', postDTO);
+
+		return response.data;
+
 	}
 
 }

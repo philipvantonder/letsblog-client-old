@@ -6,7 +6,7 @@ const userAuthentication = require('./middleware/userAuthentication');
 
 /**
  * @route POST api/category/uniqueCategory
- * @desc Check if the Slug category is unique.
+ * @desc Check if the Slug category name is unique.
  * @access Private
  */
 router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, res) => {
@@ -28,9 +28,9 @@ router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, 
 /**
  * @route GET api/category/categories
  * @desc Get all blog categories.
- * @access Private
+ * @access Public
  */
-router.route('/categories').get(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/categories').get(async (req, res) => {
 
 	try {
 		
@@ -75,6 +75,46 @@ router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, 
 		const { id } = req.body;
 	
 		const { code, message } = await CategoryService.removeCategory(id);
+
+		res.status(200).send({ code, message });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+
+});
+
+/**
+ * @route GET api/category/category
+ * @desc get single category.
+ * @access Private
+ */
+router.route('/category').post(userAuthentication.isLoggedIn, async (req, res) => {
+
+	try {
+
+		const { id } = req.body;
+	
+		const { code, message, category } = await CategoryService.getCategory(id);
+
+		res.status(200).send({ code, message, category });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+
+});
+
+/**
+ * @route POST api/category/category
+ * @desc update category.
+ * @access Private
+ */
+router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => {
+
+	try {
+
+		const { code, message } = await CategoryService.update(req.body);
 
 		res.status(200).send({ code, message });
 

@@ -12,7 +12,7 @@
 					<router-link tag="a" :to="{ name: 'add-post' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Create Post </router-link>
 				</li>
 				<li class="nav-item hover-white" v-if="isLoggedIn">
-					<router-link tag="a" :to="{ name: 'post-list' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Posts </router-link>
+					<router-link tag="a" :to="{ name: 'post-list' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> My Posts </router-link>
 				</li>
 				<li class="nav-item hover-white" v-if="isLoggedIn">
 					<router-link tag="a" :to="{ name: 'categories' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Categories </router-link>

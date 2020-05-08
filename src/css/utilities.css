@@ -93,6 +93,10 @@ body {
     opacity: 0.5;
 }
 
+.text-black {
+	color: #000 !important;
+}
+
 .bg-black {
     background-color: #000;
 }
@@ -143,6 +147,12 @@ body {
 	padding: 5px 10px;
 	border-radius: 3px;
 }
+
+.h-90 {
+	height: 30rem;
+}
+
+
 
 /* This is for the rich editor post images */
 p > img {

@@ -17,6 +17,11 @@
 		</div>
 
 		<ul class="navbar-nav">
+			
+			<li v-for="category in categories" :key="category._id" class="nav-item d-flex align-items-center mr-4 rounded-pill bg-white category-item">
+				<router-link :to="{ name: 'login' }" class="nav-link text-black font-weight-bolder"> {{ category.name }} </router-link>
+			</li>
+
 			<li class="nav-item d-flex align-items-center" v-if="!isLoggedIn">
 				<router-link :to="{ name: 'login' }" class="nav-link text-white"> Sign In </router-link>
 			</li>
@@ -33,7 +38,7 @@
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<router-link :to="{ name: 'profile' }" class="dropdown-item"> Profile </router-link>
 						<div class="dropdown-divider"></div>
-						<a href="javascript:void(0)" class="dropdown-item" @click="logout()"> Logout </a>
+						<a href="javascript:void(0)" class="dropdown-item" @click="logoutUser()"> Logout </a>
 					</div>
 				</li>
 			</div>
@@ -79,15 +84,16 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['setUserDetailsFromToken', 'setUser']),
+		...mapActions('user', ['setUserDetailsFromToken', 'setUser', 'logout']),
+		...mapActions('category', ['setCategories']),
 
-		logout() {
+		logoutUser() {
 
 			if (localStorage.getItem('token') !== null) {
 
 				localStorage.removeItem('token');
-				
-				this.$store.dispatch('user/logout');
+
+				this.logout();
 
 				this.$router.push({ name: 'login' });
 			}
@@ -102,15 +108,17 @@ export default {
 
 	computed: {
 		...mapGetters('user', ['isLoggedIn', 'loggedInUser']),
-
-		...mapState('user', ['user'])
+		...mapState('user', ['user']),
+		...mapState('category', ['categories']),
 	},
 
-	created() {
+	async created() {
 
-		this.setUser();
+		await this.setCategories();
 
-		this.setUserDetailsFromToken();
+		await this.setUser();
+				
+		await this.setUserDetailsFromToken();
 
 		const handleEscape = (e) => {
 			if (e.key === 'Esc' || e.key === 'Escape') {
@@ -129,3 +137,11 @@ export default {
 
 }
 </script>
+
+<style scoped>
+
+.category-item:hover {
+	background-color: #d3d3d3 !important;
+}
+
+</style>

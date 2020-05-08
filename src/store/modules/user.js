@@ -55,6 +55,7 @@ export default {
 					let user = await JWTService.getUserBasicInfo(token);
 					
 					commit('SET_LOGGED_IN_USER', user);
+					
 				
 				}
 
@@ -79,7 +80,11 @@ export default {
 		},
 
 		logout({ commit }) {
+
 			commit('SET_AUTH_TOKEN', false);
+			commit('SET_LOGGED_IN_USER', '');
+			commit('SET_USER', {});
+
 		},
 
 		async setUserDetailsFromToken({ commit, state }) {
@@ -100,17 +105,21 @@ export default {
 
 		},
 
-		async setUser({ commit }) {
+		async setUser({ commit, state }) {
 
 			try {
 
-				let { code, user } = await UserService.fetchUser();
+				if (state.token) {
+					
+					let { code, user } = await UserService.fetchUser();
+					
+					if (code === 0) {
+						commit('SET_USER', user);
+					}
+					
+					return { code };
 
-				if (code === 0) {
-					commit('SET_USER', user);
 				}
-
-				return { code };
 
 			} catch (error) {
 				return { code: 1, error: error };

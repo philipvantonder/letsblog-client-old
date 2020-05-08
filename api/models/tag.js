@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const Tag = new mongoose.Schema({
+const TagSchema = new mongoose.Schema({
     name: String,
 }, { timestamps: true });
 
-module.exports = mongoose.model('Tag', Tag);
+module.exports = mongoose.model('Tag', TagSchema);

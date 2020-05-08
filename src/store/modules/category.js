@@ -6,7 +6,8 @@ export default {
 
 	state: {
 
-		categories: [] // All blog psot different categories
+		category: '', // single blog post category
+		categories: [] // blog post categories
 
 	},
 
@@ -19,11 +20,17 @@ export default {
 		REMOVE_CATEGORY(state, id) {
 			let category_index = state.categories.map(category => category._id).indexOf(id);
 			state.categories.splice(category_index, 1);
-		}
+		},
+
+		SET_CATEGORY(state, category) {
+			state.category = category;
+		},
 
 	},
 
 	getters: {
+
+		getCategory: state => state.category
 
 	},
 
@@ -87,6 +94,38 @@ export default {
 
 				return { code };
 				
+			} catch (error) {
+				return { code: 1, message: error };
+			}
+
+		},
+
+		async setCategory({ commit }, id) {
+
+			try {
+				
+				let { code, category } = await CategoryService.getCategory(id);
+
+				if (code === 0) {
+					commit('SET_CATEGORY', category);
+				}
+
+				return { code };
+
+			} catch (error) {
+				return { code: 1, message: error };
+			}
+
+		},
+
+		async updateCategory(context, postDTO) {
+
+			try {
+				
+				let { code } = await CategoryService.update(postDTO);
+
+				return { code };
+
 			} catch (error) {
 				return { code: 1, message: error };
 			}

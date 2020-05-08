@@ -65,7 +65,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['login']),
+		...mapActions('user', ['login', 'setUser', 'setUserDetailsFromToken']),
 
 		async signIn() {
 
@@ -77,6 +77,10 @@ export default {
 			let { code } = await this.login(this.user);
 
 			if (code === 0) {
+
+				await this.setUser();
+				
+				await this.setUserDetailsFromToken();
 
 				this.$router.push({ name: 'feed' });
 
