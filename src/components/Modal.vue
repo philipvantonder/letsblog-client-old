@@ -64,6 +64,22 @@ export default {
 			this.$emit('modalState', true);
 		}
 
+	},
+
+	created() {
+
+		const handleEscape = (e) => {
+			if (e.key === 'Esc' || e.key === 'Escape') {
+				this.$emit('modalState', false);
+			}
+		};
+
+		document.addEventListener('keydown', handleEscape);
+
+		this.$once('hook:beforeDestroy', () => {
+			document.removeEventListener('keydown', handleEscape);
+		});
+
 	}
 
 }

@@ -17,9 +17,18 @@
 		</div>
 
 		<ul class="navbar-nav">
-			
-			<li v-for="category in categories" :key="category._id" class="nav-item d-flex align-items-center mr-4 rounded-pill bg-white category-item">
-				<router-link :to="{ name: 'login' }" class="nav-link text-black font-weight-bolder"> {{ category.name }} </router-link>
+			<li v-for="category in categories" :key="category._id" class="nav-item dropdown" >
+				<router-link class="nav-link text-white" tag="a" :to="{ name: 'login' }" >
+					{{ category.name }} <font-awesome-layers v-if="category.subcategories.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
+				</router-link>
+
+				<ul v-if="category.subcategories.length > 0" class="navbar-nav position-absolute shadow bg-white rounded z-10">
+					<li class="nav-item dropdown" >
+						<router-link class="nav-link text-black" tag="a" :to="{ name: 'login' }" v-for="subcategory in category.subcategories" :key="subcategory._id">
+							{{ subcategory.subcategoryName }}
+						</router-link>
+					</li>
+				</ul>
 			</li>
 
 			<li class="nav-item d-flex align-items-center" v-if="!isLoggedIn">
@@ -140,8 +149,53 @@ export default {
 
 <style scoped>
 
-.category-item:hover {
-	background-color: #d3d3d3 !important;
+.category-caret {
+	transition: transform 0.5s;
+}
+
+ul li a:hover > .category-caret  {
+	transform: rotate(180deg);
+}
+
+ul li ul {
+	visibility: hidden;
+	opacity: 0;
+	display: none;
+	padding: 0.5rem 0 !important;
+}
+
+ul li:hover > ul, ul li:focus-within > ul, ul li ul:hover {
+	visibility: visible;
+	opacity: 1;
+	display: block;
+}
+
+ul li ul li a {
+	display: block !important;
+    width: 100% !important;
+    padding: 0.25rem 1.5rem !important;
+    clear: both !important;
+    font-weight: 400 !important;
+    color: #212529 !important;
+    text-align: inherit !important;
+    white-space: nowrap !important;
+	border: 0 !important;
+}
+
+ul li ul li a:active {
+	color: #fff !important;
+    text-decoration: none !important;
+    background-color: #18799a !important;
+}
+
+ul li ul li a:hover {
+	color: #16181b;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+
+ul li ul li {
+	clear: both;
 }
 
 </style>

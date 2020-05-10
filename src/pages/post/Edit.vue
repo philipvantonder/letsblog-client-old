@@ -38,6 +38,15 @@
 						</div>
 
 						<div class="form-group">
+							<select :class="{ 'is-invalid': $v.post.category.$error }" class="form-control">
+								<option value=""> Choose a category </option>
+								<optgroup v-for="category in categories" :key="category._id" :label="category.name"> 
+									<option v-for="(subcategory, index) in category.subcategories" :key="index" :value="category._id"> {{ subcategory.subcategoryName }}</option>
+								</optgroup>
+							</select>
+						</div>
+
+						<div class="form-group">
 							<button class="btn btn-outline-primary" @click.prevent="savePost({ publish: false })"> Save </button>
 							<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="savePost({ publish: true })"> {{ publisedText }} </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
@@ -91,6 +100,7 @@ export default {
 
 	computed: {
 		...mapState('posts', ['post']),
+		...mapState('category', ['categories']),
 
 		publisedText() {
 			return this.post.isPublished ? 'Unpublish' : 'Publish';
@@ -100,6 +110,7 @@ export default {
 
     methods: {
 		...mapActions('posts', ['setPost', 'updatePost']),
+		...mapActions('category', ['setCategories']),
 
         async submitPost() {
 
@@ -108,6 +119,7 @@ export default {
 			formData.append('title', this.post.title);
 			formData.append('body', this.post.body);
 			formData.append('isPublished', this.post.isPublished);
+			formData.append('category', this.post.category);
 			formData.append('slug', this.post.slug);
 
 			if (this.$refs.file.value) {
@@ -202,6 +214,8 @@ export default {
 			this.loading = false;
 
 			this.slugTitle = this.post.slug
+
+			await this.setCategories();
 		}
 
 	},
@@ -212,6 +226,7 @@ export default {
 
 			title: { required },
 			body: { required },
+			category: { required },
 
 		}
 		

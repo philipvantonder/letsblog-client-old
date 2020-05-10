@@ -152,7 +152,9 @@ body {
 	height: 30rem;
 }
 
-
+.leading-loose {
+	line-height: 2;
+}	
 
 /* This is for the rich editor post images */
 p > img {

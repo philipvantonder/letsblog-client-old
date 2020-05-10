@@ -11,13 +11,22 @@
 				<div class="shadow p-5 radius-10 bg-white"> 
 					<ul v-if="categories.length" class="list-group">
 						<li class="list-group-item d-flex justify-content-between align-items-center" v-for="category in categories" :key="category._id"> 
-							{{ category.name }} 
+							<div class="category-container d-flex flex-column"> 
+								<div class="category-heading cursor-pointer">
+									{{ category.name }} <font-awesome-layers v-if="category.subcategories.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
+								</div>
+							
+								<div v-if="category.subcategories.length > 0" class="subcategories d-none position-absolute mt-4 shadow bg-white p-3 rounded z-10">
+									<ul class="list-unstyled">
+										<li v-for="subcategory in category.subcategories" :key="subcategory._id" class="leading-loose" > {{ subcategory.subcategoryName }} </li>
+									</ul>
+								</div>
+							</div>
 							
 							<div class="d-flex align-items-center">
 								<button class="btn btn-secondary btn-sm" @click="editCategory(category._id)"> Edit </button>
 								<button class="btn btn-danger btn-sm ml-2" @click="remove(category._id)"> Remove </button>
 							</div>
-
 						</li>
 					</ul>
 					<ul v-else class="list-group">
@@ -53,9 +62,9 @@
 
 					<div v-if="formData.subcategoryArr.length > 0">
 						<label for="password" class="font-weight-bolder"> Subcategories </label>
-						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="index">
+						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory._id">
 							<div class="form-group d-flex">
-								<input type="text" v-model="subcategory.subcategoryname" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> <button class="btn btn-danger ml-2" @click="removeSubcategory(index)"> Remove </button>
+								<input type="text" v-model="subcategory.subcategoryName" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> <button class="btn btn-danger ml-2" @click="removeSubcategory(index)"> Remove </button>
 							</div>
 						</div>
 					</div>
@@ -172,7 +181,7 @@ export default {
 		addSubcategory() {
 			
 			this.formData.subcategoryArr.push({
-				subcategoryname: ''
+				subcategoryName: ''
 			});
 
 		},
@@ -199,9 +208,7 @@ export default {
 			this.formData.categoryName = category.name;
 			this.formData.categorySlug = category.slug;
 
-			let subcategoriesArr = category.subcategories.map(item => ({ subcategoryname: item }));
-
-			this.formData.subcategoryArr = subcategoriesArr;
+			this.formData.subcategoryArr = category.subcategories;
 
 		},
 
@@ -251,7 +258,7 @@ export default {
 
 				$each: {
 
-					subcategoryname: { required }
+					subcategoryName: { required }
 
 				}
 
@@ -263,3 +270,20 @@ export default {
 
 }
 </script>
+
+<style scoped>
+
+.category-caret {
+	transition: transform 0.5s;
+}
+
+.category-heading:hover > .category-caret {
+	cursor: pointer;
+	transform: rotate(180deg);
+}
+
+.category-heading:hover + .subcategories {
+	display: block !important;
+}
+
+</style>

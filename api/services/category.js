@@ -32,19 +32,11 @@ module.exports = {
 	},
 
 	addCategory: async (postDTO) => {
-
-		let subcategoriesArr = [];
-
-		if (postDTO.subcategoryArr.length > 0) {
-			for (let subcategory in postDTO.subcategoryArr) {
-				subcategoriesArr.push(postDTO.subcategoryArr[subcategory].subcategoryname);
-			}
-		}
 		
 		const category = new CategoryModel({
 			name: postDTO.categoryName,
 			slug: postDTO.categorySlug,
-			subcategories: subcategoriesArr,
+			subcategories: postDTO.subcategoryArr
 		});
 
 		await category.save();
@@ -70,20 +62,12 @@ module.exports = {
 	},
 
 	update: async(postDTO) => {
-
-		let subcategoriesArr = [];
-
-		if (postDTO.subcategoryArr.length > 0) {
-			for (let subcategory in postDTO.subcategoryArr) {
-				subcategoriesArr.push(postDTO.subcategoryArr[subcategory].subcategoryname);
-			}
-		}
 		
 		await CategoryModel.updateOne({ _id: postDTO.id }, {
 			$set: {
 				name: postDTO.categoryName,
 				slug: postDTO.categorySlug,
-				subcategories: subcategoriesArr	
+				subcategories: postDTO.subcategoryArr	
 			}
 		});
 

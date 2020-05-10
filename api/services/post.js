@@ -40,6 +40,8 @@ module.exports = {
 
 	create: async (postDTO, token) => {
 
+		let tagsArr = postDTO.tags.split(',');
+		
 		const { user } = await UserService.getUserByToken(token);
 
 		const post = new PostModel({
@@ -48,8 +50,10 @@ module.exports = {
 			fileName: postDTO.filename,
 			isPublished: postDTO.isPublished,
 			slug: postDTO.slug,
+			category: postDTO.category,
+			tags: tagsArr,
 			user: user._id
-		})
+		});
 
 		const newPost = await post.save();
 

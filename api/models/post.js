@@ -16,6 +16,13 @@ const PostSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'User' 
 	},
+	category: { 
+		type: mongoose.Schema.Types.ObjectId, 
+		ref: 'Categories' 
+	},
+	tags: {
+		type: Array
+	}
 }, { timestamps: true });
 
 module.exports = mongoose.model('Post', PostSchema);

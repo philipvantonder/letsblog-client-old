@@ -35,6 +35,15 @@
 						</div>
 
 						<div class="form-group">
+							<select v-model="post.category" :class="{ 'is-invalid': $v.post.category.$error }" class="form-control">
+								<option value=""> Choose a category </option>
+								<optgroup v-for="category in categories" :key="category._id" :label="category.name"> 
+									<option v-for="(subcategory, index) in category.subcategories" :key="index" :value="category._id"> {{ subcategory.subcategoryName }}</option>
+								</optgroup>
+							</select>
+						</div>
+
+						<div class="form-group">
 							<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save Draft</button>
 							<button class="btn btn-outline-success ml-1" @click.prevent="addPost({ published: true })"> Publish </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" tag="a" :to="{ name: 'feed' }"> Cancel </router-link>
@@ -45,15 +54,11 @@
 
 			<div class="col-md-12 col-lg-3 mt-4 mt-lg-0">
 				<div class="border-0 p-5 shadow radius-10 bg-white">
-					<ul class="list-group">
-						<li class="list-group-item disabled" aria-disabled="true">Cras justo odio</li>
-						<li class="list-group-item">Dapibus ac facilisis in</li>
-						<li class="list-group-item">Morbi leo risus</li>
-						<li class="list-group-item">Porta ac consectetur ac</li>
-						<li class="list-group-item">Vestibulum at eros</li>
-					</ul>
+
+					<TagInput v-model="post.tags" />
+
 				</div>
-			</div>	
+			</div>
 
 		</div>
 	</div>
@@ -62,11 +67,12 @@
 <script>
 
 	import { required } from 'vuelidate/lib/validators';
-	import { mapActions } from 'vuex';
+	import { mapActions, mapState } from 'vuex';
 	import { VueEditor } from "vue2-editor";
 	import Alert from '@/model/Alert';
 
 	import SlugWidget from '@/components/SlugWidget.vue';
+	import TagInput from '@/components/TagInput.vue';
 
     export default {
 
@@ -79,6 +85,8 @@
 				post: {
 					title: '',
 					slug: '',
+					category: '',
+					tags: '',
 					fileName: ''
 				}
 
@@ -88,12 +96,14 @@
 
 		components: {
 			VueEditor,
-			SlugWidget
+			SlugWidget,
+			TagInput
 		},
 
         methods: {
 
 			...mapActions('posts', ['createPost']),
+			...mapActions('category', ['setCategories']),
 
 			async addPost (data) {
 
@@ -129,9 +139,13 @@
 				formData.append('title', this.post.title);
 				formData.append('body', this.post.body);
 				formData.append('isPublished', this.post.isPublished);
+
 				formData.append('file', this.post.file)
 				formData.append('slug', this.post.slug)
 				formData.append('fileName', this.post.file.name);
+				
+				formData.append('category', this.post.category);
+				formData.append('tags', this.post.tags);
 
 				let { code } = await this.createPost(formData);
 
@@ -170,12 +184,25 @@
 
 		},
 		
+		computed: {
+
+			...mapState('category', ['categories'])
+
+		},
+
+		async created() {
+
+			await this.setCategories();
+
+		},
+		
 		validations: {
 
 			post: {
 
 				title: { required },
 				body: { required },
+				category: { required },
 				file: { required },
 
 			}
@@ -185,11 +212,3 @@
     }
 
 </script>
-
-<style scoped>
-
-.radius-10 {
-	border-radius: .625rem !important;
-}
-
-</style>
