@@ -9,16 +9,16 @@
 		<div class="row py-2">
 			<div class="col">
 				<div class="shadow p-5 radius-10 bg-white"> 
-					<ul v-if="categories.length" class="list-group">
-						<li class="list-group-item d-flex justify-content-between align-items-center" v-for="category in categories" :key="category._id"> 
+					<ul class="list-group" v-if="categories.length > 0" >
+						<li class="list-group-item d-flex justify-content-between align-items-center" v-for="(category, index) in categories" :key="index"> 
 							<div class="category-container d-flex flex-column"> 
 								<div class="category-heading cursor-pointer">
-									{{ category.name }} <font-awesome-layers v-if="category.subcategories.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
+									{{ category.category.name }} <font-awesome-layers v-if="category.subcategory.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
 								</div>
-							
-								<div v-if="category.subcategories.length > 0" class="subcategories d-none position-absolute mt-4 shadow bg-white p-3 rounded z-10">
+
+								<div v-if="category.subcategory.length > 0" class="subcategories d-none position-absolute mt-4 shadow bg-white p-3 rounded z-10">
 									<ul class="list-unstyled">
-										<li v-for="subcategory in category.subcategories" :key="subcategory._id" class="leading-loose" > {{ subcategory.subcategoryName }} </li>
+										<li v-for="subcategoryItem in category.subcategory" :key="subcategoryItem._id" class="leading-loose" > {{ subcategoryItem.name }} </li>
 									</ul>
 								</div>
 							</div>
@@ -63,8 +63,15 @@
 					<div v-if="formData.subcategoryArr.length > 0">
 						<label for="password" class="font-weight-bolder"> Subcategories </label>
 						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory._id">
-							<div class="form-group d-flex">
-								<input type="text" v-model="subcategory.subcategoryName" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> <button class="btn btn-danger ml-2" @click="removeSubcategory(index)"> Remove </button>
+							<div class="form-group d-flex flex-column">
+								<div class="d-flex">
+									<input type="text" v-model="subcategory.subcategoryName" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
+									<button class="btn btn-danger ml-2" @click="removeSubcategory(index)"> Remove </button>
+								</div>
+								<div class="d-flex mt-2">
+									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.subcategoryName" :type="'category'" :id='subcategory.id' />
+									<input type="hidden" v-model="subcategory.subcategorySlugName" />
+								</div>
 							</div>
 						</div>
 					</div>
@@ -162,6 +169,10 @@ export default {
 			this.formData.categorySlug = val;
 		},
 
+		updateSubcategorySlug(val, index) {
+			this.formData.subcategoryArr[index].subcategorySlugName = val;
+		},
+
 		updateModalState(state) {
 			this.modalIsOpen = state;
 		},
@@ -181,7 +192,8 @@ export default {
 		addSubcategory() {
 			
 			this.formData.subcategoryArr.push({
-				subcategoryName: ''
+				subcategoryName: '',
+				subcategorySlugName: ''
 			});
 
 		},

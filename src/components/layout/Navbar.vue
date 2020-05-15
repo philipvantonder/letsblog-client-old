@@ -17,15 +17,15 @@
 		</div>
 
 		<ul class="navbar-nav">
-			<li v-for="category in categories" :key="category._id" class="nav-item dropdown" >
+			<li v-for="(category, index) in categories" :key="index" class="nav-item dropdown" >
 				<router-link class="nav-link text-white" tag="a" :to="{ name: 'login' }" >
-					{{ category.name }} <font-awesome-layers v-if="category.subcategories.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
+					{{ category.category.name }} <font-awesome-layers v-if="category.subcategory.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
 				</router-link>
 
-				<ul v-if="category.subcategories.length > 0" class="navbar-nav position-absolute shadow bg-white rounded z-10">
+				<ul v-if="category.subcategory.length > 0" class="navbar-nav position-absolute shadow bg-white rounded z-10">
 					<li class="nav-item dropdown" >
-						<router-link class="nav-link text-black" tag="a" :to="{ name: 'login' }" v-for="subcategory in category.subcategories" :key="subcategory._id">
-							{{ subcategory.subcategoryName }}
+						<router-link class="nav-link text-black" tag="a" :to="{ name: 'login' }" v-for="subcategoryItem in category.subcategory" :key="subcategoryItem._id">
+							{{ subcategoryItem.name }}
 						</router-link>
 					</li>
 				</ul>
@@ -123,7 +123,9 @@ export default {
 
 	async created() {
 
-		await this.setCategories();
+		if (this.isLoggedIn) {
+			await this.setCategories();
+		}
 
 		await this.setUser();
 				

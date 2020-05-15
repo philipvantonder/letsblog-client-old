@@ -25,13 +25,32 @@ module.exports = {
 
 	getCategories: async () => {
 
-		const categories = await CategoryModel.find();
+		let parent_arr = await CategoryModel.find({ parentId: null });
+		
+		let category_arr = [];
+		
+		for (let parent in parent_arr) {
 
-		return { code: 0, categories };
+			let category = parent_arr[parent];
+
+			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
+
+			categoryObj = {
+				category,
+				subcategory: subcategory_arr
+			};
+
+			category_arr.push(categoryObj);
+
+		}
+
+		return { code: 0, categories: category_arr };
 
 	},
 
 	addCategory: async (postDTO) => {
+
+		console.log(postDTO);
 		
 		const category = new CategoryModel({
 			name: postDTO.categoryName,
@@ -39,7 +58,25 @@ module.exports = {
 			subcategories: postDTO.subcategoryArr
 		});
 
-		await category.save();
+		const newCategory = await category.save();
+
+		if (postDTO.subcategoryArr.length > 0) {
+
+			for (let subcategoryDetails in postDTO.subcategoryArr) {
+
+				let subcategory = postDTO.subcategoryArr[subcategoryDetails];
+
+				let newSubcategory = new CategoryModel({
+					name: subcategory.subcategoryName,
+					slug: subcategory.subcategorySlugName,
+					parentId: newCategory._id,
+				});
+
+				await newSubcategory.save();
+
+			}
+
+		}
 
 		return { code: 0, message: 'Category have been added' };
 
