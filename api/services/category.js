@@ -50,8 +50,6 @@ module.exports = {
 
 	addCategory: async (postDTO) => {
 
-		console.log(postDTO);
-		
 		const category = new CategoryModel({
 			name: postDTO.categoryName,
 			slug: postDTO.categorySlug,
@@ -67,8 +65,8 @@ module.exports = {
 				let subcategory = postDTO.subcategoryArr[subcategoryDetails];
 
 				let newSubcategory = new CategoryModel({
-					name: subcategory.subcategoryName,
-					slug: subcategory.subcategorySlugName,
+					name: subcategory.name,
+					slug: subcategory.slug,
 					parentId: newCategory._id,
 				});
 
@@ -84,6 +82,14 @@ module.exports = {
 
 	removeCategory: async(id) => {
 
+		let subCategories = await CategoryModel.find({ parentId: id });
+		
+		if (subCategories.length > 0) {
+			for (subcategory of subCategories) {
+				await CategoryModel.findByIdAndRemove({ _id: subcategory._id });
+			}
+		}
+
 		await CategoryModel.findByIdAndRemove({ _id: id });
 
 		return { code: 0, message: 'Category have been removed' }; 
@@ -92,9 +98,22 @@ module.exports = {
 
 	getCategory: async(id) => {
 
-		const category = await CategoryModel.findById({ _id: id });
+		let parent_arr = await CategoryModel.find({ _id: id });
+		
+		for (let parent in parent_arr) {
 
-		return { code: 0, message: 'Single category result', category }; 
+			let category = parent_arr[parent];
+
+			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
+
+			categoryObj = {
+				category,
+				subcategory: subcategory_arr
+			};
+
+		}
+
+		return { code: 0, message: 'Single category result', category: categoryObj }; 
 
 	},
 
@@ -104,9 +123,34 @@ module.exports = {
 			$set: {
 				name: postDTO.categoryName,
 				slug: postDTO.categorySlug,
-				subcategories: postDTO.subcategoryArr	
 			}
 		});
+
+		for (subcategory of postDTO.subcategoryArr) {
+
+			// Add new Category
+			if (typeof subcategory.parentId === 'undefined') {
+
+				let newCategory = new CategoryModel({
+					name: subcategory.name,
+					slug: subcategory.slug,
+					parentId: postDTO.id
+				});
+
+				await newCategory.save();
+
+			} else {
+
+				await CategoryModel.updateOne({ _id: subcategory._id }, {
+					$set: {
+						name: subcategory.name,
+						slug: subcategory.slug
+					}
+				});
+
+			}
+
+		}
 
 		return { code: 0, message: 'Category have been updated' }; 
 

@@ -100,6 +100,20 @@ export default {
 
 		},
 
+		async removeSubCategory (context, id) {
+
+			try {
+
+				const { code } =  await CategoryService.removeCategory(id);
+
+				return { code };
+				
+			} catch (error) {
+				return { code: 1, message: error };
+			}
+
+		},
+
 		async setCategory({ commit }, id) {
 
 			try {

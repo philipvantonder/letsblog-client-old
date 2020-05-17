@@ -22,10 +22,10 @@
 									</ul>
 								</div>
 							</div>
-							
+
 							<div class="d-flex align-items-center">
-								<button class="btn btn-secondary btn-sm" @click="editCategory(category._id)"> Edit </button>
-								<button class="btn btn-danger btn-sm ml-2" @click="remove(category._id)"> Remove </button>
+								<button class="btn btn-secondary btn-sm" @click="editCategory(category.category._id)"> Edit </button>
+								<button class="btn btn-danger btn-sm ml-2" @click="remove(category.category._id)"> Remove </button>
 							</div>
 						</li>
 					</ul>
@@ -63,14 +63,15 @@
 					<div v-if="formData.subcategoryArr.length > 0">
 						<label for="password" class="font-weight-bolder"> Subcategories </label>
 						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory._id">
+
 							<div class="form-group d-flex flex-column">
 								<div class="d-flex">
-									<input type="text" v-model="subcategory.subcategoryName" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
-									<button class="btn btn-danger ml-2" @click="removeSubcategory(index)"> Remove </button>
+									<input type="text" v-model="subcategory.name" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
+									<button class="btn btn-danger ml-2" @click="removeSubcategory(subcategory._id, index)"> Remove </button>
 								</div>
 								<div class="d-flex mt-2">
-									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.subcategoryName" :type="'category'" :id='subcategory.id' />
-									<input type="hidden" v-model="subcategory.subcategorySlugName" />
+									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.name" :type="'category'" :id='subcategory._id' />
+									<input type="hidden" v-model="subcategory.slug" />
 								</div>
 							</div>
 						</div>
@@ -126,7 +127,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions('category', ['setCategories', 'createCategory', 'removeCategory', 'setCategory', 'updateCategory']),
+		...mapActions('category', ['setCategories', 'createCategory', 'removeCategory', 'removeSubCategory', 'setCategory', 'updateCategory']),
 
 		async submitForm() {
 
@@ -170,7 +171,7 @@ export default {
 		},
 
 		updateSubcategorySlug(val, index) {
-			this.formData.subcategoryArr[index].subcategorySlugName = val;
+			this.formData.subcategoryArr[index].slug = val;
 		},
 
 		updateModalState(state) {
@@ -192,8 +193,8 @@ export default {
 		addSubcategory() {
 			
 			this.formData.subcategoryArr.push({
-				subcategoryName: '',
-				subcategorySlugName: ''
+				name: '',
+				slug: ''
 			});
 
 		},
@@ -213,26 +214,39 @@ export default {
 			
 			await this.setCategory(id);
 
-			const category = this.getCategory;
+			const { category, subcategory } = this.getCategory;
 
 			// populate edit data on the modal
 			this.formData.id = category._id; // add id to the object use for updating
 			this.formData.categoryName = category.name;
 			this.formData.categorySlug = category.slug;
 
-			this.formData.subcategoryArr = category.subcategories;
+			this.formData.subcategoryArr = subcategory;
 
 		},
 
-		removeSubcategory(id) {
+		async removeSubcategory(id, index) {
+			
+			const response = await Alert.confirm({ title: "Are you sure you want to remove this subCategory.", confirmButton: true });
 
-			this.formData.subcategoryArr.splice(id, 1)
+			if (response) {
+				
+				const { code } = await this.removeSubCategory(id);
+			
+				if (code === 0) {
+					this.formData.subcategoryArr.splice(index, 1);
+					Alert.toast({ title: 'subCategory have been removed.', customClass: 'mt-7' });
+
+					await this.setCategories();
+				}
+
+			}
 
 		},
 
 		async remove(id) {
 		
-			const response = await Alert.confirm({ title: "Are you sure you want to remove this category.", confirmButton: true});
+			const response = await Alert.confirm({ title: "Are you sure you want to remove this category.", confirmButton: true });
 
 			if (response) {
 				
@@ -270,7 +284,7 @@ export default {
 
 				$each: {
 
-					subcategoryName: { required }
+					name: { required }
 
 				}
 
