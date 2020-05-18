@@ -9,6 +9,7 @@
 		</div>
 
 		<div v-if="message" class="mt-2 tag-input__message tag-input__warning" :class="{ 'tag-input__shake': message }" v-html="message"></div>
+
 		<div class="mt-2">
 			<button class="btn btn-primary" @click="addTag()"> Add Tag </button>
 		</div>

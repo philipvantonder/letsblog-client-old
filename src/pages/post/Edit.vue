@@ -1,12 +1,12 @@
 <template>
-	<div v-if="!loading" class="container px-4 pb-4">
+	<div v-if="!loading" class="container-fluid px-4 pb-4">
 
 		<div class="row py-2 mt-2 no-gutters">
 			<h1>Edit New Blog Post</h1>
 		</div>
 
 		<div class="row py-2">
-			<div v-if="post" class="col-lg-12">
+			<div v-if="post" class="col-lg-9">
 				<div class="shadow radius-10 p-5 bg-white">
 
 					<div v-if="message" class="alert alert-warning" role="alert">
@@ -59,7 +59,17 @@
 					</form>
 				</div>
 			</div>
+
+			<div class="col-md-12 col-lg-3 mt-4 mt-lg-0">
+				<div class="border-0 p-5 shadow radius-10 bg-white">
+
+					<TagInput v-model="post.tags" :tagsArr="post.tags" />
+
+				</div>
+			</div>
+
 		</div>
+
 	</div>
 </template>
 
@@ -72,6 +82,7 @@ import { VueEditor } from "vue2-editor";
 import Alert from '@/model/Alert'; 
 
 import SlugWidget from '@/components/SlugWidget.vue';
+import TagInput from '@/components/TagInput.vue';
 
 export default {
 
@@ -99,7 +110,8 @@ export default {
 
 	components: {
 		VueEditor,
-		SlugWidget
+		SlugWidget,
+		TagInput
 	},
 
 	computed: {
@@ -125,6 +137,7 @@ export default {
 			formData.append('isPublished', this.post.isPublished);
 			formData.append('category', this.post.category);
 			formData.append('slug', this.post.slug);
+			formData.append('tags', this.post.tags);
 
 			if (this.$refs.file.value) {
 				formData.append('file', this.post.file)

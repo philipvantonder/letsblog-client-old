@@ -77,11 +77,14 @@ module.exports = {
 			return { code: 1, message: 'Post not found' };
 		}
 
+		let tagsArr = postDTO.tags.split(',');
+
 		post.title = postDTO.title;
 		post.body = postDTO.body;
 		post.isPublished = postDTO.isPublished;
 		post.slug = postDTO.slug;
 		post.category = postDTO.category;
+		post.tags = tagsArr;
 		
 		// check if a new file are being uploaded.
 		if (postDTO.fileName !== undefined) {
