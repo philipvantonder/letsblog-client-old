@@ -81,6 +81,7 @@ module.exports = {
 		post.body = postDTO.body;
 		post.isPublished = postDTO.isPublished;
 		post.slug = postDTO.slug;
+		post.category = postDTO.category;
 		
 		// check if a new file are being uploaded.
 		if (postDTO.fileName !== undefined) {

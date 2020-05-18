@@ -58,6 +58,14 @@ export default {
 
 		return response.data;
 
-	}
+	},
+
+	async getCategoryBySlug (slug) {
+
+		const response = await axiosInstance.get('/categoryBySlug/' + slug );
+
+		return response.data;
+
+	},
 
 }

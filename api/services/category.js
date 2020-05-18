@@ -1,4 +1,5 @@
 const CategoryModel = require('../models/category');
+const PostModel = require('../models/post');
 
 module.exports = {
 
@@ -153,6 +154,24 @@ module.exports = {
 		}
 
 		return { code: 0, message: 'Category have been updated' }; 
+
+	},
+
+	getCategoriesBySlug: async (slug) => {
+
+		const category = await CategoryModel.findOne({ slug });
+
+		if (category) {
+
+			const categoryPosts = await PostModel.find({ category: category._id });
+			
+			return { code: 0, message: 'Post linked to category', posts: categoryPosts };
+			
+		} else {
+			
+			return { code: 0, message: 'No linked Posts found', posts: [] };
+		
+		}
 
 	}
 

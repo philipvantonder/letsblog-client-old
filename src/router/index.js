@@ -11,6 +11,7 @@ import ChangePasswordPage from '@/pages/auth/ChangePassword';
 
 import BlogFeed from '@/pages/public/BlogFeed';
 import BlogPost from '@/pages/public/BlogPost';
+import BlogCategory from '@/pages/public/BlogCategory';
 
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
@@ -24,7 +25,7 @@ const router = new VueRouter({
 
 	mode: 'history',
 
-	linkActiveClass: 'font-weight-bold is-active-link',
+	linkActiveClass: 'font-weight-bold is-active-link active',
 
 	routes: [
 
@@ -62,6 +63,12 @@ const router = new VueRouter({
 			name: 'blog-post',
 			path: '/post/:id',
 			component: BlogPost,
+		},
+
+		{
+			name: 'blog-category',
+			path: '/category/:id',
+			component: BlogCategory,
 		},
 
 		{

@@ -234,10 +234,13 @@ export default {
 				const { code } = await this.removeSubCategory(id);
 			
 				if (code === 0) {
+
 					this.formData.subcategoryArr.splice(index, 1);
+
 					Alert.toast({ title: 'subCategory have been removed.', customClass: 'mt-7' });
 
 					await this.setCategories();
+					
 				}
 
 			}

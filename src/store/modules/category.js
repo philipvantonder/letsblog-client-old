@@ -7,7 +7,8 @@ export default {
 	state: {
 
 		category: '', // single blog post category
-		categories: [] // blog post categories
+		categories: [], // blog post categories
+		linkedCategoryPosts: [] // all posts linked to a specific category
 
 	},
 
@@ -24,6 +25,10 @@ export default {
 
 		SET_CATEGORY(state, category) {
 			state.category = category;
+		},
+
+		SET_LINKED_CATEGORIES(state, posts) {
+			state.linkedCategoryPosts = posts;
 		},
 
 	},
@@ -144,7 +149,25 @@ export default {
 				return { code: 1, message: error };
 			}
 
-		}
+		},
+
+		async setCategoryBySlug({ commit }, slug) {
+
+			try {
+				
+				let { code, posts } = await CategoryService.getCategoryBySlug(slug);
+
+				if (code === 0) {
+					commit('SET_LINKED_CATEGORIES', posts);
+				}
+
+				return { code };
+
+			} catch (error) {
+				return { code: 1, message: error };
+			}
+
+		},
 
 	}
 

@@ -37,9 +37,13 @@
 						<div class="form-group">
 							<select v-model="post.category" :class="{ 'is-invalid': $v.post.category.$error }" class="form-control">
 								<option value=""> Choose a category </option>
-								<optgroup v-for="category in categories" :key="category._id" :label="category.name"> 
-									<option v-for="(subcategory, index) in category.subcategories" :key="index" :value="category._id"> {{ subcategory.subcategoryName }}</option>
-								</optgroup>
+								
+								<template v-for="category in categories" >
+									<optgroup v-if="category.subcategory.length > 0" :key="category._id" :label="category.category.name">
+										<option v-for="(subcategory, index) in category.subcategory" :key="index" :value="subcategory._id"> {{ subcategory.name }} </option>
+									</optgroup>
+									<option v-else :key="category._id" :value="category._id" > {{ category.category.name }} </option>
+								</template>
 							</select>
 						</div>
 

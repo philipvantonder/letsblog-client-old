@@ -124,4 +124,29 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
 
 });
 
+/**
+ * @route GET api/category/categoryBySlug
+ * @desc Get all blog categories by slug name.
+ * @access Public
+ */
+router.route('/categoryBySlug/:slug').get(async (req, res) => {
+
+	try {
+
+		const { slug } = req.params;
+
+		console.log("------------------");
+		console.log(slug);
+		console.log("------------------");
+		
+		const { code, message, posts } = await CategoryService.getCategoriesBySlug(slug);
+
+		res.status(200).send({ code, message, posts });
+
+	} catch (error) {
+		res.status(500).send({ message: error.message });
+	}
+
+});
+
 module.exports = router;

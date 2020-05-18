@@ -7,7 +7,7 @@
 
 		<div class="d-flex flex-grow-1 overflow-y-hidden">
 			<div class="d-flex flex-grow-1 overflow-auto feed-content">
-				<router-view ></router-view>
+				<router-view :key="$route.fullPath" ></router-view>
 			</div>
 		</div>
 
