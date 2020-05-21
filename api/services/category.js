@@ -30,15 +30,48 @@ module.exports = {
 		
 		let category_arr = [];
 		
-		for (let parent in parent_arr) {
-
-			let category = parent_arr[parent];
+		for (category of parent_arr) {
 
 			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
 
+			let newSubCatArr = [];
+			for (subcategoryItem of subcategory_arr) {
+
+				canRemoveSubCategory = true;
+
+				const linkedSubPost = await PostModel.findOne({ category: subcategoryItem._id })
+
+				if (linkedSubPost) {
+					canRemoveSubCategory = false;
+				}
+
+				subCategoryObj = {
+					id: subcategoryItem._id,
+					name: subcategoryItem.name,
+					slug: subcategoryItem.slug,
+					canRemoveSubCategory
+				};
+
+				newSubCatArr.push(subCategoryObj);
+
+			}
+
+			let canRemoveCategory = true;
+
+			const linkedPost = await PostModel.findOne({ category: category._id });
+
+			if (linkedPost) {
+				canRemoveCategory = false;
+			}
+
 			categoryObj = {
-				category,
-				subcategory: subcategory_arr
+				category: {
+					id: category._id,
+					name: category.name,
+					slug: category.slug,
+					canRemoveCategory
+				},
+				subcategory: newSubCatArr
 			};
 
 			category_arr.push(categoryObj);

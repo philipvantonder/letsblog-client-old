@@ -15,6 +15,13 @@ class EntityAlreadyExists extends ErrorBase {
     }
 }
 
+class EntityNotFoundError extends ErrorBase {
+	constructor (entity, message) {
+		super(404, message);
+
+		this.entity = entity;
+	}
+}
 
 class UnknownError extends ErrorBase {
     constructor(message) {
@@ -24,6 +31,7 @@ class UnknownError extends ErrorBase {
 
 module.exports = {
 	EntityAlreadyExists,
+	EntityNotFoundError,
 	UnknownError,
-	ErrorBase
+	ErrorBase,
 };

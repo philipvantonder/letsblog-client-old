@@ -107,22 +107,12 @@ export default {
 
 		async setUser({ commit, state }) {
 
-			try {
+			if (state.token) {
+				
+				let { user } = await UserService.fetchUser();
+				
+				commit('SET_USER', user);
 
-				if (state.token) {
-					
-					let { code, user } = await UserService.fetchUser();
-					
-					if (code === 0) {
-						commit('SET_USER', user);
-					}
-					
-					return { code };
-
-				}
-
-			} catch (error) {
-				return { code: 1, error: error };
 			}
 
 		},

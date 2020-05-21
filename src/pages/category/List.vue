@@ -18,14 +18,14 @@
 
 								<div v-if="category.subcategory.length > 0" class="subcategories d-none position-absolute mt-4 shadow bg-white p-3 rounded z-10">
 									<ul class="list-unstyled">
-										<li v-for="subcategoryItem in category.subcategory" :key="subcategoryItem._id" class="leading-loose" > {{ subcategoryItem.name }} </li>
+										<li v-for="subcategoryItem in category.subcategory" :key="subcategoryItem.id" class="leading-loose" > {{ subcategoryItem.name }} </li>
 									</ul>
 								</div>
 							</div>
 
 							<div class="d-flex align-items-center">
-								<button class="btn btn-secondary btn-sm" @click="editCategory(category.category._id)"> Edit </button>
-								<button class="btn btn-danger btn-sm ml-2" @click="remove(category.category._id)"> Remove </button>
+								<button class="btn btn-secondary btn-sm" @click="editCategory(category.category.id)"> Edit </button>
+								<button v-if="category.category.canRemoveCategory" class="btn btn-danger btn-sm ml-2" @click="remove(category.category.id)"> Remove </button>
 							</div>
 						</li>
 					</ul>
@@ -62,15 +62,15 @@
 
 					<div v-if="formData.subcategoryArr.length > 0">
 						<label for="password" class="font-weight-bolder"> Subcategories </label>
-						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory._id">
+						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory.id">
 
 							<div class="form-group d-flex flex-column">
 								<div class="d-flex">
 									<input type="text" v-model="subcategory.name" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
-									<button class="btn btn-danger ml-2" @click="removeSubcategory(subcategory._id, index)"> Remove </button>
+									<button class="btn btn-danger ml-2" @click="deleteSubcategory(subcategory.id, index)"> Remove </button>
 								</div>
 								<div class="d-flex mt-2">
-									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.name" :type="'category'" :id='subcategory._id' />
+									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.name" :type="'category'" :id='subcategory.id' />
 									<input type="hidden" v-model="subcategory.slug" />
 								</div>
 							</div>
@@ -225,22 +225,28 @@ export default {
 
 		},
 
-		async removeSubcategory(id, index) {
+		async deleteSubcategory(id, index) {
 			
-			const response = await Alert.confirm({ title: "Are you sure you want to remove this subCategory.", confirmButton: true });
+			if (typeof id === 'undefined') {
+				this.formData.subcategoryArr.splice(index, 1);
+			} else {
 
-			if (response) {
-				
-				const { code } = await this.removeSubCategory(id);
-			
-				if (code === 0) {
-
-					this.formData.subcategoryArr.splice(index, 1);
-
-					Alert.toast({ title: 'subCategory have been removed.', customClass: 'mt-7' });
-
-					await this.setCategories();
+				const response = await Alert.confirm({ title: "Are you sure you want to remove this subCategory.", confirmButton: true });
+	
+				if (response) {
 					
+					const { code } = await this.removeSubCategory(id);
+				
+					if (code === 0) {
+	
+						this.formData.subcategoryArr.splice(index, 1);
+	
+						Alert.toast({ title: 'subCategory have been removed.', customClass: 'mt-7' });
+	
+						await this.setCategories();
+						
+					}
+	
 				}
 
 			}

@@ -133,19 +133,19 @@ router.route('/register').post(async (req, res, next) => {
  * @desc fetch user by using token
  * @access Public
  */
-router.route('/getUser').get(async (req, res) => {
+router.route('/getUser').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const token = req.headers['authorization'];
 
 		const { user } = await UserService.getUserByToken(token);
 
-		res.status(200).send({ code: 0, message: 'User details', user });
+		res.status(200).send({ user });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 

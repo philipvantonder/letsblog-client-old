@@ -42,10 +42,10 @@
 								<option value=""> Choose a category </option>
 								
 								<template v-for="category in categories" >
-									<optgroup v-if="category.subcategory.length > 0" :key="category.category._id" :label="category.category.name">
+									<optgroup v-if="category.subcategory.length > 0" :key="category.category.id" :label="category.category.name">
 										<option v-for="(subcategory, index) in category.subcategory" :key="index" :value="subcategory._id"> {{ subcategory.name }} </option>
 									</optgroup>
-									<option v-else :key="category.category._id" :value="category.category._id" > {{ category.category.name }} </option>
+									<option v-else :key="category.category.id" :value="category.category.id" > {{ category.category.name }} </option>
 								</template>
 							</select>
 						</div>

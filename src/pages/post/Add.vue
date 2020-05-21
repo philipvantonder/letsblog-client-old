@@ -42,7 +42,7 @@
 									<optgroup v-if="category.subcategory.length > 0" :key="category._id" :label="category.category.name">
 										<option v-for="(subcategory, index) in category.subcategory" :key="index" :value="subcategory._id"> {{ subcategory.name }} </option>
 									</optgroup>
-									<option v-else :key="category._id" :value="category._id" > {{ category.category.name }} </option>
+									<option v-else :key="category.category.id" :value="category.category.id" > {{ category.category.name }} </option>
 								</template>
 							</select>
 						</div>

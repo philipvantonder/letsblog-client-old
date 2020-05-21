@@ -3,7 +3,7 @@ const EmailService =  require('../services/email');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwt_secret, client_url } = require('../config/index');
-const { EntityAlreadyExists } = require('../utils/error-handling/custom-errors');
+const { EntityAlreadyExists, EntityNotFoundError } = require('../utils/error-handling/custom-errors');
 
 module.exports = {
 
@@ -69,10 +69,10 @@ module.exports = {
 		const user = await UserModel.findById({ _id: token_verify.userId });
 
 		if (!user) {
-			return { code: 0, message: 'could not find user' };
+			throw new EntityNotFoundError('User', 'Could not find user');
 		}
 
-		return { code: 0, message: 'User found', user };
+		return { user };
 
 	},
 
@@ -81,7 +81,7 @@ module.exports = {
 		const user = await UserModel.findById({ _id: id });
 
 		if (!user) {
-			return { code: 1, message: 'User not found' };
+			throw new EntityNotFoundError('User', 'Could not find user');
 		}
 
 		user.name = userDTO.name;
@@ -106,7 +106,7 @@ module.exports = {
 		const user = await UserModel.findOne({ email: email });
 
 		if (!user) {
-			throw new Error("Email does not exists.");
+			throw new EntityNotFoundError('User', 'Email does not exists.');
 		}
 
 		user.generatePasswordReset();

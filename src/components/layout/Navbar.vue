@@ -17,20 +17,6 @@
 		</div>
 
 		<ul class="navbar-nav">
-			<!-- <li v-for="(category, index) in categories" :key="index" class="nav-item dropdown" >
-				<router-link class="nav-link text-white" tag="a" :to="{ name: 'blog-category', params: { 'id': category.category.slug } }" >
-					{{ category.category.name }} <font-awesome-layers v-if="category.subcategory.length > 0" full-width class="fa-fw fa-1x py-1 category-caret"> <font-awesome-icon icon="caret-down" /> </font-awesome-layers>
-				</router-link>
-
-				<ul v-if="category.subcategory.length > 0" class="navbar-nav position-absolute shadow bg-white rounded z-10">
-					<li class="nav-item dropdown" >
-						<router-link class="nav-link text-black" tag="a" :to="{ name: 'blog-category', params: { 'id': subcategoryItem.slug } }" v-for="subcategoryItem in category.subcategory" :key="subcategoryItem._id">
-							{{ subcategoryItem.name }}
-						</router-link>
-					</li>
-				</ul>
-			</li> -->
-
 			<div class="d-flex align-items-center mr-3">
 				<div v-for="(category, index) in categories" :key="index" class="dropdown">
 					<router-link v-if="category.subcategory.length === 0" class="nav-link text-white" tag="a" data-toggle="dropdown" :to="{ name: 'blog-category', params: { 'id': category.category.slug } }" >
