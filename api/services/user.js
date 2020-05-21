@@ -3,6 +3,7 @@ const EmailService =  require('../services/email');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwt_secret, client_url } = require('../config/index');
+const { EntityAlreadyExists } = require('../utils/error-handling/custom-errors');
 
 module.exports = {
 
@@ -24,6 +25,12 @@ module.exports = {
 
 		userDTO.password = await bcrypt.hash(userDTO.password, 10);
 
+		const user = await UserModel.findOne({ email: userDTO.email });
+
+		if (user) {
+			throw new EntityAlreadyExists('User', `Email ${userDTO.email} already exists.`);
+		}
+
 		const User = new UserModel({
 			'name': userDTO.name,
 			'surname': userDTO.surname,
@@ -32,8 +39,6 @@ module.exports = {
 		});
 
 		await User.save();
-
-		return { code: 0, message: 'Registration successfully' };
 
 	},
 

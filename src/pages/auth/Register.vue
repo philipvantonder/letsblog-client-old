@@ -6,6 +6,9 @@
 			</div>
 
 			<div class="mt-3">
+
+				<div v-if="errorMessage" class="mt-2 alert-container alert-red" :class="{ 'alert-shake': errorMessage }">  {{ errorMessage }} </div>
+
 				<form @submit.prevent="registerUser()">
 					
 					<div class="form-group">
@@ -64,6 +67,8 @@
 
             return {
 
+				errorMessage: '',
+
                 user: {
                     name: '',
                     surname: '',
@@ -99,16 +104,24 @@
                     return;
 				}
 
-				let { code, message } = await UserService.register(this.user)
+				try {
 
-				if (code === 0) {
+					this.errorMessage = '';
 
+					const { message } = await UserService.register(this.user);
+					
 					Alert.message({
 						text: message,
 						confirmBtnText: 'Login',
 						redirect: '/login',
 						confirmButton: true
 					});
+
+				} catch (error) {
+
+					if (error.response.data.message) {
+						this.errorMessage = error.response.data.message;
+					}
 
 				}
 

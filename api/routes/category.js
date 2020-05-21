@@ -134,10 +134,6 @@ router.route('/categoryBySlug/:slug').get(async (req, res) => {
 	try {
 
 		const { slug } = req.params;
-
-		console.log("------------------");
-		console.log(slug);
-		console.log("------------------");
 		
 		const { code, message, posts } = await CategoryService.getCategoriesBySlug(slug);
 

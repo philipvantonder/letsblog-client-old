@@ -163,7 +163,7 @@ module.exports = {
 
 		if (category) {
 
-			const categoryPosts = await PostModel.find({ category: category._id });
+			const categoryPosts = await PostModel.find({ category: category._id }).sort({ createdAt: 'desc' });
 			
 			return { code: 0, message: 'Post linked to category', posts: categoryPosts };
 			

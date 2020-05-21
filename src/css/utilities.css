@@ -156,6 +156,45 @@ body {
 	line-height: 2;
 }	
 
+.alert-red {
+	border-left-color: red !important;
+}
+
+.alert-container {
+	padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #eee;
+    border-left-width: .25rem;
+	border-radius: .25rem;
+	background-color: #FFF;
+}
+
+.alert-shake {
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+	perspective: 1000px;
+}
+
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+  
+	20%, 80% {
+		transform: translate3d(2px, 0, 0);
+	}
+
+	30%, 50%, 70% {
+		transform: translate3d(-4px, 0, 0);
+	}
+
+	40%, 60% {
+		transform: translate3d(4px, 0, 0);
+	}
+}
+
 /* This is for the rich editor post images */
 p > img {
 	width: 100%;

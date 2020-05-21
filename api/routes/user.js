@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../services/user');
 const userAuthentication = require('./middleware/userAuthentication');
+
 const multer = require("multer");
 const fs = require('fs');
 const path = require('path');
+const { handle } = require('../utils/error-handling/request-handler');
 
 var imageDir;
 
@@ -112,17 +114,17 @@ router.route('/login').post(async (req, res) => {
  * @desc Register function
  * @access Public
  */
-router.route('/register').post(async (req, res) => {
+router.route('/register').post(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
-		const { code, message } = await UserService.createUser(req.body);
+		await UserService.createUser(req.body);
 
-		res.status(200).send({ code, message });
-		
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.status(200).send({ message: 'Registration successfull' });
+
+		res.end();
+
+	}, next);
 
 });
 
