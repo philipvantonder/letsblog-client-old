@@ -46,131 +46,64 @@ export default {
 
 		async setPublishedBlogPosts({ commit }) {
 
-			try {
+			const { posts } = await PostService.fetchPublishedBlogPosts();
 
-				let { code, posts } = await PostService.fetchPublishedBlogPosts();
-
-				if (code === 0) {
-					commit('SET_PUBLISHED_BLOG_POSTS', posts);
-				}
-					
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			commit('SET_PUBLISHED_BLOG_POSTS', posts);
 
 		},
 
 		async setBlogPostBySlug({ commit }, id) {
 
-			try {
+			const { post } = await PostService.fetchBlogPostBySlug(id);
 
-				let { code, post } = await PostService.fetchBlogPostBySlug(id);
-
-				if (code === 0) {
-					commit('SET_BLOG_POST', post);
-				}
-
-				return { code }
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			commit('SET_BLOG_POST', post);
 
 		},
 
 		async setUserPosts({ commit }) {
 
-			try {
+			let { posts } = await PostService.fetchUserPosts();
 
-				let { code, posts } = await PostService.fetchUserPosts();
-
-				if (code === 0) {
-					commit('SET_USER_POSTS', posts);
-				}
-				
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			commit('SET_USER_POSTS', posts);
 
 		},
 
 		async removePost({ commit }, id) {
 
-			try {
+			await PostService.delete(id);
 
-				let { code } = await PostService.delete(id);
-
-				if (code === 0) {
-					commit('REMOVE_USER_POST', id);
-				}
-
-				return { code };
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			commit('REMOVE_USER_POST', id);
 
 		},
 
 		async setPost({ commit }, id) {
 
-			try {
+			const { post } = await PostService.fetchPost(id);
 
-				let { code, post } = await PostService.fetchPost(id);
+			commit('SET_POST', post);
 
-				if (code === 0) {
-					commit('SET_POST', post);
-				}
-
-				return { code };
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
 
 		},
 
 		async createPost(context, post) {
 
-			try {
-
-				let { code } = await PostService.create(post);
-	
-				return { code };
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			await PostService.create(post);
 			
 		},
 		
 		async updatePost(contex, postDTO) {
 			
-			try {
+			const { id, post } = postDTO;
 
-				let { id, post } = postDTO;
-
-				let { code } = await PostService.update(id, post);
-
-				return { code };
-				
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			await PostService.update(id, post);
 
 		},
 
 		async checkUnique (context, postDTO) {
 
-			try {
+			const { newSlug } = await PostService.checkUnique(postDTO);
 
-				let { code, newSlug } = await PostService.checkUnique(postDTO);
-
-				return { code, newSlug };
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			return { newSlug };
 
 		}
  

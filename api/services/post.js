@@ -1,6 +1,7 @@
 const PostModel = require('../models/post');
 const UserService = require('../services/user');
 const fs = require('fs');
+const { EntityNotFoundError } = require('../utils/error-handling/custom-errors');
 
 module.exports = {
 
@@ -8,7 +9,7 @@ module.exports = {
 
 		const post = await PostModel.findOne({ _id: id, isPublished: true });
 		
-		return { code: 0, message: 'Blog post', post };
+		return { post };
 
 	},
 
@@ -16,7 +17,7 @@ module.exports = {
 
 		const post = await PostModel.findOne({ slug: slug, isPublished: true });
 		
-		return { code: 0, message: 'Blog post', post };
+		return { post };
 
 	},
 
@@ -24,7 +25,7 @@ module.exports = {
 
 		const posts = await PostModel.find({ isPublished: true }).sort({ createdAt: 'desc' });
 		
-		return { code: 0, message: 'Published posts', posts };
+		return { posts };
 
 	},
 
@@ -34,7 +35,7 @@ module.exports = {
 		
 		const posts = await PostModel.find({ user: user._id }).sort({ createdAt: 'desc' });
 		
-		return { code: 0, message: 'posts', posts: posts };
+		return { posts };
 
 	},
 
@@ -57,7 +58,7 @@ module.exports = {
 
 		const newPost = await post.save();
 
-		return { code: 0, message: 'Post created', post: newPost };
+		return { post: newPost };
 
 	},
 
@@ -65,7 +66,7 @@ module.exports = {
 
 		const post = await PostModel.findById({ _id: id });
 
-		return { code: 0, message: 'Post', post: post };
+		return { post };
 
 	},
 
@@ -74,7 +75,7 @@ module.exports = {
 		const post = await PostModel.findById({ _id: id });
 
 		if (!post) {
-			return { code: 1, message: 'Post not found' };
+			throw new EntityNotFoundError('Post', 'Post not found');
 		}
 
 		let tagsArr = postDTO.tags.split(',');
@@ -93,15 +94,13 @@ module.exports = {
 
 		await post.save();
 
-		return { code: 0, message: 'Post have been updated' };
-
 	},
 
 	delete: async (id) => {
 
 		const post = await PostModel.findByIdAndRemove({ _id: id });
 
-		return { code: 0, message: 'Post have been removed', post: post }; 
+		return { post }; 
 
 	},
 
@@ -121,7 +120,7 @@ module.exports = {
 
 		if (post && postDTO.id) {
 			if ((postDTO.id == post._id) && (postDTO.slug == post.slug)) {
-				return { code: 0, newSlug: post.slug };
+				return { newSlug: post.slug };
 			}
 		}
 
@@ -129,10 +128,11 @@ module.exports = {
 
 			const newSlugVal = postDTO.slug + Math.floor((Math.random() * 100000) + 1);
 
-			return { code: 0, newSlug: newSlugVal };
+			return { newSlug: newSlugVal };
+
 		}
 
-		return { code: 0, newSlug: postDTO.slug };
+		return { newSlug: postDTO.slug };
 
 	},
 

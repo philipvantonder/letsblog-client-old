@@ -9,7 +9,7 @@ module.exports = {
 
 		if (category && postDTO.id) {
 			if ((postDTO.id == category._id) && (postDTO.slug == category.slug)) {
-				return { code: 0, newSlug: category.slug };
+				return { newSlug: category.slug };
 			}
 		}
 
@@ -17,10 +17,10 @@ module.exports = {
 
 			const newSlugVal = postDTO.slug + Math.floor((Math.random() * 100000) + 1);
 
-			return { code: 0, newSlug: newSlugVal };
+			return { newSlug: newSlugVal };
 		}
 
-		return { code: 0, newSlug: postDTO.slug };
+		return { newSlug: postDTO.slug };
 
 	},
 
@@ -78,7 +78,7 @@ module.exports = {
 
 		}
 
-		return { code: 0, categories: category_arr };
+		return { categories: category_arr };
 
 	},
 
@@ -94,9 +94,7 @@ module.exports = {
 
 		if (postDTO.subcategoryArr.length > 0) {
 
-			for (let subcategoryDetails in postDTO.subcategoryArr) {
-
-				let subcategory = postDTO.subcategoryArr[subcategoryDetails];
+			for (subcategory of postDTO.subcategoryArr) {
 
 				let newSubcategory = new CategoryModel({
 					name: subcategory.name,
@@ -109,8 +107,6 @@ module.exports = {
 			}
 
 		}
-
-		return { code: 0, message: 'Category have been added' };
 
 	},
 
@@ -126,17 +122,13 @@ module.exports = {
 
 		await CategoryModel.findByIdAndRemove({ _id: id });
 
-		return { code: 0, message: 'Category have been removed' }; 
-
 	},
 
 	getCategory: async(id) => {
 
 		let parent_arr = await CategoryModel.find({ _id: id });
 		
-		for (let parent in parent_arr) {
-
-			let category = parent_arr[parent];
+		for (category of parent_arr) {
 
 			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
 
@@ -147,7 +139,7 @@ module.exports = {
 
 		}
 
-		return { code: 0, message: 'Single category result', category: categoryObj }; 
+		return { category: categoryObj }; 
 
 	},
 
@@ -186,24 +178,22 @@ module.exports = {
 
 		}
 
-		return { code: 0, message: 'Category have been updated' }; 
-
 	},
 
 	getCategoriesBySlug: async (slug) => {
 
 		const category = await CategoryModel.findOne({ slug });
 
+		if (!category) {
+			return { posts: [] };
+		}
+
 		if (category) {
 
-			const categoryPosts = await PostModel.find({ category: category._id }).sort({ createdAt: 'desc' });
+			const posts = await PostModel.find({ category: category._id }).sort({ createdAt: 'desc' });
 			
-			return { code: 0, message: 'Post linked to category', posts: categoryPosts };
+			return { posts };
 			
-		} else {
-			
-			return { code: 0, message: 'No linked Posts found', posts: [] };
-		
 		}
 
 	}

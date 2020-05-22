@@ -1,6 +1,5 @@
 import UserService from '@/services/user';
 import JWTService from '@/services/jwt';
-import Alert from '@/model/Alert';
 
 export default {
 
@@ -40,42 +39,16 @@ export default {
 
 		async login({ commit }, userDTO) {
 
-			try {
+			const { token } = await UserService.signIn(userDTO);
 
-				let response = await UserService.signIn(userDTO);
-				
-				let { code, message, token } = response.data 
-				
-				if (code === 0) {
+			commit('SET_AUTH_TOKEN', token);
 
-					commit('SET_AUTH_TOKEN', token);
+			localStorage.setItem('token', token);
 
-					localStorage.setItem('token', token);
-
-					let user = await JWTService.getUserBasicInfo(token);
-					
-					commit('SET_LOGGED_IN_USER', user);
-					
-				
-				}
-
-				if (code === 1) {
-
-					Alert.message({
-						icon: 'error',
-						title: 'Login failed', 
-						text: message,
-						confirmBtnText: 'Try again',
-						confirmButton: true
-					});
-
-				}
-
-				return { code };
-
-			} catch (error) {
-				return { code: 1, error };
-			}
+			let user = await JWTService.getUserBasicInfo(token);
+			
+			commit('SET_LOGGED_IN_USER', user);
+			
 
 		},
 
@@ -89,18 +62,12 @@ export default {
 
 		async setUserDetailsFromToken({ commit, state }) {
 
-			try {
-
-				if (state.token) {
-		
-					let user = await JWTService.getUserBasicInfo(state.token);
-					
-					commit('SET_LOGGED_IN_USER', user);
-					
-				}
-
-			} catch (error) {
-				return { code: 1, error: error };
+			if (state.token) {
+	
+				let user = await JWTService.getUserBasicInfo(state.token);
+				
+				commit('SET_LOGGED_IN_USER', user);
+				
 			}
 
 		},
@@ -119,51 +86,25 @@ export default {
 
 		async updateUser(context, postDTO) {
 
-			try {
+			const { user } = await UserService.update(postDTO);
 
-				const { code, user } = await UserService.update(postDTO);
-
-				return { code, user };
-
-			} catch (error) {
-				return { code: 1, error: error };
-			}
+			return { user };
 
 		},
 
 		async passwordReset (context, postDTO) {
-
-			try {
 				
-				const { code, message } = await UserService.sendPasswordReset(postDTO);
+			const { message } = await UserService.sendPasswordReset(postDTO);
 
-				return { code, message };
-
-			} catch (error) {
-				if (error.message) {
-					throw new Error(error.message);
-				} else {
-					throw new Error("Something went wrong.");
-				}
-			}
-			
+			return { message };
+		
 		},
 		
 		async changePassword(context, postDTO) {
 			
-			try {
-				
-				const { code, message } = await UserService.changePassword(postDTO);
+			const { message } = await UserService.changePassword(postDTO);
 
-				return { code, message };
-
-			} catch (error) {
-				if (error.message) {
-					throw new Error(error.message);
-				} else {
-					throw new Error("Something went wrong.");
-				}
-			}
+			return { message };
 
 		}
 

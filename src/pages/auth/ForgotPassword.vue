@@ -94,21 +94,13 @@ export default {
 				return;
 			}
 
-			try {
-				
-				this.loading = true;
-				
-				let { code, message } = await this.passwordReset(this.user);
+			this.loading = true;
+			
+			let { message } = await this.passwordReset(this.user);
 
-				if (code === 0) {
-					this.loading = false;
-					this.sentEmail = true;
-					this.message = message;
-				}
-
-			} catch (error) {
-				console.error(error);
-			}
+			this.loading = false;
+			this.sentEmail = true;
+			this.message = message;
 
 		}
 

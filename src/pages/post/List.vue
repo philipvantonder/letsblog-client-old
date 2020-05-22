@@ -63,23 +63,17 @@ export default {
 
 			if (post.isPublished) {
 
-				const response = await Alert.confirm({ title: "Cannot remove Published Post.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
+				await Alert.confirm({ title: "Cannot remove Published Post.", confirmButton: true, confirmButtonText: 'Unpublish Post', icon: 'error'});
 
-				if (response) {
-					this.$router.push({ name: 'edit-post', params: { id: id } })
-				}
+				this.$router.push({ name: 'edit-post', params: { id: id } });
 
 			} else {
 	
-				const response = await Alert.confirm({ title: "Are you sure you want to remove this post?" });
+				await Alert.confirm({ title: "Are you sure you want to remove this post?" });
 
-				if (response) {
-					const {code } = await this.removePost(id);
+				await this.removePost(id);
 
-					if (code === 0) {
-						Alert.toast({ title: 'Post have been removed.', customClass: 'mt-7' });
-					}
-				}
+				Alert.toast({ title: 'Post have been removed.', customClass: 'mt-7' });
 
 			}
 

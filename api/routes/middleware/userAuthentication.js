@@ -6,7 +6,7 @@ module.exports = {
 
 	isLoggedIn: function(req, res, next) {
 
-		let token = req.headers['authorization'];
+		const token = req.headers['authorization'];
 
 		if (token) {
 

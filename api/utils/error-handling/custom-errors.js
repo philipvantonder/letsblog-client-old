@@ -23,6 +23,18 @@ class EntityNotFoundError extends ErrorBase {
 	}
 }
 
+class TokenExpiredError extends ErrorBase {
+    constructor(){
+        super(401, 'Token expired');
+    }
+}
+
+class InvalidTokenError extends ErrorBase {
+    constructor(){
+        super(401, 'Invalid Token Provided');
+    }
+}
+
 class UnknownError extends ErrorBase {
     constructor(message) {
         super(412, message);
@@ -32,6 +44,8 @@ class UnknownError extends ErrorBase {
 module.exports = {
 	EntityAlreadyExists,
 	EntityNotFoundError,
+	TokenExpiredError,
+	InvalidTokenError,
 	UnknownError,
 	ErrorBase,
 };

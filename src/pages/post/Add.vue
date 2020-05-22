@@ -151,11 +151,9 @@
 				formData.append('category', this.post.category);
 				formData.append('tags', this.post.tags);
 
-				let { code } = await this.createPost(formData);
+				await this.createPost(formData);
 
-				if (code === 0) {
-					this.$router.push({ name: 'feed' });
-				}
+				this.$router.push({ name: 'feed' });
 
 			},
 			

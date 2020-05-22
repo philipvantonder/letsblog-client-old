@@ -146,11 +146,9 @@ export default {
 
 			let { id } = this.$route.params;
 
-			let response = await this.updatePost({ id, post: formData })
+			await this.updatePost({ id, post: formData })
 
-			if (response.code === 0) {
-				this.$router.push({ name: 'post-list' });
-			}
+			this.$router.push({ name: 'post-list' });
 
 		},
 		
@@ -225,15 +223,13 @@ export default {
 
 		let { id } = this.$route.params;
 
-		let response = await this.setPost(id);
+		await this.setPost(id);
 
-		if (response.code === 0) {
-			this.loading = false;
+		this.loading = false;
 
-			this.slugTitle = this.post.slug
+		this.slugTitle = this.post.slug
 
-			await this.setCategories();
-		}
+		await this.setCategories();
 
 	},
 	

@@ -3,7 +3,7 @@ const EmailService =  require('../services/email');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwt_secret, client_url } = require('../config/index');
-const { EntityAlreadyExists, EntityNotFoundError } = require('../utils/error-handling/custom-errors');
+const { EntityAlreadyExists, EntityNotFoundError, TokenExpiredError } = require('../utils/error-handling/custom-errors');
 
 module.exports = {
 
@@ -14,10 +14,8 @@ module.exports = {
 		const user = await UserModel.findOne({ _id: verify.userId });
 
 		if (!user) {
-			return { code: 1, message: 'User not found' };
+			throw new EntityNotFoundError('User', 'User not found.');
 		}
-
-		return { code: 0, message: 'User is logged in' }
 
 	},
 
@@ -42,23 +40,23 @@ module.exports = {
 
 	},
 
-	signIn: async (req, res, user) => {
+	signIn: async (userDTO) => {
 
-		const getUser = await UserModel.findOne({ email: user.email });
+		const getUser = await UserModel.findOne({ email: userDTO.email });
 		
 		if (!getUser) {
-			return { code: 1, message: 'Password or username does not match.' };
+			throw new EntityNotFoundError('User', 'Password or username does not match.');
 		}
-
-		const findUser = await bcrypt.compare(user.password, getUser.password);
-
+		
+		const findUser = await bcrypt.compare(userDTO.password, getUser.password);
+		
 		if (!findUser) {
-			return { code: 1, message: 'Password or username does not match.' };
+			throw new EntityNotFoundError('User', 'Password or username does not match.');
 		}
 
-		const signed_token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
+		const token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
 
-		return { code: 0, message: 'Logged in', token: signed_token };
+		return { token };
 
 	},
 
@@ -97,8 +95,6 @@ module.exports = {
 
 		await user.save();
 
-		return { code: 0, message: 'User have been updated' };
-
 	},
 
 	sendPasswordResetEmail: async (email) => {
@@ -131,7 +127,7 @@ module.exports = {
 		const user = await UserModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
 
 		if (!user) {
-			throw new Error("Password token is invalid or has expires");
+			throw new TokenExpiredError('Password token is invalid or has expires.');
 		}
 
 		await user.resetPassword(password);

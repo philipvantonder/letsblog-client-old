@@ -16,7 +16,7 @@ export default {
 
 		const response = await axiosInstance.post('/login', user);
 
-		return response;
+		return response.data;
 
 	},
 

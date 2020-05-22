@@ -64,6 +64,8 @@
 						<label for="password" class="font-weight-bolder"> Subcategories </label>
 						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory.id">
 
+							{{ subcategory }}
+
 							<div class="form-group d-flex flex-column">
 								<div class="d-flex">
 									<input type="text" v-model="subcategory.name" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
@@ -138,29 +140,23 @@ export default {
 
 			if (this.edit) {
 
-				let { code } = await this.updateCategory(this.formData);
-
-				if (code === 0) {
+				await this.updateCategory(this.formData);
 				
-					Alert.toast({ title: 'Category updated.', customClass: 'mt-7' });
+				Alert.toast({ title: 'Category updated.', customClass: 'mt-7' });
 
-					await this.setCategories();
+				await this.setCategories();
 
-					this.resetForm();
-				}
+				this.resetForm();
 
 			} else {
 				
-				let { code } = await this.createCategory(this.formData);
+				await this.createCategory(this.formData);
 
-				if (code === 0) {
-				
-					Alert.toast({ title: 'New category added.', customClass: 'mt-7' });
+				Alert.toast({ title: 'New category added.', customClass: 'mt-7' });
 
-					await this.setCategories();
+				await this.setCategories();
 
-					this.resetForm();
-				}
+				this.resetForm();
 
 			}
 
@@ -235,17 +231,13 @@ export default {
 	
 				if (response) {
 					
-					const { code } = await this.removeSubCategory(id);
+					await this.removeSubCategory(id);
 				
-					if (code === 0) {
-	
-						this.formData.subcategoryArr.splice(index, 1);
-	
-						Alert.toast({ title: 'subCategory have been removed.', customClass: 'mt-7' });
-	
-						await this.setCategories();
-						
-					}
+					this.formData.subcategoryArr.splice(index, 1);
+
+					Alert.toast({ title: 'subCategory have been removed.', customClass: 'mt-7' });
+
+					await this.setCategories();
 	
 				}
 
@@ -259,11 +251,9 @@ export default {
 
 			if (response) {
 				
-				const { code } = await this.removeCategory(id);
+				await this.removeCategory(id);
 			
-				if (code === 0) {
-					Alert.toast({ title: 'Category have been removed.', customClass: 'mt-7' });
-				}
+				Alert.toast({ title: 'Category have been removed.', customClass: 'mt-7' });
 
 			}
 

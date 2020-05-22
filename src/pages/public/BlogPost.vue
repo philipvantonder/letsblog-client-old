@@ -35,13 +35,11 @@
 
 		async created() {
 
-			let { id } = this.$route.params;
+			const { id } = this.$route.params;
 
-			let response = await this.setBlogPostBySlug(id);
+			await this.setBlogPostBySlug(id);
 
-			if (response.code === 0) {
-				this.loading = false;
-			}
+			this.loading = false;
 
 		}
 

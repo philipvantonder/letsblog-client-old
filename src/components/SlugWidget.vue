@@ -144,21 +144,17 @@ export default {
 
 			if (this.type != '' && this.type === 'category') {
 
-				const { code, newSlug } = await this.$store.dispatch('category/checkUniqueCategory', { slug, id });
+				const { newSlug } = await this.$store.dispatch('category/checkUniqueCategory', { slug, id });
 
-				if (code === 0) {
-					this.slug = newSlug;
-					this.$emit('slugChanged', newSlug);
-				}
+				this.slug = newSlug;
+				this.$emit('slugChanged', newSlug);
 
 			} else {
 				
-				const { code, newSlug } = await this.checkUnique({ slug, id });
+				const { newSlug } = await this.checkUnique({ slug, id });
 
-				if (code === 0) {
-					this.slug = newSlug;
-					this.$emit('slugChanged', newSlug);
-				}
+				this.slug = newSlug;
+				this.$emit('slugChanged', newSlug);
 
 			}
 

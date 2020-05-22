@@ -3,25 +3,26 @@ const router = express.Router();
 
 const CategoryService = require('../services/category');
 const userAuthentication = require('./middleware/userAuthentication');
+const { handle } = require('../utils/error-handling/request-handler');
 
 /**
  * @route POST api/category/uniqueCategory
  * @desc Check if the Slug category name is unique.
  * @access Private
  */
-router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const postDTO = req.body;
 		
-		const { code, newSlug } = await CategoryService.uniqueCategory(postDTO);
+		const { newSlug } = await CategoryService.uniqueCategory(postDTO);
 
-		res.status(200).send({ code, newSlug });
+		res.status(200).send({ newSlug });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -30,17 +31,17 @@ router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, 
  * @desc Get all blog categories.
  * @access Public
  */
-router.route('/categories').get(async (req, res) => {
+router.route('/categories').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 		
-		const { code, categories } = await CategoryService.getCategories();
+		const { categories } = await CategoryService.getCategories();
 
-		res.status(200).send({ code, categories });
+		res.status(200).send({ categories });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -49,17 +50,17 @@ router.route('/categories').get(async (req, res) => {
  * @desc Add new category.
  * @access Private
  */
-router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 	
-		const { code, message, categories } = await CategoryService.addCategory(req.body);
+		const { categories } = await CategoryService.addCategory(req.body);
 
-		res.status(200).send({ code, message, categories });
+		res.status(200).send({ categories });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -68,19 +69,17 @@ router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res
  * @desc remove category.
  * @access Private
  */
-router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const { id } = req.body;
 	
-		const { code, message } = await CategoryService.removeCategory(id);
+		await CategoryService.removeCategory(id);
 
-		res.status(200).send({ code, message });
+		res.end();
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 
@@ -89,19 +88,19 @@ router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, 
  * @desc get single category.
  * @access Private
  */
-router.route('/category').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/category').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const { id } = req.body;
 	
-		const { code, message, category } = await CategoryService.getCategory(id);
+		const { category } = await CategoryService.getCategory(id);
 
-		res.status(200).send({ code, message, category });
+		res.status(200).send({ category });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -110,17 +109,15 @@ router.route('/category').post(userAuthentication.isLoggedIn, async (req, res) =
  * @desc update category.
  * @access Private
  */
-router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/update').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
-		const { code, message } = await CategoryService.update(req.body);
+		await CategoryService.update(req.body);
 
-		res.status(200).send({ code, message });
+		res.end();
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 
@@ -129,19 +126,19 @@ router.route('/update').post(userAuthentication.isLoggedIn, async (req, res) => 
  * @desc Get all blog categories by slug name.
  * @access Public
  */
-router.route('/categoryBySlug/:slug').get(async (req, res) => {
+router.route('/categoryBySlug/:slug').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const { slug } = req.params;
 		
-		const { code, message, posts } = await CategoryService.getCategoriesBySlug(slug);
+		const { posts } = await CategoryService.getCategoriesBySlug(slug);
 
-		res.status(200).send({ code, message, posts });
+		res.status(200).send({ posts });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 

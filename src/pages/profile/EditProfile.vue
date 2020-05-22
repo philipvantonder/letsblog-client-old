@@ -128,15 +128,11 @@ export default {
 				formData.append('fileName', this.user.file.name);
 			}
 
-			let { code } = await this.updateUser(formData);
+			await this.updateUser(formData);
 
-			if (code === 0) {
+			this.$router.push({ name: 'profile' });
 
-				this.$router.push({ name: 'profile' });
-
-				Alert.toast({ title: 'User details have been updated', customClass: 'mt-7' });
-
-			}
+			Alert.toast({ title: 'User details have been updated', customClass: 'mt-7' });
 
 		},
 
@@ -168,11 +164,9 @@ export default {
 
 	async created() {
 
-		const { code } = await this.setUser();
+		await this.setUser();
 
-		if (code === 0) {
-			this.loading = false;
-		}
+		this.loading = false;
 
 	},
 

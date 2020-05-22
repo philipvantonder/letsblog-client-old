@@ -6,10 +6,13 @@
 			</div>
 			
 			<div class="mt-4">
-				<form @submit.prevent="signIn()">
+				<form @submit.prevent="signIn()" novalidate>
 					<div class="form-group">
 						<label for="email" class="font-weight-bolder">Email address </label>
 						<input type="email" class="form-control" :class="{ 'is-invalid': $v.user.email.$error }" v-model="user.email" >
+						<div v-if="$v.user.email.$error" class="invalid-feedback">
+							<span v-if="!$v.user.email.email">Email is invalid</span>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="password" class="font-weight-bolder">Password</label>
@@ -32,8 +35,9 @@
 
 <script>
 
-import { required } from 'vuelidate/lib/validators';
+import { required, email } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
+import Alert from '@/model/Alert';
 
 export default {
 
@@ -56,7 +60,7 @@ export default {
 
 		user: {
 
-			email: { required },
+			email: { required, email },
 			password: { required }
 
 		}
@@ -74,15 +78,31 @@ export default {
 				return;
 			}
 
-			let { code } = await this.login(this.user);
+			try {
 
-			if (code === 0) {
+				await this.login(this.user);
 
 				await this.setUser();
 				
 				await this.setUserDetailsFromToken();
 
 				this.$router.push({ name: 'feed' });
+
+			} catch (error) {
+
+				if (error.response.data.message) {
+
+					let message = error.response.data.message;
+
+					Alert.message({
+						icon: 'error',
+						title: 'Login failed', 
+						text: message,
+						confirmBtnText: 'Try again',
+						confirmButton: true
+					});
+
+				}
 
 			}
 

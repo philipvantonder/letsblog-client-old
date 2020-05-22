@@ -74,19 +74,19 @@ const fileUpload = multer({
  * @desc check if token is valid.
  * @access Public
  */
-router.route('/isAuthenticated').get(async (req, res) => {
+router.route('/isAuthenticated').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const token = req.headers['authorization'];
 
-		const { code, message} = await UserService.isAuthenticated(token);
+		const { message} = await UserService.isAuthenticated(token);
 
-		res.status(200).send({ code, message });
+		res.status(200).send({ message });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -95,17 +95,17 @@ router.route('/isAuthenticated').get(async (req, res) => {
  * @desc login function
  * @access Public
  */
-router.route('/login').post(async (req, res) => {	
+router.route('/login').post(async (req, res, next) => {	
 
-	try {
+	await handle(async () => {
 
-		const { code, message, token } = await UserService.signIn(req, res, req.body);
+		const { token } = await UserService.signIn(req.body);
 		
-		res.status(200).send({ code, message, token });
+		res.status(200).send({ token });
+
+		res.end();
 		
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 
@@ -154,21 +154,22 @@ router.route('/getUser').get(async (req, res, next) => {
  * @desc update user's details
  * @access Private
  */
-router.route('/update').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+router.route('/update').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const token = req.headers['authorization']; 
 
 		const { user } = await UserService.getUserByToken(token);
 
-		const { code, message } = await UserService.update(user._id, req.body);
+		await UserService.update(user._id, req.body);
 
-		res.status(200).send({ code, message, user });
+		res.status(200).send({ user });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
+
 
 });
 
@@ -177,19 +178,19 @@ router.route('/update').post(userAuthentication.isLoggedIn, fileUpload.single('f
  * @desc Recover Password - Generates token and Sends password reset email
  * @access Public
  */
-router.route('/sendPasswordReset').post(async (req, res) => {
+router.route('/sendPasswordReset').post(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const { email } = req.body;
 
 		await UserService.sendPasswordResetEmail(email);
 
-		res.status(200).send({ code: 0, message: `Email have been sent to <strong>${email}</strong>.` });
+		res.status(200).send({ message: `Email have been sent to <strong>${email}</strong>.` });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -198,11 +199,11 @@ router.route('/sendPasswordReset').post(async (req, res) => {
  * @desc fetch users image.
  * @access Public
  */
-router.route('/image/:id/:file').get((req, res) => {
+router.route('/image/:id/:file').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
-		const { id, file } = req.params
+		const { id, file } = req.params;
 
 		let fileDir = '../images/user/' + id + '/' + file;
 		
@@ -212,9 +213,7 @@ router.route('/image/:id/:file').get((req, res) => {
 
 		res.sendFile(path.join(__dirname, fileDir));
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 
@@ -223,19 +222,19 @@ router.route('/image/:id/:file').get((req, res) => {
  * @desc Reset Password - if token is valid update password
  * @access Public
  */
-router.route('/changePassword').post(async (req, res) => {
+router.route('/changePassword').post(async (req, res, next) => {
 	
-	const { token, password } = req.body;
+	await handle(async () => {
 
-	try {
+		const { token, password } = req.body;
 
 		await UserService.resetPassword(token, password);
 
-		res.status(200).send({ code: 0, message: 'Password have been updated.' });
+		res.status(200).send({ message: 'Password have been updated.' });
+
+		res.end();
 		
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 

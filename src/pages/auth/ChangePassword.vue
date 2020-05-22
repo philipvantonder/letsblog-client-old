@@ -78,24 +78,14 @@ export default {
 				return;
 			}
 
-			try {
-
-				const { code, message } = await this.changePassword(this.user);
-
-				if (code === 0) {
-					
-					Alert.message({
-						text: message,
-						confirmBtnText: 'Login',
-						redirect: '/login',
-						confirmButton: true
-					});
-
-				}
-
-			} catch (error) {
-				console.error(error);
-			}
+			const { message } = await this.changePassword(this.user);
+				
+			Alert.message({
+				text: message,
+				confirmBtnText: 'Login',
+				redirect: '/login',
+				confirmButton: true
+			});
 
 		}
 

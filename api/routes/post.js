@@ -5,10 +5,10 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const userAuthentication = require('./middleware/userAuthentication');
 
+const userAuthentication = require('./middleware/userAuthentication');
 const router = express.Router();
-const app = express();
+const { handle } = require('../utils/error-handling/request-handler');
 
 var postsImageDir;
 
@@ -73,36 +73,24 @@ const fileUpload = multer({
 
 });
 
-// app.use((err, req, res, next) =>  {
-
-// 	if(err.code === "INCORRECT_FILETYPE") {
-// 		res.status(422).json("Only images are allowed")
-// 	}
-
-// 	if(err.code === "LIMIT_FILE_SIZE") {
-// 		res.status(422).json("Allowed file size is 2MB")
-// 	}
-
-// })
-
 /**
  * @route GET api/posts/user
  * @desc fetch all posts linked to a user.
  * @access Public
  */
-router.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => { 	
+router.route('/user').get(userAuthentication.isLoggedIn, async (req, res, next) => { 	
 	
-	try {
+	await handle(async () => {
 
 		const token = req.headers['authorization'];
 	
-		const { code, message, posts } = await PostService.getUserPosts(token);
+		const { posts } = await PostService.getUserPosts(token);
 
-		res.status(200).send({ code, message, posts });
+		res.status(200).send({ posts });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -111,19 +99,19 @@ router.route('/user').get(userAuthentication.isLoggedIn, async (req, res) => {
  * @desc fetch single blog post.
  * @access Public
  */
-router.route('/blogPost/:id').get(async (req, res) => { 	
+router.route('/blogPost/:id').get(async (req, res, next) => { 	
 
-	try {
+	await handle(async () => {
 
 		const { id } = req.params;
 		
-		const { code, message, post } = await PostService.getBlogPost(id);
+		const { post } = await PostService.getBlogPost(id);
 
-		res.status(200).send({ code, message, post });
+		res.status(200).send({ post });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -132,19 +120,19 @@ router.route('/blogPost/:id').get(async (req, res) => {
  * @desc fetch single blog post using slug.
  * @access Public
  */
-router.route('/slug/:slug').get(async (req, res) => { 	
+router.route('/slug/:slug').get(async (req, res, next) => { 	
 
-	try {
+	await handle(async () => {
 
 		const { slug } = req.params;
 		
-		const { code, message, post } = await PostService.getBlogPostBySlug(slug);
+		const { post } = await PostService.getBlogPostBySlug(slug);
 
-		res.status(200).send({ code, message, post });
+		res.status(200).send({ post });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -153,21 +141,21 @@ router.route('/slug/:slug').get(async (req, res) => {
  * @desc Create new blog post.
  * @access Private
  */
-router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const token = req.headers['authorization'];
 	
 		const postDTO = { ...req.body, ...req.file };
 		
-		const { code, message, post } = await PostService.create(postDTO, token);
+		const { post } = await PostService.create(postDTO, token);
 
-		res.status(200).send({ code, message, post });
+		res.status(200).send({ post });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -176,9 +164,9 @@ router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('f
  * @desc fetch blog post image.
  * @access Public
  */
-router.route('/image/:id').get(async (req, res) => {
+router.route('/image/:id').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const { id } = req.params;
 
@@ -188,9 +176,7 @@ router.route('/image/:id').get(async (req, res) => {
 		
 		res.sendFile(path.join(__dirname, fileDir));
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 
@@ -199,17 +185,17 @@ router.route('/image/:id').get(async (req, res) => {
  * @desc fetch all published blog posts.
  * @access Public
  */
-router.route('/publishedBlogs').get(async (req, res) => {
+router.route('/publishedBlogs').get(async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 		
-		const { code, message, posts } = await PostService.getPublishedBlogPosts();
+		const { posts } = await PostService.getPublishedBlogPosts();
 
-		res.status(200).send({ code, message, posts });
+		res.status(200).send({ posts });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 	
 });
 
@@ -218,9 +204,9 @@ router.route('/publishedBlogs').get(async (req, res) => {
  * @desc fetch single blog post.
  * @access Private
  */
-router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res, next) => {
 	
-	try {
+	await handle(async () => {
 
 		const { id } = req.params;
 		
@@ -228,9 +214,9 @@ router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) =>
 
 		res.status(200).send({ code, message, post });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 	
 });
 
@@ -239,19 +225,17 @@ router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res) =>
  * @desc Update blog post.
  * @access Private
  */
-router.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res) => {
+router.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 	
-	try {
+	await handle(async () => {
 
 		const { id } = req.params;
 		
-		const { code, message } = await PostService.update(id, req.body);
-
-		res.status(200).send({ code, message });
+		await PostService.update(id, req.body);
 		
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
@@ -260,23 +244,19 @@ router.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single
  * @desc Remove blog post.
  * @access Private
  */
-router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const { id } = req.params;
 	
-		const { code, message, post } = await PostService.delete(id);
+		const { post } = await PostService.delete(id);
 		
-		if (code === 0) {
-			await PostService.removeUserPostFile(post);
-		}
+		await PostService.removeUserPostFile(post);
+		
+		res.end();
 
-		res.status(200).send({ code, message });
-		
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+	}, next);
 
 });
 
@@ -285,19 +265,19 @@ router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, re
  * @desc Check if the Slug is unique.
  * @access Private
  */
-router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res) => {
+router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
-	try {
+	await handle(async () => {
 
 		const postDTO = req.body;
 		
-		const { code, newSlug } = await PostService.unique(postDTO);
+		const { newSlug } = await PostService.unique(postDTO);
 
-		res.status(200).send({ code, newSlug });
+		res.status(200).send({ newSlug });
 
-	} catch (error) {
-		res.status(500).send({ message: error.message });
-	}
+		res.end();
+
+	}, next);
 
 });
 
