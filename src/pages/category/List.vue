@@ -63,9 +63,6 @@
 					<div v-if="formData.subcategoryArr.length > 0">
 						<label for="password" class="font-weight-bolder"> Subcategories </label>
 						<div v-for="(subcategory, index) in formData.subcategoryArr" :key="subcategory.id">
-
-							{{ subcategory }}
-
 							<div class="form-group d-flex flex-column">
 								<div class="d-flex">
 									<input type="text" v-model="subcategory.name" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
@@ -210,10 +207,10 @@ export default {
 			
 			await this.setCategory(id);
 
-			const { category, subcategory } = this.getCategory;
+			let { category, subcategory } = this.getCategory[0];
 
 			// populate edit data on the modal
-			this.formData.id = category._id; // add id to the object use for updating
+			this.formData.id = category.id; // add id to the object use for updating
 			this.formData.categoryName = category.name;
 			this.formData.categorySlug = category.slug;
 

@@ -31,11 +31,13 @@ router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, 
  * @desc Get all blog categories.
  * @access Public
  */
-router.route('/categories').get(async (req, res, next) => {
+router.route('/categories/:id?').get(async (req, res, next) => {
 
 	await handle(async () => {
 		
-		const { categories } = await CategoryService.getCategories();
+		const { id } = req.params;
+		
+		const { categories } = await CategoryService.getCategories(id);
 
 		res.status(200).send({ categories });
 
@@ -76,27 +78,6 @@ router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, 
 		const { id } = req.body;
 	
 		await CategoryService.removeCategory(id);
-
-		res.end();
-
-	}, next);
-
-});
-
-/**
- * @route GET api/category/category
- * @desc get single category.
- * @access Private
- */
-router.route('/category').post(userAuthentication.isLoggedIn, async (req, res, next) => {
-
-	await handle(async () => {
-
-		const { id } = req.body;
-	
-		const { category } = await CategoryService.getCategory(id);
-
-		res.status(200).send({ category });
 
 		res.end();
 

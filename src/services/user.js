@@ -14,39 +14,39 @@ export default {
 
 	async signIn(user) {
 
-		const response = await axiosInstance.post('/login', user);
+		const { data } = await axiosInstance.post('/login', user);
 
-		return response.data;
+		return data;
 
 	},
 
 	async register(user) {
 
-		const response = await axiosInstance.post('/register', user);
+		const { data } = await axiosInstance.post('/register', user);
 		
-		return response.data;	
+		return data;	
 
 	},
 
 	async isAuthenticated() {
 
-		const response = await axiosInstance.get('/isAuthenticated');
+		const { data } = await axiosInstance.get('/isAuthenticated');
 
-		return response;
+		return data;
 
 	},
 
 	async fetchUser() {
 
-		const response = await axiosInstance.get('/getUser');
+		const { data } = await axiosInstance.get('/getUser');
 
-		return response.data;
+		return data;
 
 	},
 
 	async update(userDTO) {
 
-		const response = await axiosInstance.post('/update', userDTO, 
+		const { data } = await axiosInstance.post('/update', userDTO, 
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -55,23 +55,23 @@ export default {
 			}
 		);
 
-		return response.data;
+		return data;
 
 	},
 
 	async sendPasswordReset(userDTO) {
 
-		const response = await axiosInstance.post('/sendPasswordReset', userDTO);
+		const { data } = await axiosInstance.post('/sendPasswordReset', userDTO);
 
-		return response.data;
+		return data;
 
 	},
 
 	async changePassword(userDTO) {
 
-		const response = await axiosInstance.post('/changePassword', userDTO);
+		const { data } = await axiosInstance.post('/changePassword', userDTO);
 
-		return response.data;
+		return data;
 
 	}
 

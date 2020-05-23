@@ -14,47 +14,47 @@ export default {
 
 	async fetchUserPosts() {
 
-		const reponse = await axiosInstance.get('/user');
+		const { data } = await axiosInstance.get('/user');
 
-		return reponse.data;
+		return data;
 
 	},
 
 	async fetchBlogPost(id) {
 
-		const response = await axiosInstance.get('/blogPost/' + id);
+		const { data } = await axiosInstance.get('/blogPost/' + id);
 
-		return response.data;
+		return data;
 
 	},
 
 	async fetchBlogPostBySlug(slug) {
 
-		const response = await axiosInstance.get('/slug/' + slug);
+		const { data } = await axiosInstance.get('/slug/' + slug);
 
-		return response.data;
+		return data;
 
 	},
 
 	async fetchPublishedBlogPosts() {
 			
-		const response = await axiosInstance.get('/publishedBlogs');
+		const { data } = await axiosInstance.get('/publishedBlogs');
 
-		return response.data;
+		return data;
 
 	},
 
 	async fetchPost(id) {
 
-		const response = await axiosInstance.get('/post/' + id);
+		const { data } = await axiosInstance.get('/post/' + id);
 
-		return response.data;
+		return data;
 
 	},
 
-	async create(data) {
+	async create(postDTO) {
 
-		const reponse = await axiosInstance.post('/create', data,
+		const { data } = await axiosInstance.post('/create', postDTO,
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -62,21 +62,21 @@ export default {
 			}
 		);
 
-		return reponse.data;
+		return data;
 
 	},
 
 	async delete (id) {
 
-		const response = await axiosInstance.delete('/delete/' + id);
+		const { data } = await axiosInstance.delete('/delete/' + id);
 
-		return response.data;
+		return data;
 
 	},
 
 	async update (id, post) {
 
-		const response = await axiosInstance.put('/update/' + id, post,
+		const { data } = await axiosInstance.put('/update/' + id, post,
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -84,23 +84,23 @@ export default {
 			}
 		);		
 
-		return response.data;
+		return data;
 
 	},
 
 	async getImage (post) {
 
-		const response = await axiosInstance.get('/image/' + post.user + '/' + post.fileName);
+		const { data } = await axiosInstance.get('/image/' + post.user + '/' + post.fileName);
 
-		return response.data;
+		return data;
 
 	},
 
 	async checkUnique(postDTO) {
 
-		const response = await axiosInstance.post('/unique', postDTO);
+		const { data } = await axiosInstance.post('/unique', postDTO);
 
-		return response.data;
+		return data;
 
 	}
 

@@ -24,9 +24,15 @@ module.exports = {
 
 	},
 
-	getCategories: async () => {
+	getCategories: async (id) => {
 
-		let parent_arr = await CategoryModel.find({ parentId: null });
+		let parent_arr;
+
+		if (typeof id !== 'undefined') {
+			parent_arr = await CategoryModel.find({ _id: id });
+		} else {
+			parent_arr = await CategoryModel.find({ parentId: null });
+		}
 		
 		let category_arr = [];
 		
@@ -77,7 +83,7 @@ module.exports = {
 			category_arr.push(categoryObj);
 
 		}
-
+		
 		return { categories: category_arr };
 
 	},
@@ -121,25 +127,6 @@ module.exports = {
 		}
 
 		await CategoryModel.findByIdAndRemove({ _id: id });
-
-	},
-
-	getCategory: async(id) => {
-
-		let parent_arr = await CategoryModel.find({ _id: id });
-		
-		for (category of parent_arr) {
-
-			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
-
-			categoryObj = {
-				category,
-				subcategory: subcategory_arr
-			};
-
-		}
-
-		return { category: categoryObj }; 
 
 	},
 

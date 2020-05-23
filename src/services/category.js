@@ -14,57 +14,49 @@ export default {
 	
 	async checkUniqueCategory(postDTO) {
 
-		const response = await axiosInstance.post('/uniqueCategory', postDTO);
+		const { data } = await axiosInstance.post('/uniqueCategory', postDTO);
 
-		return response.data;
+		return data;
 
 	},
 
-	async getCategories () {
+	async getCategories (id = '') {
 
-		const response = await axiosInstance.get('/categories');
+		const { data } = await axiosInstance.get('/categories/' + id);
 
-		return response.data;
+		return data;
 
 	},
 
 	async createCategory (postDTO) {
 
-		const response = await axiosInstance.post('/addCategory', postDTO);
+		const { data } = await axiosInstance.post('/addCategory', postDTO);
 
-		return response.data;
+		return data;
 
 	},
 
 	async removeCategory (id) {
 
-		const response = await axiosInstance.post('/removeCategory', { id });
+		const { data } = await axiosInstance.post('/removeCategory', { id });
 
-		return response.data;
-
-	},
-
-	async getCategory (id) {
-
-		const response = await axiosInstance.post('/category', { id });
-
-		return response.data;
+		return data;
 
 	},
 
 	async update (postDTO) {
 
-		const response = await axiosInstance.post('/update', postDTO);
+		const { data } = await axiosInstance.post('/update', postDTO);
 
-		return response.data;
+		return data;
 
 	},
 
 	async getCategoryBySlug (slug) {
 
-		const response = await axiosInstance.get('/categoryBySlug/' + slug );
+		const { data } = await axiosInstance.get('/categoryBySlug/' + slug);
 
-		return response.data;
+		return data;
 
 	},
 
