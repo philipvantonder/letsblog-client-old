@@ -49,6 +49,15 @@
 
 <style>
 
+.ql-syntax {
+	background-color: #23241f;
+	color: #f8f8f2;
+	padding: 5px 10px;
+	border-radius: 3px;
+}
 
+p > img {
+	width: 100%;
+}
 
 </style>

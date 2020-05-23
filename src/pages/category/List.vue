@@ -66,7 +66,7 @@
 							<div class="form-group d-flex flex-column">
 								<div class="d-flex">
 									<input type="text" v-model="subcategory.name" :class="{ 'is-invalid' : $v.$error }" class="form-control" placeholder="Subcategory name"> 
-									<button class="btn btn-danger ml-2" @click="deleteSubcategory(subcategory.id, index)"> Remove </button>
+									<button class="btn btn-danger ml-2" v-if="subcategory.canRemoveSubCategory" @click="deleteSubcategory(subcategory.id, index)"> Remove </button>
 								</div>
 								<div class="d-flex mt-2">
 									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.name" :type="'category'" :id='subcategory.id' />
@@ -187,7 +187,8 @@ export default {
 			
 			this.formData.subcategoryArr.push({
 				name: '',
-				slug: ''
+				slug: '',
+				canRemoveSubCategory: true
 			});
 
 		},
@@ -243,7 +244,7 @@ export default {
 		},
 
 		async remove(id) {
-		
+
 			const response = await Alert.confirm({ title: "Are you sure you want to remove this category.", confirmButton: true });
 
 			if (response) {

@@ -141,13 +141,6 @@ body {
 	margin-top: 5rem !important;
 }
 
-.ql-syntax {
-	background-color: #23241f;
-	color: #f8f8f2;
-	padding: 5px 10px;
-	border-radius: 3px;
-}
-
 .h-90 {
 	height: 30rem;
 }
@@ -193,9 +186,4 @@ body {
 	40%, 60% {
 		transform: translate3d(4px, 0, 0);
 	}
-}
-
-/* This is for the rich editor post images */
-p > img {
-	width: 100%;
 }

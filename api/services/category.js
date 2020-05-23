@@ -40,6 +40,14 @@ module.exports = {
 
 			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
 
+			let canRemoveCategory = true;
+
+			const linkedPost = await PostModel.findOne({ category: category._id });
+
+			if (linkedPost) {
+				canRemoveCategory = false;
+			}
+
 			let newSubCatArr = [];
 			for (subcategoryItem of subcategory_arr) {
 
@@ -49,6 +57,7 @@ module.exports = {
 
 				if (linkedSubPost) {
 					canRemoveSubCategory = false;
+					canRemoveCategory = false;
 				}
 
 				subCategoryObj = {
@@ -60,14 +69,6 @@ module.exports = {
 
 				newSubCatArr.push(subCategoryObj);
 
-			}
-
-			let canRemoveCategory = true;
-
-			const linkedPost = await PostModel.findOne({ category: category._id });
-
-			if (linkedPost) {
-				canRemoveCategory = false;
 			}
 
 			categoryObj = {

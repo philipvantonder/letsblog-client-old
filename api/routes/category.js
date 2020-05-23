@@ -56,9 +56,7 @@ router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res
 
 	await handle(async () => {
 	
-		const { categories } = await CategoryService.addCategory(req.body);
-
-		res.status(200).send({ categories });
+		await CategoryService.addCategory(req.body);
 
 		res.end();
 

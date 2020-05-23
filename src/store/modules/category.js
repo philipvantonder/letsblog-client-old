@@ -19,7 +19,7 @@ export default {
 		},
 
 		REMOVE_CATEGORY(state, id) {
-			let category_index = state.categories.map(category => category._id).indexOf(id);
+			let category_index = state.categories.map(({ category }) => category.id).indexOf(id);
 			state.categories.splice(category_index, 1);
 		},
 
