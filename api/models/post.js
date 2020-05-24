@@ -12,16 +12,20 @@ const PostSchema = new mongoose.Schema({
 		default: false,
 	},
 	fileName: String,
-	user: { 
+	user: {
 		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'User' 
 	},
-	category: { 
+	category: {
 		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'Categories' 
 	},
 	tags: {
 		type: Array
+	},
+	reviewed: {
+		type: Boolean,
+		default: false
 	}
 }, { timestamps: true });
 

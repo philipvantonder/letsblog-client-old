@@ -54,6 +54,19 @@ export default {
 </script>
 
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+	body {
+		font-family: 'Playfair Display', serif;
+	}
+
+	h1, h2, h3, h4 ,h5, h6 {
+		font-family: 'Playfair Display', serif;
+	}
+
+	p {
+		font-family: 'Playfair Display', serif;
+	}
 
 	::-moz-selection { /* Code for Firefox */
 		color: #FFF;
