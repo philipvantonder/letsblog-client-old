@@ -49,9 +49,9 @@ export default {
 
 		},
 
-		async setCategories({ commit }, id) {
+		async setCategories({ commit }) {
 
-			const { categories } = await CategoryService.getCategories(id);
+			const { categories } = await CategoryService.getCategories();
 
 			commit('SET_CATEGORIES', categories);
 
@@ -77,11 +77,11 @@ export default {
 
 		},
 
-		async setCategory({ commit }, id) {
+		async setCategoryById({ commit }, id) {
 				
-			const { categories } = await CategoryService.getCategories(id);
+			const { category } = await CategoryService.getCategoryById(id);
 
-			commit('SET_CATEGORY', categories);
+			commit('SET_CATEGORY', category);
 
 		},
 

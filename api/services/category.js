@@ -24,15 +24,68 @@ module.exports = {
 
 	},
 
-	getCategories: async (id) => {
+	getCategoryById: async (id) => {
 
-		let parent_arr;
+		let parent_arr = await CategoryModel.find({ _id: id });
+		
+		let category_arr = [];
+		
+		for (category of parent_arr) {
 
-		if (typeof id !== 'undefined') {
-			parent_arr = await CategoryModel.find({ _id: id });
-		} else {
-			parent_arr = await CategoryModel.find({ parentId: null });
+			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
+
+			let canRemoveCategory = true;
+
+			const linkedPost = await PostModel.findOne({ category: category._id });
+
+			if (linkedPost) {
+				canRemoveCategory = false;
+			}
+
+			let newSubCatArr = [];
+			for (subcategoryItem of subcategory_arr) {
+
+				canRemoveSubCategory = true;
+
+				const linkedSubPost = await PostModel.findOne({ category: subcategoryItem._id })
+
+				if (linkedSubPost) {
+					canRemoveSubCategory = false;
+					canRemoveCategory = false;
+				}
+
+				subCategoryObj = {
+					id: subcategoryItem._id,
+					name: subcategoryItem.name,
+					slug: subcategoryItem.slug,
+					canRemoveSubCategory
+				};
+
+				newSubCatArr.push(subCategoryObj);
+
+			}
+
+			categoryObj = {
+				category: {
+					id: category._id,
+					name: category.name,
+					slug: category.slug,
+					canRemoveCategory
+				},
+				subcategory: newSubCatArr
+			};
+
+			category_arr.push(categoryObj);
+
 		}
+		
+		return { category: category_arr };
+
+	},
+
+	getCategories: async () => {
+
+		let parent_arr = await CategoryModel.find({ parentId: null });
 		
 		let category_arr = [];
 		
@@ -178,7 +231,7 @@ module.exports = {
 
 		if (category) {
 
-			const posts = await PostModel.find({ category: category._id }).sort({ createdAt: 'desc' });
+			const posts = await PostModel.find({ category: category._id, isPublished: true }).sort({ createdAt: 'desc' });
 			
 			return { posts };
 			

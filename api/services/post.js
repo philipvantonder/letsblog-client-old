@@ -1,7 +1,9 @@
 const PostModel = require('../models/post');
+const UserModel = require('../models/user');
 const UserService = require('../services/user');
 const fs = require('fs');
 const { EntityNotFoundError } = require('../utils/error-handling/custom-errors');
+const moment = require('moment');
 
 module.exports = {
 
@@ -15,8 +17,20 @@ module.exports = {
 
 	getBlogPostBySlug: async (slug) => {
 
-		const post = await PostModel.findOne({ slug: slug, isPublished: true });
+		const postObj = await PostModel.findOne({ slug: slug, isPublished: true });
 		
+		const AuthorObj = await UserModel.findById({ _id: postObj.user });
+
+		const post = {
+			id: postObj._id,
+			body: postObj.body,
+			title: postObj.title,
+			datePublished: moment(postObj.createdAt).format('MMMM Do YYYY'),
+			authorId: AuthorObj._id,
+			authorPicture: AuthorObj.profileImage,
+			author: `${AuthorObj.name} ${AuthorObj.surname}`
+		};
+
 		return { post };
 
 	},

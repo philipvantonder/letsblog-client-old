@@ -2,7 +2,7 @@
 	<div class="container-fluid px-4 pb-4">
 
 		<div class="row py-2 mt-2 no-gutters">
-			<h3>Add New Blog Post</h3>
+			<h3>Add Post</h3>
 		</div>
 
 		<div class="row py-2">
@@ -19,7 +19,7 @@
 						</div>
 
 						<div class="form-group">
-							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="post.title" />
+							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="post.title" :type="'post'" />
 							<input type="hidden" v-model="post.slug" />
 						</div>
 

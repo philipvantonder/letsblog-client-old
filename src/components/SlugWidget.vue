@@ -81,7 +81,7 @@ export default {
 
 	methods: {
 
-		...mapActions('posts', ['checkUnique', 'checkUniqueCategory']),
+		...mapActions('posts', ['checkUnique']),
 
 		editSlug() {
 
@@ -144,10 +144,20 @@ export default {
 
 			if (this.type != '' && this.type === 'category') {
 
-				const { newSlug } = await this.$store.dispatch('category/checkUniqueCategory', { slug, id });
+				if (slug != '') {
 
-				this.slug = newSlug;
-				this.$emit('slugChanged', newSlug);
+					const { newSlug } = await this.$store.dispatch('category/checkUniqueCategory', { slug, id });
+
+					this.slug = newSlug;
+					this.$emit('slugChanged', newSlug);
+				
+				} else {
+
+					await '';
+					this.slug = '';
+					this.$emit('slugChanged', '');
+
+				}
 
 			} else {
 				

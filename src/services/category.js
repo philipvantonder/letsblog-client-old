@@ -20,9 +20,17 @@ export default {
 
 	},
 
-	async getCategories (id = '') {
+	async getCategoryById (id) {
 
 		const { data } = await axiosInstance.get('/categories/' + id);
+
+		return data;
+
+	},
+
+	async getCategories () {
+
+		const { data } = await axiosInstance.get('/categories');
 
 		return data;
 

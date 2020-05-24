@@ -2,7 +2,7 @@
 	<div class="container-fluid px-4 pb-4">
 				
 		<div class="row py-2 no-gutters">
-			<h1>Posts</h1>
+			<h1>My Posts</h1>
 		</div>
 
 		<div class="row py-2">
@@ -34,7 +34,9 @@
 						</tr>
 					</tbody>
 				</table>
-				<p v-else> No posts loaded.</p>
+				<div v-else>
+					<p> No posts. <router-link tag="a" :to="{ name: 'add-post' }"> Create first Post </router-link> </p>
+				</div>
 			</div>
 		</div>
 	</div>

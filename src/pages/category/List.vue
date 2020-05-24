@@ -126,7 +126,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions('category', ['setCategories', 'createCategory', 'removeCategory', 'removeSubCategory', 'setCategory', 'updateCategory']),
+		...mapActions('category', ['setCategories', 'createCategory', 'removeCategory', 'removeSubCategory', 'setCategoryById', 'updateCategory']),
 
 		async submitForm() {
 
@@ -206,7 +206,7 @@ export default {
 			this.edit = true;
 			this.modalIsOpen = true;
 			
-			await this.setCategory(id);
+			await this.setCategoryById(id);
 
 			let { category, subcategory } = this.getCategory[0];
 

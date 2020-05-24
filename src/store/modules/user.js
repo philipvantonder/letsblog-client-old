@@ -49,7 +49,6 @@ export default {
 			
 			commit('SET_LOGGED_IN_USER', user);
 			
-
 		},
 
 		logout({ commit }) {

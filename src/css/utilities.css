@@ -7,12 +7,12 @@ body {
 }
 
 .feed-content::-webkit-scrollbar {
-	width: 12px;
+	width: 15px;
 	background-color: #fff;
 }
 
 .feed-content::-webkit-scrollbar-thumb {
-	width: 12px;
+	width: 15px;
 	background-color: #95999c;
 	border-radius: 50rem;
 }

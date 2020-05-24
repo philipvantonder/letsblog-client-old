@@ -33,6 +33,8 @@ Axios.interceptors.response.use(response => {
 
 	let { code } = response.data;
 
+	console.log(code);
+
 	// code === "EXPIRED_TOKEN"
 	if (code === "INVALID_TOKEN") {
 

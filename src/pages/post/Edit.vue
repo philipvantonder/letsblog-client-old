@@ -2,7 +2,7 @@
 	<div v-if="!loading" class="container-fluid px-4 pb-4">
 
 		<div class="row py-2 mt-2 no-gutters">
-			<h1>Edit New Blog Post</h1>
+			<h1>Edit post</h1>
 		</div>
 
 		<div class="row py-2">
@@ -19,7 +19,7 @@
 						</div>
 
 						<div class="form-group">
-							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="slugTitle" :id="post._id" />
+							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="slugTitle" :id="post._id" :type="'post'" />
 						</div>
 
 						<div class="form-group">
