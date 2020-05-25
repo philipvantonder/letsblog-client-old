@@ -42,19 +42,19 @@ module.exports = {
 
 	signIn: async (userDTO) => {
 
-		const getUser = await UserModel.findOne({ email: userDTO.email });
+		const user = await UserModel.findOne({ email: userDTO.email });
 		
-		if (!getUser) {
+		if (!user) {
 			throw new EntityNotFoundError('User', 'Password or username does not match.');
 		}
 		
-		const findUser = await bcrypt.compare(userDTO.password, getUser.password);
+		const userPassword = await bcrypt.compare(userDTO.password, user.password);
 		
-		if (!findUser) {
+		if (!userPassword) {
 			throw new EntityNotFoundError('User', 'Password or username does not match.');
 		}
 
-		const token = await jwt.sign({ 'userId': getUser._id, 'name': getUser.name, 'surname': getUser.surname }, jwt_secret);
+		const token = await jwt.sign({ 'userId': user._id, 'name': user.name, 'surname': user.surname }, jwt_secret);
 
 		return { token };
 
@@ -66,6 +66,10 @@ module.exports = {
 		
 		const userObj = await UserModel.findById({ _id: token_verify.userId });
 
+		if (!userObj) {
+			throw new EntityNotFoundError('User', 'Could not find user');
+		}
+
 		const user = {
 			id: userObj._id,
 			name: userObj.name,
@@ -76,10 +80,6 @@ module.exports = {
 			profileImage: userObj.profileImage,
 			bio: userObj.bio,
 			cellnumber: userObj.cellnumber,
-		}
-
-		if (!user) {
-			throw new EntityNotFoundError('User', 'Could not find user');
 		}
 
 		return { user };

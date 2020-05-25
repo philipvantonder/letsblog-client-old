@@ -47,7 +47,7 @@ module.exports = {
 
 		const { user } = await UserService.getUserByToken(token);
 		
-		const posts = await PostModel.find({ user: user._id }).sort({ createdAt: 'desc' });
+		const posts = await PostModel.find({ user: user.id }).sort({ createdAt: 'desc' });
 		
 		return { posts };
 
@@ -67,7 +67,7 @@ module.exports = {
 			slug: postDTO.slug,
 			category: postDTO.category,
 			tags: tagsArr,
-			user: user._id
+			user: user.id
 		});
 
 		const newPost = await post.save();

@@ -18,7 +18,7 @@ var storage = multer.diskStorage({
 
 		const { user } = await UserService.getUserByToken(token);
 
-		imageDir = 'images/user/' + user._id;
+		imageDir = 'images/user/' + user.id;
 
 		if (!fs.existsSync(imageDir)) {
 			fs.mkdirSync(imageDir, { recursive: true });
@@ -162,7 +162,7 @@ router.route('/update').put(userAuthentication.isLoggedIn, fileUpload.single('fi
 
 		const { user } = await UserService.getUserByToken(token);
 
-		await UserService.update(user._id, req.body);
+		await UserService.update(user.id, req.body);
 
 		res.status(200).send({ user });
 
