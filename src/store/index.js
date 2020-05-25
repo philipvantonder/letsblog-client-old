@@ -6,7 +6,7 @@ Vue.use(Vuex);
 import UserModule from './modules/user';
 import PostsModule from './modules/posts';
 import CategoryModule from './modules/category';
-import CommentModule from './modules/category';
+import CommentModule from './modules/comment';
 
 export default new Vuex.Store({
 

@@ -41,7 +41,7 @@
 
 			<div v-if="isLoggedIn" class="d-flex align-items-center">
 				<div class="cursor-pointer" id="navbarDropdown" data-toggle="dropdown">
-					<img class="rounded-circle h-10 w-10 obj-fit profile-border" :src="'http://localhost:4000/api/users/image/' + user._id + '/' + user.profileImage" />
+					<img class="rounded-circle h-10 w-10 obj-fit profile-border" :src="'http://localhost:4000/api/users/image/' + user.id + '/' + user.profileImage" />
 				</div>
 
 				<li class="nav-item dropdown">

@@ -4,7 +4,7 @@
 			<div class="col-lg-4"> 
 				<div class="shadow rounded bg-white d-flex flex-column">
 					<div class="d-flex justify-content-center p-4">
-						<img class="rounded-circle obj-fit h-20 w-20" :src="'http://localhost:4000/api/users/image/' + user._id + '/' + user.profileImage" />
+						<img class="rounded-circle obj-fit h-20 w-20" :src="'http://localhost:4000/api/users/image/' + user.id + '/' + user.profileImage" />
 
 						<div class="ml-2 d-flex flex-column justify-content-center">
 							<h6 class="font-medium"> {{ userFullName }} </h6>

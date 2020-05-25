@@ -9,7 +9,7 @@
 						</div>
 						<div class="d-flex align-items-center">
 							<div>
-								<img class="rounded-circle h-10 w-10 obj-fit profile-border" :src="'http://localhost:4000/api/users/image/' + blogPost.authorId + '/' + blogPost.authorPicture" />
+								<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + blogPost.authorId + '/' + blogPost.authorPicture" />
 							</div>
 							<div class="d-flex flex-column ml-2">
 								<div>
@@ -35,9 +35,12 @@
 
 			<div class="col-lg-6">
 				<div v-if="showComment" class="mt-3">
-					<AddComment @hideCommentBox="hideCommentBox()" />
+					<AddComment @hideCommentBox="hideCommentBox()" :postId="blogPost.id" :userId="user.id" />
 				</div>
 			</div>
+
+			{{ postComments }}
+
 		</div>
 	</div>
 </template>
@@ -67,12 +70,14 @@
 
 		computed: {
 			...mapState('posts', ['blogPost']),
-
-			...mapGetters('user', ['isLoggedIn'])
+			...mapState('user', ['user']),
+			...mapState('comment', ['postComments']),
+			...mapGetters('user', ['isLoggedIn']),
 		},
 
 		methods: {
 			...mapActions('posts', ['setBlogPostBySlug']),
+			...mapActions('comment', ['setPostCommentsById']),
 
 			showCommentBox() {
 
@@ -105,6 +110,8 @@
 			const { id } = this.$route.params;
 
 			await this.setBlogPostBySlug(id);
+
+			await this.setPostCommentsById(this.blogPost.id);
 
 			this.loading = false;
 

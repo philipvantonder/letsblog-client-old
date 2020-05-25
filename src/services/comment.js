@@ -20,9 +20,9 @@ export default {
 
 	},
 
-	async fetchPostComments (postDTO) {
+	async getPostCommentsById (id) {
 
-		const { data } = await axiosInstance.get('/', postDTO);
+		const { data } = await axiosInstance.get('/' + id);
 
 		return data;
 

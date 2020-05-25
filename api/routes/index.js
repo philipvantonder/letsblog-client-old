@@ -1,12 +1,9 @@
-const express = require('express');
-const app = express();
+const PostRoute = require('./routes/post');
+const UserRoute = require('./routes/user');
+const CategoryRoute = require('./routes/category');
+const CommentRoute = require('./routes/comment');
 
-const postRoute = require('./post');
-const userRoute = require('./user');
-const categoryRoute = require('./category');
-
-module.exports = {
-	postRoute,
-	userRoute,
-	categoryRoute
-};
+app.use('/api/posts', PostRoute);
+app.use('/api/users', UserRoute);
+app.use('/api/category', CategoryRoute);
+app.use('/api/comment', CommentRoute);

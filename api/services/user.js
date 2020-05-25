@@ -64,7 +64,19 @@ module.exports = {
 
 		const token_verify = await jwt.verify(token, jwt_secret);
 		
-		const user = await UserModel.findById({ _id: token_verify.userId });
+		const userObj = await UserModel.findById({ _id: token_verify.userId });
+
+		const user = {
+			id: userObj._id,
+			name: userObj.name,
+			surname: userObj.surname,
+			email: userObj.email,
+			createdAt: userObj.createdAt,
+			updatedAt: userObj.updatedAt,
+			profileImage: userObj.profileImage,
+			bio: userObj.bio,
+			cellnumber: userObj.cellnumber,
+		}
 
 		if (!user) {
 			throw new EntityNotFoundError('User', 'Could not find user');

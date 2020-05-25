@@ -17,7 +17,7 @@
 					</div>
 
 					<div class="d-flex justify-content-center">
-						<img class="rounded-circle obj-fit h-20 w-20" :src="'http://localhost:4000/api/users/image/' + user._id + '/' + user.profileImage" />
+						<img class="rounded-circle obj-fit h-20 w-20" :src="'http://localhost:4000/api/users/image/' + user.id + '/' + user.profileImage" />
 					</div>
 
 					<div v-show="changeProfilePicture" class="mt-3">

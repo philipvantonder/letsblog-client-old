@@ -6,7 +6,7 @@ export default {
 
 	state: {
 
-		comments: []
+		postComments: []
 
 	},
 
@@ -14,7 +14,7 @@ export default {
 
 		UPDATE_COMMENT(state, comment) {
 
-			state.comments = comment
+			state.postComments = comment;
 
 		}
 
@@ -32,11 +32,11 @@ export default {
 
 		},
 
-		setComment({ commit }) {
+		async setPostCommentsById({ commit }, id) {
 
-			const { comment } = await CommentService.fetchPostComments();
+			const { postComments } = await CommentService.getPostCommentsById(id);
 
-			commit('UPDATE_COMMENT', comment);
+			commit('UPDATE_COMMENT', postComments);
 		}
 
 	}

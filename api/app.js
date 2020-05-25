@@ -9,7 +9,7 @@ const morgan = require('morgan');
 const PostRoute = require('./routes/post');
 const UserRoute = require('./routes/user');
 const CategoryRoute = require('./routes/category');
-const CommentRoute = require('./routes/category');
+const CommentRoute = require('./routes/comment');
 
 const { port, mongo_url } = require('./config/index');
 const { errorHandlingMiddleware } = require('./utils/error-handling/error-handling-middleware');

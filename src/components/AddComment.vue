@@ -32,7 +32,21 @@ export default {
 			required: false,
 			default: () => []
 
-		}
+		},
+
+		postId: {
+
+			type: String,
+			required: true
+
+		},
+
+		userId: {
+
+			type: String,
+			required: true
+
+		},
 
 	},
 
@@ -41,7 +55,9 @@ export default {
 		return {
 
 			formData: {
-				comment: ''
+				comment: '',
+				userId: this.userId,
+				postId: this.postId
 			}
 
 		}
@@ -60,7 +76,6 @@ export default {
 			}
 
 			await this.create(this.formData);
-
 
 		},
 
