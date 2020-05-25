@@ -1,14 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const postRoute = require('./routes/post');
 
-const userRoute = require('./routes/user');
-const categoryRoute = require('./routes/category');
 const cors = require('cors');
 const app = express();
-
 const morgan = require('morgan');
+
+const PostRoute = require('./routes/post');
+const UserRoute = require('./routes/user');
+const CategoryRoute = require('./routes/category');
+const CommentRoute = require('./routes/category');
+
 const { port, mongo_url } = require('./config/index');
 const { errorHandlingMiddleware } = require('./utils/error-handling/error-handling-middleware');
 
@@ -28,9 +30,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-app.use('/api/posts', postRoute);
-app.use('/api/users', userRoute);
-app.use('/api/category', categoryRoute);
+app.use('/api/posts', PostRoute);
+app.use('/api/users', UserRoute);
+app.use('/api/category', CategoryRoute);
+app.use('/api/comment', CommentRoute);
 
 app.use(errorHandlingMiddleware);
 

@@ -85,7 +85,7 @@ export default {
 				await this.setUser();
 				
 				await this.setUserDetailsFromToken();
-
+				
 				this.$router.push({ name: 'feed' });
 
 			} catch (error) {

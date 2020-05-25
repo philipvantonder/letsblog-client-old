@@ -57,9 +57,9 @@
 
 <script>
 
+	import { mapActions } from 'vuex'; 
 	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
 	import Alert from '@/model/Alert';
-	import UserService from '@/services/user';
 
     export default {
 
@@ -97,6 +97,8 @@
 
         methods: {
 
+			...mapActions('user', ['createUser']),
+
             async registerUser() {
 
                 this.$v.$touch()
@@ -108,7 +110,7 @@
 
 					this.errorMessage = '';
 
-					const { message } = await UserService.register(this.user);
+					const { message } = await this.createUser(this.user);
 					
 					Alert.message({
 						text: message,

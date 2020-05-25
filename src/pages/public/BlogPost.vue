@@ -25,7 +25,17 @@
 
 						<div class="text-break mt-3" v-html="blogPost.body"> </div>
 					</div>
+				</div>
+
+				<div class="mt-3">
+					<button class="btn btn-dark" @click="showCommentBox()"> Comment </button>
+				</div>
 					
+			</div>
+
+			<div class="col-lg-6">
+				<div v-if="showComment" class="mt-3">
+					<AddComment @hideCommentBox="hideCommentBox()" />
 				</div>
 			</div>
 		</div>
@@ -34,22 +44,60 @@
 
 <script>
 
-	import { mapActions, mapState } from 'vuex';
+	import { mapActions, mapState, mapGetters } from 'vuex';
+	import AddComment from '@/components/AddComment';
+	import Alert from '@/model/Alert'
 
     export default {
 
 		data() {
+
 			return {
-				loading: true
+
+				loading: true,
+				showComment: false
+
 			}
+			
+		},
+
+		components: {
+			AddComment
 		},
 
 		computed: {
-			...mapState('posts', ['blogPost'])
+			...mapState('posts', ['blogPost']),
+
+			...mapGetters('user', ['isLoggedIn'])
 		},
 
 		methods: {
-			...mapActions('posts', ['setBlogPostBySlug'])
+			...mapActions('posts', ['setBlogPostBySlug']),
+
+			showCommentBox() {
+
+				if (!this.isLoggedIn) {
+
+					Alert.message({
+						icon: 'error',
+						title: 'Comment Failed', 
+						text: 'You need to be logged in to continue.',
+						confirmBtnText: 'Login',
+						redirect: '/login',
+						confirmButton: true,
+						cancelButton: true
+					});
+
+				} else {
+
+					this.showComment = true;
+
+				}
+
+			},
+			hideCommentBox() {
+				this.showComment = false;
+			}
 		},
 
 		async created() {

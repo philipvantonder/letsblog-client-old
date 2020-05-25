@@ -91,6 +91,14 @@ export default {
 
 		},
 
+		async createUser(context, postDTO) {
+
+			const { message } = await UserService.create(postDTO);
+
+			return { message };
+
+		},
+
 		async passwordReset (context, postDTO) {
 				
 			const { message } = await UserService.sendPasswordReset(postDTO);

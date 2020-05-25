@@ -20,7 +20,7 @@ export default {
 
 	},
 
-	async register(user) {
+	async create(user) {
 
 		const { data } = await axiosInstance.post('/register', user);
 		
@@ -46,7 +46,7 @@ export default {
 
 	async update(userDTO) {
 
-		const { data } = await axiosInstance.post('/update', userDTO, 
+		const { data } = await axiosInstance.put('/update', userDTO, 
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'

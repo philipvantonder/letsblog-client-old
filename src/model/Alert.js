@@ -12,7 +12,8 @@ class Alert {
 			position: options.position || 'center',
 			showConfirmButton: (options.confirmButton !== undefined ? options.confirmButton : false), 
 			timer: options.time || false,
-			backdrop: (options.backdrop !== undefined ? options.backdrop : true)
+			backdrop: (options.backdrop !== undefined ? options.backdrop : true),
+			showCancelButton: (options.cancelButton !== undefined ? options.cancelButton : false)
 		})
 		.then((result) => {
 			
@@ -37,7 +38,7 @@ class Alert {
 				icon: options.icon || 'question',
 				title: options.title,
 				confirmButtonText: options.confirmButtonText || 'Yes',
-				showCancelButton:  (options.cancelButton !== undefined ? options.cancelButton : true)
+				showCancelButton: (options.cancelButton !== undefined ? options.cancelButton : true)
 			}).then((result) => {
 				
 				if (result.value) {

@@ -150,11 +150,11 @@ router.route('/getUser').get(async (req, res, next) => {
 });
 
 /**
- * @route POST api/users/update
+ * @route PUT api/users/update
  * @desc update user's details
  * @access Private
  */
-router.route('/update').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
+router.route('/update').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 
 	await handle(async () => {
 

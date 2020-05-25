@@ -6,6 +6,7 @@ Vue.use(Vuex);
 import UserModule from './modules/user';
 import PostsModule from './modules/posts';
 import CategoryModule from './modules/category';
+import CommentModule from './modules/category';
 
 export default new Vuex.Store({
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
 
 		user: UserModule,
 		posts: PostsModule,
-		category: CategoryModule
+		category: CategoryModule,
+		comment: CommentModule
 
 	}
 
