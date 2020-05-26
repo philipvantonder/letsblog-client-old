@@ -66,7 +66,7 @@ export default {
 
 	methods: {
 
-		...mapActions('comment', ['create']),
+		...mapActions('comment', ['create', 'setPostCommentsById']),
 
 		async submitForm() {
 
@@ -77,6 +77,10 @@ export default {
 
 			await this.create(this.formData);
 
+			await this.setPostCommentsById(this.postId);
+
+			this.formData.comment = '';
+			this.$emit('hideCommentBox');
 		},
 
 		hideCommentBox() {

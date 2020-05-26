@@ -1,4 +1,7 @@
 const CommentModel = require('../models/comment');
+const UserModel = require('../models/user');
+
+const moment = require('moment');
 
 module.exports = {
 
@@ -16,9 +19,29 @@ module.exports = {
 
 	getPostCommentsById: async (id) => {
 
-		const postComments = await CommentModel.find({ post: id });
+		const postCommentsObj = await CommentModel.find({ post: id });
 
-		return { postComments }
+		const postComments = [];
+
+		for (postComment of postCommentsObj) {
+			
+			const userObject = await UserModel.findById({ _id: postComment.user });
+
+			let postCommentDetails = {
+				commentBody: postComment.body,
+				createdAt: moment(postComment.createdAt).format('MMMM Do YYYY h:mm:ss a'),
+				isPublished: postComment.isPublished,
+				userId: userObject._id,
+				userName: userObject.name,
+				userSurname: userObject.surname,
+				userProfileImage: userObject.profileImage,
+			};
+
+			postComments.push(postCommentDetails);
+
+		}
+
+		return { postComments };
 
 	}
 

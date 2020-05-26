@@ -92,7 +92,7 @@ const router = new VueRouter({
 		{
 			name: 'categories',
 			path: '/categories',
-			component: lazyLoad('pages/category/List'),
+			component: lazyLoad('pages/category/index'),
 			meta: {
 				requiresAuth: true 
 			}

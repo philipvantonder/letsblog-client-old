@@ -28,18 +28,30 @@
 				</div>
 
 				<div class="mt-3">
-					<button class="btn btn-dark" @click="showCommentBox()"> Comment </button>
+					<button v-if="!showComment" class="btn btn-dark" @click="showCommentBox()"> Comment </button>
 				</div>
 					
 			</div>
 
-			<div class="col-lg-6">
-				<div v-if="showComment" class="mt-3">
-					<AddComment @hideCommentBox="hideCommentBox()" :postId="blogPost.id" :userId="user.id" />
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6">
+						<div v-if="showComment" class="mt-3">
+							<AddComment @hideCommentBox="hideCommentBox()" :postId="blogPost.id" :userId="user.id" />
+						</div>
+					</div>
 				</div>
 			</div>
 
-			{{ postComments }}
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div v-if="postComments" class="mt-4">
+							<ListComment :comments="postComments" />
+						</div>
+					</div>
+				</div>
+			</div>
 
 		</div>
 	</div>
@@ -49,6 +61,7 @@
 
 	import { mapActions, mapState, mapGetters } from 'vuex';
 	import AddComment from '@/components/AddComment';
+	import ListComment from '@/components/ListComment';
 	import Alert from '@/model/Alert'
 
     export default {
@@ -65,7 +78,8 @@
 		},
 
 		components: {
-			AddComment
+			AddComment,
+			ListComment
 		},
 
 		computed: {
