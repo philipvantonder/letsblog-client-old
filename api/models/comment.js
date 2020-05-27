@@ -5,10 +5,6 @@ const CommentSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	ispublished: {
-		type: Boolean,
-		default: true
-	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'user'
@@ -16,7 +12,15 @@ const CommentSchema = new mongoose.Schema({
 	post: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Post'
-	}
+	},
+	parentId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Comment'
+	},
+	ispublished: {
+		type: Boolean,
+		default: true
+	},
 }, { timestamps: true });
 
 module.exports = mongoose.model('Comment', CommentSchema);

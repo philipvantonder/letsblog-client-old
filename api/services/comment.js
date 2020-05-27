@@ -28,6 +28,7 @@ module.exports = {
 			const userObject = await UserModel.findById({ _id: postComment.user });
 
 			let postCommentDetails = {
+				commentId: postComment._id,
 				commentBody: postComment.body,
 				createdAt: moment(postComment.createdAt).format('MMMM Do YYYY h:mm:ss a'),
 				isPublished: postComment.isPublished,

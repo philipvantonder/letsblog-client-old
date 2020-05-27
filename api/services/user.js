@@ -80,7 +80,7 @@ module.exports = {
 			profileImage: userObj.profileImage,
 			bio: userObj.bio,
 			cellnumber: userObj.cellnumber,
-		}
+		};
 
 		return { user };
 

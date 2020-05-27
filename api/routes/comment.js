@@ -27,9 +27,9 @@ router.route('/').post(userAuthentication.isLoggedIn, async (req, res, next) => 
 /**
  * @route GET api/comment/
  * @desc Get all Post comments.
- * @access Private
+ * @access Public
  */
-router.route('/:id').get(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/:id').get(async (req, res, next) => {
 
 	await handle(async () => {
 

@@ -1,31 +1,34 @@
 <template>
-	<div v-if="comments.length > 0">
-		
-		<div> <strong> Comments ({{ comments.length }}) </strong> </div>
+	<div class="shadow radius-10 bg-white p-3 mt-2">
+		<div class="d-flex justify-content-between">
+			<div class="d-flex align-items-center">
+				<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + comment.userId + '/' + comment.userProfileImage" />
 
-		<div v-for="(comment, index) in comments" :key="index">
-			<div class="shadow rounded bg-white p-3 mt-2">
-				<div class="d-flex justify-content-between">
-					<div class="d-flex align-items-center">
-						<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + comment.userId + '/' + comment.userProfileImage" />
-
-						<div class="d-flex flex-column">
-							<div class="ml-3">
-								<div>
-									<h4 class="mb-1"> {{ comment.userName }} {{ comment.userSurname }} </h4>
-								</div>
-								<div>
-									<p class="mb-0"> {{ comment.commentBody }} </p>
-								</div>
-							</div>
+				<div class="d-flex flex-column">
+					<div class="ml-3">
+						<div>
+							<h4 class="mb-1"> {{ comment.userName }} {{ comment.userSurname }} </h4>
 						</div>
-					</div>
-					<div>
-						{{ comment.createdAt }}
+						<div>
+							<p class="mb-0"> {{ comment.commentBody }} </p>
+						</div>
 					</div>
 				</div>
 			</div>
-
+			<div class="d-flex flex-column">
+				<div>
+					{{ comment.createdAt }}	
+				</div>
+				<div class="d-flex align-items-center justify-content-between">
+					<div>
+						<a href="javascript:void(0)" @click="addReply(comment.commentId)"> Reply </a>
+					</div>
+					<div>
+						<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>
+						<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -36,17 +39,16 @@
 
 		props: {
 
-			comments: {
-				type: Array,
-				required: false,
-				default: () => []
+			comment: {
+				type: Object,
+				required: true,
 			}
 
 		},
 
-		data() {
+		methods: {
 
-			return {
+			addReply() {
 
 			}
 

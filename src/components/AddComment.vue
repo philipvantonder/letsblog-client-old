@@ -26,14 +26,6 @@ export default {
 
 	props: {
 
-		commentArr: {
-
-			type: Array,
-			required: false,
-			default: () => []
-
-		},
-
 		postId: {
 
 			type: String,
@@ -102,7 +94,3 @@ export default {
 }
 
 </script>
-
-<style>
-
-</style>

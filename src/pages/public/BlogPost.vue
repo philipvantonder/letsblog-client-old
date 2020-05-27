@@ -47,7 +47,10 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div v-if="postComments" class="mt-4">
-							<ListComment :comments="postComments" />
+
+							<div> <strong> Comments ({{ postComments.length }}) </strong> </div>
+
+							<ListComment v-for="(comment, index) in postComments" :key="index" :comment="comment" />
 						</div>
 					</div>
 				</div>
