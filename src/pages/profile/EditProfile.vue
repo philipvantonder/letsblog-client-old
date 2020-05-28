@@ -81,7 +81,7 @@
 
 import { required } from 'vuelidate/lib/validators';
 import { mapActions, mapState } from 'vuex';
-import Alert from '@/model/Alert';
+import Alert from '@/utilities/Alert';
 
 export default {
 

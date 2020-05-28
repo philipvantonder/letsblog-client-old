@@ -32,7 +32,7 @@
 
 import { required, sameAs, minLength } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
-import Alert from '@/model/Alert';
+import Alert from '@/utilities/Alert';
 
 export default {
 

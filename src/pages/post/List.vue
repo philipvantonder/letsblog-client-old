@@ -22,11 +22,11 @@
 					<tbody>
 						<tr v-for="post in userPosts" :key="post._id">
 							<td>{{ post.title }}</td>
-							<td>{{ post.body | LimitText(50) }}</td>
+							<td>{{ LimitText(post.body, 50) }}</td>
 							<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image" /></td>
-							<td>{{ post.isPublished | BooleanText }}</td>
-							<td>{{ post.createdAt | Date }}</td>
-							<td>{{ post.updatedAt | Date }}</td>
+							<td>{{ BooleanText(post.isPublished) }}</td>
+							<td>{{ FormatDate(post.createdAt) }}</td>
+							<td>{{ FormatDate(post.updatedAt) }}</td>
 							<td class="text-center" colspan="2">
 								<router-link :to="{ name: 'edit-post', params: { id: post._id } }" class="btn btn-primary">Edit</router-link>
 								<button class="ml-2 btn btn-danger" @click="deletePost(post._id)">Delete</button>
@@ -45,7 +45,9 @@
 <script>
 
 import { mapActions, mapState } from 'vuex';
-import Alert from '@/model/Alert';
+import Alert from '@/utilities/Alert';
+
+import { BooleanText, LimitText, FormatDate } from '@/utilities/filters/index';
 
 export default {
 	
@@ -55,6 +57,10 @@ export default {
 
 	methods: {
 		
+		BooleanText,
+		LimitText,
+		FormatDate,
+
 		...mapActions('posts', ['setUserPosts', 'removePost']),
 
 		async deletePost(id) {

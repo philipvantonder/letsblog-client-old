@@ -65,7 +65,7 @@
 	import { mapActions, mapState, mapGetters } from 'vuex';
 	import AddComment from '@/components/AddComment';
 	import ListComment from '@/components/ListComment';
-	import Alert from '@/model/Alert'
+	import Alert from '@/utilities/Alert'
 
     export default {
 

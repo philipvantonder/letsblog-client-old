@@ -16,7 +16,7 @@ import BlogCategory from '@/pages/public/BlogCategory';
 import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
 
-import { lazyLoad } from '@/model/utilities';
+import { lazyLoad } from '@/utilities/functions';
 
 Vue.component('navbar', Navbar);
 Vue.component('sidebar', Sidebar);

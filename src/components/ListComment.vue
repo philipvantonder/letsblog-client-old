@@ -24,8 +24,8 @@
 						<a href="javascript:void(0)" @click="addReply(comment.commentId)"> Reply </a>
 					</div>
 					<div>
-						<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>
-						<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+						<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>
+						<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
 					</div>
 				</div>
 			</div>
@@ -57,3 +57,11 @@
 	}
 
 </script>
+
+<style>
+
+.comment-icon:hover {
+	color: red;
+}
+
+</style>

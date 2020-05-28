@@ -98,7 +98,7 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 
 import SlugWidget from '@/components/SlugWidget.vue';
-import Alert from '@/model/Alert';
+import Alert from '@/utilities/Alert';
 import Modal from '@/components/Modal';
 
 export default {

@@ -79,7 +79,7 @@ import { required } from  'vuelidate/lib/validators';
 import { mapActions, mapState } from 'vuex';
 
 import { VueEditor } from "vue2-editor";
-import Alert from '@/model/Alert'; 
+import Alert from '@/utilities/Alert'; 
 
 import SlugWidget from '@/components/SlugWidget.vue';
 import TagInput from '@/components/TagInput.vue';

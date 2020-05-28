@@ -59,7 +59,7 @@
 
 	import { mapActions } from 'vuex'; 
 	import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
-	import Alert from '@/model/Alert';
+	import Alert from '@/utilities/Alert';
 
     export default {
 

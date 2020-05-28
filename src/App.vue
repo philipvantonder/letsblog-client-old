@@ -18,7 +18,7 @@
 <script>
 
 import { mapGetters } from 'vuex';
-import './css/utilities.css'
+import './assets/css/utilities.css'
 
 export default {
 

@@ -10,7 +10,7 @@
 							<div class="card-body">
 								<h5 class="card-title" title="View post"> {{ post.title }} </h5>
 
-								<p class="card-text" v-html="$options.filters.LimitText(post.body, 80)"> </p>
+								<p class="card-text" v-html="LimitText(post.body, 80)"> </p>
 							</div>
 						</router-link>
 					</div>
@@ -27,6 +27,8 @@
 
 import { mapActions, mapState } from 'vuex';
 
+import { LimitText } from '@/utilities/filters/index'; 
+
 export default {
 
 	computed: {
@@ -34,6 +36,7 @@ export default {
 	},
 
 	methods: {
+		LimitText,
 		...mapActions('posts', ['setPublishedBlogPosts'])
 	},
 

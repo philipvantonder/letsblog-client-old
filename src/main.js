@@ -7,23 +7,15 @@ import Axios from 'axios';
 import store from './store/index';
 import router from './router/index';
 
-import './css/style.scss';
+/* Bootstrap Styles */
+import './assets/css/style.scss';
 import 'bootstrap';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faLink, faEnvelope, faMobile, faMobileAlt, faCaretDown, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
-
-library.add(faLink, faEnvelope, faMobile, faMobileAlt, faCaretDown, faThumbsUp, faThumbsDown);
-
-Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.component('font-awesome-layers', FontAwesomeLayers);
-
-/* Filters */
-import '@/model/filters/index';
+/* Font Awesome */
+import '@/utilities/font-awesome/index';
 
 /* Directives */
-import '@/model/directives/index';
+import '@/utilities/directives/index';
 
 Vue.use(Vuelidate);
 
