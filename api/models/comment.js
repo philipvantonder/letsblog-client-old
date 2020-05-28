@@ -7,15 +7,18 @@ const CommentSchema = new mongoose.Schema({
 	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'user'
+		ref: 'User',
+		required: true
 	},
 	post: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Post'
+		ref: 'Post',
+		required: true
 	},
 	parentId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Comment'
+		ref: 'Comment',
+		default: null
 	},
 	ispublished: {
 		type: Boolean,

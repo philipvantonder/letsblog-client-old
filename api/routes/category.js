@@ -13,10 +13,8 @@ const { handle } = require('../utils/error-handling/request-handler');
 router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
-
-		const postDTO = req.body;
 		
-		const { newSlug } = await CategoryService.uniqueCategory(postDTO);
+		const { newSlug } = await CategoryService.uniqueCategory(req.body);
 
 		res.status(200).send({ newSlug });
 

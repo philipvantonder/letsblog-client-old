@@ -1,3 +1,7 @@
+:root {
+	--prim-theme-color: #18799a;
+}
+
 body {
 	background-color: #eff3f9 !important;
 }

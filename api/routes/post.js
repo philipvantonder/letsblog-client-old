@@ -268,10 +268,8 @@ router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, re
 router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
-
-		const postDTO = req.body;
 		
-		const { newSlug } = await PostService.unique(postDTO);
+		const { newSlug } = await PostService.unique(req.body);
 
 		res.status(200).send({ newSlug });
 

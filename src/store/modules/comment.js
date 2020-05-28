@@ -37,6 +37,12 @@ export default {
 			const { postComments } = await CommentService.getPostCommentsById(id);
 
 			commit('UPDATE_COMMENT', postComments);
+		},
+
+		async addReply(context, postDTO) {
+
+			await CommentService.addreply(postDTO); 
+
 		}
 
 	}

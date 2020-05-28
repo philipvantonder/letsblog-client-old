@@ -14,11 +14,13 @@ const PostSchema = new mongoose.Schema({
 	fileName: String,
 	user: {
 		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'User' 
+		ref: 'User',
+		required: true
 	},
 	category: {
 		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'Categories' 
+		ref: 'Categories',
+		default: null
 	},
 	tags: {
 		type: Array

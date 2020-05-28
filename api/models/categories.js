@@ -18,7 +18,8 @@ const CategorySchema = new mongoose.Schema({
 	name: String,
 	slug: {
 		type: String,
-		unique: true
+		unique: true,
+		required: true
 	},
 	parentId: {
 		type: mongoose.Schema.Types.ObjectId,

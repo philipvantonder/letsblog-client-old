@@ -26,6 +26,14 @@ export default {
 
 		return data;
 
+	},
+
+	async addreply (postDTO) {
+
+		const { data } = await axiosInstance.post('/addReply', postDTO);
+
+		return data;
+
 	}
 
 }

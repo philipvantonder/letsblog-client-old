@@ -30,6 +30,7 @@ module.exports = {
 			let postCommentDetails = {
 				commentId: postComment._id,
 				commentBody: postComment.body,
+				postId: postComment.post,
 				createdAt: moment(postComment.createdAt).format('MMMM Do YYYY h:mm:ss a'),
 				isPublished: postComment.isPublished,
 				userId: userObject._id,
@@ -43,6 +44,21 @@ module.exports = {
 		}
 
 		return { postComments };
+
+	},
+
+	addReply: async (postDTO) => {
+
+		console.log(postDTO);
+
+		const comment = new CommentModel({
+			body: postDTO.comment,
+			user: postDTO.userId,
+			post: postDTO.postId,
+			parentId: postDTO.commentId,
+		});
+
+		await comment.save();
 
 	}
 

@@ -14,9 +14,7 @@ router.route('/').post(userAuthentication.isLoggedIn, async (req, res, next) => 
 
 	await handle(async () => {
 
-		const postDTO = req.body;
-
-		await CommentService.create(postDTO);
+		await CommentService.create(req.body);
 
 		res.end();
 
@@ -38,6 +36,23 @@ router.route('/:id').get(async (req, res, next) => {
 		const { postComments } = await CommentService.getPostCommentsById(id);
 
 		res.status(200).send({ postComments });
+
+		res.end();
+
+	}, next);
+
+});
+
+/**
+ * @route POST api/comment/addReply
+ * @desc Add reply to a post comment.
+ * @access Private
+ */
+router.route('/addReply').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+
+	await handle(async () => {
+
+		await CommentService.addReply(req.body);
 
 		res.end();
 
