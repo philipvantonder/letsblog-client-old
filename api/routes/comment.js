@@ -60,4 +60,21 @@ router.route('/addReply').post(userAuthentication.isLoggedIn, async (req, res, n
 
 });
 
+/**
+ * @route POST api/comment/addLike
+ * @desc Add reply to a post comment.
+ * @access Private
+ */
+router.route('/addLike').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+
+	await handle(async () => {
+
+		await CommentService.addLike(req.body);
+
+		res.end();
+
+	}, next);
+
+});
+
 module.exports = router;

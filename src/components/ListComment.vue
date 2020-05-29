@@ -25,8 +25,14 @@
 							<a href="javascript:void(0)" @click="showReplyPopup(comment.commentId, comment.userId, comment.postId)"> Reply </a>
 						</div>
 						<div>
-							<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="addLike(true)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>
-							<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="addLike(false)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+							<span>
+								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(true, comment.commentId, comment.userId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
+								({{ comment.commentLike }})
+							</span>
+							<span>
+								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(false, comment.commentId, comment.userId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+								({{ comment.commentDislike }})
+							</span>
 						</div>
 					</div>
 				</div>
@@ -90,7 +96,7 @@
 
 		methods: {
 
-			...mapActions('comment', ['addReply']),
+			...mapActions('comment', ['addReply', 'addLike']),
 
 			showReplyPopup(commentId, userId, postId) {
 				this.formData.commentId = commentId;
@@ -115,7 +121,7 @@
 				await this.resetForm();
 
 				this.modalIsOpen = false;
-				this.$emit('add-reply');
+				this.$emit('update-blog-post');
 			},
 
 			async resetForm() {
@@ -123,6 +129,14 @@
 				this.formData.userId = '';
 				this.formData.postId = '';
 				this.formData.comment = '';
+			},
+
+			async submitLike(value, commentId, userId) {
+
+				this.addLike({value, commentId, userId});
+
+				this.$emit('update-blog-post');
+
 			}
 
 		},

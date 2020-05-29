@@ -34,6 +34,14 @@ export default {
 
 		return data;
 
+	},
+
+	async addLike(postDTO) {
+
+		const { data } = await axiosInstance.post('/addLike', postDTO);
+
+		return data;
+
 	}
 
 }

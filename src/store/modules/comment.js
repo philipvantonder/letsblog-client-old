@@ -43,6 +43,12 @@ export default {
 
 			await CommentService.addreply(postDTO); 
 
+		},
+
+		async addLike (context, postDTO) {
+
+			await CommentService.addLike(postDTO);
+
 		}
 
 	}

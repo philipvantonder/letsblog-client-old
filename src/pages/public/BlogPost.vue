@@ -50,7 +50,7 @@
 
 							<div> <strong> Comments ({{ postComments.length }}) </strong> </div>
 
-							<ListComment v-for="(comment, index) in postComments" :key="index" :comment="comment" @add-reply="updateBlogPost()" />
+							<ListComment v-for="(comment, index) in postComments" :key="index" :comment="comment" @update-blog-post="updateBlogPost()" />
 						</div>
 					</div>
 				</div>
@@ -121,8 +121,6 @@
 				this.showComment = false;
 			},
 			async updateBlogPost() {
-				console.log(this.blogPost.id);
-				
 				await this.setPostCommentsById(this.blogPost.id);
 			}
 		},
