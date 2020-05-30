@@ -1,20 +1,10 @@
-import axios from 'axios';
-
-const axiosInstance = axios.create({
-	baseURL: 'http://localhost:4000/api/comment'
-});
-
-const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
-
-if (token) {
-	axiosInstance.defaults.headers.common['authorization'] = token;
-}
+import { getAxiosInstance } from '@/services/axios/index';
 
 export default {
 
 	async create (postDTO) {
 
-		const { data } = await axiosInstance.post('/', postDTO);
+		const { data } = await getAxiosInstance('/comment').post('/', postDTO);
 
 		return data;
 
@@ -22,7 +12,7 @@ export default {
 
 	async getPostCommentsById (id) {
 
-		const { data } = await axiosInstance.get('/' + id);
+		const { data } = await getAxiosInstance('/comment').get('/' + id);
 
 		return data;
 
@@ -30,7 +20,7 @@ export default {
 
 	async addreply (postDTO) {
 
-		const { data } = await axiosInstance.post('/addReply', postDTO);
+		const { data } = await getAxiosInstance('/comment').post('/addReply', postDTO);
 
 		return data;
 
@@ -38,7 +28,7 @@ export default {
 
 	async addLike(postDTO) {
 
-		const { data } = await axiosInstance.post('/addLike', postDTO);
+		const { data } = await getAxiosInstance('/comment').post('/addLike', postDTO);
 
 		return data;
 

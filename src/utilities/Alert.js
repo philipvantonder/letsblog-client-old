@@ -77,4 +77,4 @@ class Alert {
 	
 }
 
-export default Alert
+export default Alert;

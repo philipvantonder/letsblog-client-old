@@ -20,7 +20,7 @@ var storage = multer.diskStorage({
 
 		const { user } = await UserService.getUserByToken(token);
 
-		postsImageDir = 'images/blog/' + user._id;
+		postsImageDir = 'images/blog/' + user.id;
 
 		if (!fs.existsSync(postsImageDir)) {
 			fs.mkdirSync(postsImageDir, { recursive: true });

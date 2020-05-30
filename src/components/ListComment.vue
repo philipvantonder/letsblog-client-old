@@ -26,11 +26,11 @@
 						</div>
 						<div>
 							<span>
-								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(true, comment.commentId, comment.userId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
+								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(true, comment.commentId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
 								({{ comment.commentLike }})
 							</span>
 							<span>
-								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(false, comment.commentId, comment.userId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(false, comment.commentId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
 								({{ comment.commentDislike }})
 							</span>
 						</div>
@@ -131,9 +131,9 @@
 				this.formData.comment = '';
 			},
 
-			async submitLike(value, commentId, userId) {
+			async submitLike(value, commentId) {
 
-				this.addLike({value, commentId, userId});
+				this.addLike({value, commentId});
 
 				this.$emit('update-blog-post');
 

@@ -69,7 +69,9 @@ router.route('/addLike').post(userAuthentication.isLoggedIn, async (req, res, ne
 
 	await handle(async () => {
 
-		await CommentService.addLike(req.body);
+		const token = req.headers['authorization'];
+
+		await CommentService.addLike(req.body, token);
 
 		res.end();
 

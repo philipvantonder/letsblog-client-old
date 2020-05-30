@@ -43,7 +43,7 @@ module.exports = {
 	signIn: async (userDTO) => {
 
 		const user = await UserModel.findOne({ email: userDTO.email });
-		
+
 		if (!user) {
 			throw new EntityNotFoundError('User', 'Password or username does not match.');
 		}

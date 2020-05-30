@@ -1,6 +1,7 @@
 const CommentModel = require('../models/comment');
 const UserModel = require('../models/user');
 const LikeModel = require('../models/likes');
+const UserService = require('../services/user');
 
 const moment = require('moment');
 
@@ -66,23 +67,27 @@ module.exports = {
 
 	},
 
-	addLike: async (postDTO) => {
+	addLike: async (postDTO, token) => {
 
-		const getLike = await LikeModel.findOne({ comment: postDTO.commentId, user: postDTO.userId });
+		const { user } = await UserService.getUserByToken(token);
+
+		const userId = user.id;
+
+		const getLike = await LikeModel.findOne({ comment: postDTO.commentId, user: userId });
 
 		if (!getLike) {
 			
 			const like = new LikeModel({
 				comment: postDTO.commentId,
-				user: postDTO.userId,
-				like: postDTO.value,
+				user: userId,
+				like: postDTO.value
 			});
 			
 			await like.save();
 			
 		} else {
 
-			await LikeModel.updateOne({ comment: postDTO.commentId, user: postDTO.userId }, {
+			await LikeModel.updateOne({ comment: postDTO.commentId, user: userId }, {
 				$set: {
 					like: postDTO.value
 				}

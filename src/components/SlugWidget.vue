@@ -154,6 +154,7 @@ export default {
 				} else {
 
 					await '';
+					
 					this.slug = '';
 					this.$emit('slugChanged', '');
 

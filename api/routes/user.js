@@ -100,8 +100,10 @@ router.route('/login').post(async (req, res, next) => {
 	await handle(async () => {
 
 		const { token } = await UserService.signIn(req.body);
+
+		const { user } = await UserService.getUserByToken(token);
 		
-		res.status(200).send({ token });
+		res.status(200).send({ token, user });
 
 		res.end();
 		

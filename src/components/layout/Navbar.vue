@@ -46,7 +46,7 @@
 
 				<li class="nav-item dropdown">
 					<a class="nav-link text-white" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						{{ loggedInUser }}
+						{{ user.name }} {{ user.surname }}
 					</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<router-link :to="{ name: 'profile' }" class="dropdown-item"> Profile </router-link>
@@ -97,7 +97,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['setUserDetailsFromToken', 'setUser', 'logout']),
+		...mapActions('user', ['setUser', 'logout']),
 		...mapActions('category', ['setCategories']),
 
 		logoutUser() {
@@ -109,6 +109,7 @@ export default {
 				this.logout();
 
 				this.$router.push({ name: 'login' });
+				
 			}
 
 		},
@@ -120,7 +121,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters('user', ['isLoggedIn', 'loggedInUser']),
+		...mapGetters('user', ['isLoggedIn']),
 		...mapState('user', ['user']),
 		...mapState('category', ['categories']),
 	},
@@ -132,8 +133,6 @@ export default {
 		}
 
 		await this.setUser();
-				
-		await this.setUserDetailsFromToken();
 
 		const handleEscape = (e) => {
 			if (e.key === 'Esc' || e.key === 'Escape') {

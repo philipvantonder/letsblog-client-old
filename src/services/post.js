@@ -1,20 +1,10 @@
-import axios from 'axios';
-
-const axiosInstance = axios.create({
-	baseURL: 'http://localhost:4000/api/posts'
-});
-
-const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
-
-if (token) {
-	axiosInstance.defaults.headers.common['authorization'] = token;
-}
+import { getAxiosInstance } from '@/services/axios/index';
 
 export default {
 
 	async fetchUserPosts() {
 
-		const { data } = await axiosInstance.get('/user');
+		const { data } = await getAxiosInstance('/posts').get('/user');
 
 		return data;
 
@@ -22,7 +12,7 @@ export default {
 
 	async fetchBlogPost(id) {
 
-		const { data } = await axiosInstance.get('/blogPost/' + id);
+		const { data } = await getAxiosInstance('/posts').get('/blogPost/' + id);
 
 		return data;
 
@@ -30,7 +20,7 @@ export default {
 
 	async fetchBlogPostBySlug(slug) {
 
-		const { data } = await axiosInstance.get('/slug/' + slug);
+		const { data } = await getAxiosInstance('/posts').get('/slug/' + slug);
 
 		return data;
 
@@ -38,7 +28,7 @@ export default {
 
 	async fetchPublishedBlogPosts() {
 			
-		const { data } = await axiosInstance.get('/publishedBlogs');
+		const { data } = await getAxiosInstance('/posts').get('/publishedBlogs');
 
 		return data;
 
@@ -46,7 +36,7 @@ export default {
 
 	async fetchPost(id) {
 
-		const { data } = await axiosInstance.get('/post/' + id);
+		const { data } = await getAxiosInstance('/posts').get('/post/' + id);
 
 		return data;
 
@@ -54,7 +44,7 @@ export default {
 
 	async create(postDTO) {
 
-		const { data } = await axiosInstance.post('/create', postDTO,
+		const { data } = await getAxiosInstance('/posts').post('/create', postDTO,
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -68,7 +58,7 @@ export default {
 
 	async delete (id) {
 
-		const { data } = await axiosInstance.delete('/delete/' + id);
+		const { data } = await getAxiosInstance('/posts').delete('/delete/' + id);
 
 		return data;
 
@@ -76,7 +66,7 @@ export default {
 
 	async update (id, post) {
 
-		const { data } = await axiosInstance.put('/update/' + id, post,
+		const { data } = await getAxiosInstance('/posts').put('/update/' + id, post,
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -90,7 +80,7 @@ export default {
 
 	async getImage (post) {
 
-		const { data } = await axiosInstance.get('/image/' + post.user + '/' + post.fileName);
+		const { data } = await getAxiosInstance('/posts').get('/image/' + post.user + '/' + post.fileName);
 
 		return data;
 
@@ -98,7 +88,7 @@ export default {
 
 	async checkUnique(postDTO) {
 
-		const { data } = await axiosInstance.post('/unique', postDTO);
+		const { data } = await getAxiosInstance('/posts').post('/unique', postDTO);
 
 		return data;
 

@@ -1,5 +1,4 @@
 import UserService from '@/services/user';
-import JWTService from '@/services/jwt';
 
 export default {
 
@@ -15,10 +14,6 @@ export default {
 
 		SET_AUTH_TOKEN(state, token) {
 			state.token = token;
-		},
-
-		SET_LOGGED_IN_USER(state, user) {
-			state.loggedInUser = user.name + ' ' + user.surname;
 		},
 
 		SET_USER (state, user) {
@@ -39,35 +34,19 @@ export default {
 
 		async login({ commit }, userDTO) {
 
-			const { token } = await UserService.signIn(userDTO);
-
-			commit('SET_AUTH_TOKEN', token);
+			const { token, user } = await UserService.signIn(userDTO);
 
 			localStorage.setItem('token', token);
 
-			let user = await JWTService.getUserBasicInfo(token);
-			
-			commit('SET_LOGGED_IN_USER', user);
+			commit('SET_AUTH_TOKEN', token);
+			commit('SET_USER', user);
 			
 		},
 
 		logout({ commit }) {
 
 			commit('SET_AUTH_TOKEN', false);
-			commit('SET_LOGGED_IN_USER', '');
 			commit('SET_USER', {});
-
-		},
-
-		async setUserDetailsFromToken({ commit, state }) {
-
-			if (state.token) {
-	
-				let user = await JWTService.getUserBasicInfo(state.token);
-				
-				commit('SET_LOGGED_IN_USER', user);
-				
-			}
 
 		},
 

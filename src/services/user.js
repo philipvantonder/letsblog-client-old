@@ -1,20 +1,10 @@
-import axios from 'axios';
-
-const axiosInstance = axios.create({
-	baseURL: 'http://localhost:4000/api/users'
-});
-
-const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
-
-if (token) {
-	axiosInstance.defaults.headers.common['authorization'] = token;
-}
+import { getAxiosInstance } from '@/services/axios/index';
 
 export default {
 
 	async signIn(user) {
 
-		const { data } = await axiosInstance.post('/login', user);
+		const { data } = await getAxiosInstance('/users').post('/login', user);
 
 		return data;
 
@@ -22,7 +12,7 @@ export default {
 
 	async create(user) {
 
-		const { data } = await axiosInstance.post('/register', user);
+		const { data } = await getAxiosInstance('/users').post('/register', user);
 		
 		return data;	
 
@@ -30,7 +20,7 @@ export default {
 
 	async isAuthenticated() {
 
-		const { data } = await axiosInstance.get('/isAuthenticated');
+		const { data } = await getAxiosInstance('/users').get('/isAuthenticated');
 
 		return data;
 
@@ -38,7 +28,7 @@ export default {
 
 	async fetchUser() {
 
-		const { data } = await axiosInstance.get('/getUser');
+		const { data } = await getAxiosInstance('/users').get('/getUser');
 
 		return data;
 
@@ -46,7 +36,7 @@ export default {
 
 	async update(userDTO) {
 
-		const { data } = await axiosInstance.put('/update', userDTO, 
+		const { data } = await getAxiosInstance('/users').put('/update', userDTO, 
 			{
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -61,7 +51,7 @@ export default {
 
 	async sendPasswordReset(userDTO) {
 
-		const { data } = await axiosInstance.post('/sendPasswordReset', userDTO);
+		const { data } = await getAxiosInstance('/users').post('/sendPasswordReset', userDTO);
 
 		return data;
 
@@ -69,7 +59,7 @@ export default {
 
 	async changePassword(userDTO) {
 
-		const { data } = await axiosInstance.post('/changePassword', userDTO);
+		const { data } = await getAxiosInstance('/users').post('/changePassword', userDTO);
 
 		return data;
 

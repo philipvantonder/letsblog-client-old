@@ -1,20 +1,10 @@
-import axios from 'axios';
-
-const axiosInstance = axios.create({
-	baseURL: 'http://localhost:4000/api/category'
-});
-
-const token = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : false);
-
-if (token) {
-	axiosInstance.defaults.headers.common['authorization'] = token;
-}
+import { getAxiosInstance } from '@/services/axios/index';
 
 export default {
 	
 	async checkUniqueCategory(postDTO) {
 
-		const { data } = await axiosInstance.post('/uniqueCategory', postDTO);
+		const { data } = await getAxiosInstance('/category').post('/uniqueCategory', postDTO);
 
 		return data;
 
@@ -22,7 +12,7 @@ export default {
 
 	async getCategoryById (id) {
 
-		const { data } = await axiosInstance.get('/categories/' + id);
+		const { data } = await getAxiosInstance('/category').get('/categories/' + id);
 
 		return data;
 
@@ -30,7 +20,7 @@ export default {
 
 	async getCategories () {
 
-		const { data } = await axiosInstance.get('/categories');
+		const { data } = await getAxiosInstance('/category').get('/categories');
 
 		return data;
 
@@ -38,7 +28,7 @@ export default {
 
 	async createCategory (postDTO) {
 
-		const { data } = await axiosInstance.post('/addCategory', postDTO);
+		const { data } = await getAxiosInstance('/category').post('/addCategory', postDTO);
 
 		return data;
 
@@ -46,7 +36,7 @@ export default {
 
 	async removeCategory (id) {
 
-		const { data } = await axiosInstance.post('/removeCategory', { id });
+		const { data } = await getAxiosInstance('/category').post('/removeCategory', { id });
 
 		return data;
 
@@ -54,7 +44,7 @@ export default {
 
 	async update (postDTO) {
 
-		const { data } = await axiosInstance.post('/update', postDTO);
+		const { data } = await getAxiosInstance('/category').post('/update', postDTO);
 
 		return data;
 
@@ -62,7 +52,7 @@ export default {
 
 	async getCategoryBySlug (slug) {
 
-		const { data } = await axiosInstance.get('/categoryBySlug/' + slug);
+		const { data } = await getAxiosInstance('/category').get('/categoryBySlug/' + slug);
 
 		return data;
 
