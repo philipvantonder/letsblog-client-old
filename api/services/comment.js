@@ -21,11 +21,64 @@ module.exports = {
 
 	getPostCommentsById: async (id) => {
 
-		const postCommentsObj = await CommentModel.find({ post: id });
+		// const testPostCommentsArr = await CommentModel.find({ post: id });
+
+		// function getNestedChildren(arr, parentId) {
+
+		// 	console.log("-----------------");
+		// 	console.log(parentId);
+		// 	console.log("-----------------");
+
+		// 	var out = [];
+		// 	for(var i in arr) {
+		// 		if(arr[i].parentId == parentId) {
+		// 			console.log("---ID---");
+		// 			console.log(arr[i]._id);
+		// 			console.log("---ID---");
+					
+		// 			var children = getNestedChildren(arr, arr[i]._id);
+
+		// 			console.log('---Children---');
+		// 			console.log(children);
+		// 			console.log('---Children---');
+		
+		// 			if(children.length) {
+		// 				arr[i].children = children;
+		// 			}
+		// 			out.push(arr[i]);
+		// 		}
+		// 	}
+		// 	return out;
+		// }
+		
+		// console.log(getNestedChildren(testPostCommentsArr));
+
+		// const linkedPostComments = [];
+		
+		// const testPostCommentsArr = await CommentModel.find({ post: id });
+		
+		// testPostCommentsArr.forEach(node => {
+			
+		// 	// No parentId means top level
+		// 	if (!node.parentId) return linkedPostComments.push(node);
+		
+		// 	// Insert node as child of parent in flat array
+		// 	const parentIndex = testPostCommentsArr.findIndex(el => el._id === node.parentId);
+		
+		// 	if (!testPostCommentsArr[parentIndex].children) {
+		// 	  	return testPostCommentsArr[parentIndex].children = [node];
+		// 	}
+		
+		// 	testPostCommentsArr[parentIndex].children.push(node);
+		// });
+		
+		// console.log(linkedPostComments);
+
+		const postCommentsArr = await CommentModel.find({ post: id, parentId: null });
 
 		const postComments = [];
 
-		for (postComment of postCommentsObj) {
+		for (let postComment of postCommentsArr) {
 			
 			const userObject = await UserModel.findById({ _id: postComment.user });
 
@@ -94,6 +147,16 @@ module.exports = {
 			});
 
 		}
+
+	},
+
+	getUserCommentLikes: async (token) => {
+
+		const { user } = await UserService.getUserByToken(token);
+
+		const likes = await LikeModel.find({ user: user.id });
+
+		return { likes };
 
 	}
 

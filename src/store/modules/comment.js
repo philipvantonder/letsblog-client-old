@@ -6,16 +6,19 @@ export default {
 
 	state: {
 
-		postComments: []
+		postComments: [],
+		userCommentLikes: []
 
 	},
 
 	mutations: {
 
 		UPDATE_COMMENT(state, comment) {
-
 			state.postComments = comment;
-
+		},
+		
+		UPDATE_USER_COMMENT_LIKES(state, likes) {
+			state.userCommentLikes = likes;
 		}
 
 	},
@@ -34,7 +37,7 @@ export default {
 
 		async setPostCommentsById({ commit }, id) {
 
-			const { postComments } = await CommentService.getPostCommentsById(id);
+			const { postComments } = await CommentService.fetchPostCommentsById(id);
 
 			commit('UPDATE_COMMENT', postComments);
 		},
@@ -45,10 +48,18 @@ export default {
 
 		},
 
-		async addLike (context, postDTO) {
+		async addLike(context, postDTO) {
 
 			await CommentService.addLike(postDTO);
 
+		},
+
+		async getUserCommentLikes({ commit }) {
+
+			const { likes } = await CommentService.fetchUserCommentLikes();
+
+			commit('UPDATE_USER_COMMENT_LIKES', likes);
+	
 		}
 
 	}

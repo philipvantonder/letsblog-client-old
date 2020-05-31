@@ -27,7 +27,7 @@ router.route('/').post(userAuthentication.isLoggedIn, async (req, res, next) => 
  * @desc Get all Post comments.
  * @access Public
  */
-router.route('/:id').get(async (req, res, next) => {
+router.route('/postComment/:id').get(async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -72,6 +72,27 @@ router.route('/addLike').post(userAuthentication.isLoggedIn, async (req, res, ne
 		const token = req.headers['authorization'];
 
 		await CommentService.addLike(req.body, token);
+
+		res.end();
+
+	}, next);
+
+});
+
+/**
+ * @route GET api/comment/likes
+ * @desc Get all user likes that have been made to a comment.
+ * @access Private
+ */
+router.route('/userLikes').get(userAuthentication.isLoggedIn, async (req, res, next) => {
+
+	await handle(async () => {
+
+		const token = req.headers['authorization'];
+
+		const { likes } = await CommentService.getUserCommentLikes(token);
+
+		res.status(200).send({ likes });
 
 		res.end();
 

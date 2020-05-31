@@ -128,9 +128,7 @@ export default {
 
 	async created() {
 
-		if (this.isLoggedIn) {
-			await this.setCategories();
-		}
+		await this.setCategories();
 
 		await this.setUser();
 

@@ -24,7 +24,7 @@
 
 <script>
 
-import _ from 'lodash';
+import _debounce from 'lodash.debounce';
 import { mapActions } from 'vuex';
 
 export default {
@@ -69,7 +69,7 @@ export default {
 
 	watch: {
 
-		title: _.debounce(function () {
+		title: _debounce(function () {
 			
 			if (!this.wasEdited) {
 				this.setSlug(this.title);

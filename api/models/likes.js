@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const LikesSchema = new mongoose.Schema({
+const LikeSchema = new mongoose.Schema({
 	comment: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Comment',
@@ -17,4 +17,4 @@ const LikesSchema = new mongoose.Schema({
 	}
 }, { timestamps: true });
 
-module.exports = mongoose.model('Likes', LikesSchema);
+module.exports = mongoose.model('Likes', LikeSchema);

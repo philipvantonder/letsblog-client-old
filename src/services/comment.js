@@ -10,9 +10,9 @@ export default {
 
 	},
 
-	async getPostCommentsById (id) {
+	async fetchPostCommentsById (id) {
 
-		const { data } = await getAxiosInstance('/comment').get('/' + id);
+		const { data } = await getAxiosInstance('/comment').get('/postComment/' + id);
 
 		return data;
 
@@ -29,6 +29,14 @@ export default {
 	async addLike(postDTO) {
 
 		const { data } = await getAxiosInstance('/comment').post('/addLike', postDTO);
+
+		return data;
+
+	},
+
+	async fetchUserCommentLikes() {
+
+		const { data } = await getAxiosInstance('/comment').get('/userLikes');
 
 		return data;
 

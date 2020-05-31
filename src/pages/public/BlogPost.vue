@@ -65,7 +65,7 @@
 	import { mapActions, mapState, mapGetters } from 'vuex';
 	import AddComment from '@/components/AddComment';
 	import ListComment from '@/components/ListComment';
-	import Alert from '@/utilities/Alert'
+	import Alert from '@/utilities/Alert';
 
     export default {
 
@@ -94,7 +94,7 @@
 
 		methods: {
 			...mapActions('posts', ['setBlogPostBySlug']),
-			...mapActions('comment', ['setPostCommentsById']),
+			...mapActions('comment', ['setPostCommentsById', 'getUserCommentLikes']),
 
 			showCommentBox() {
 
@@ -132,6 +132,8 @@
 			await this.setBlogPostBySlug(id);
 
 			await this.setPostCommentsById(this.blogPost.id);
+
+			await this.getUserCommentLikes();
 
 			this.loading = false;
 

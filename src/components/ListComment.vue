@@ -26,11 +26,11 @@
 						</div>
 						<div>
 							<span>
-								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(true, comment.commentId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
+								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" :class="userLikedComment(true, comment.commentId)" @click="submitLike(true, comment.commentId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
 								({{ comment.commentLike }})
 							</span>
 							<span>
-								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" @click="submitLike(false, comment.commentId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" :class="userLikedComment(false, comment.commentId)" @click="submitLike(false, comment.commentId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
 								({{ comment.commentDislike }})
 							</span>
 						</div>
@@ -63,7 +63,9 @@
 
 	import Modal from '@/components/Modal';
 	import { required } from 'vuelidate/lib/validators';
-	import { mapActions } from 'vuex';
+	import { mapActions, mapGetters, mapState } from 'vuex';
+	import _debounce from 'lodash.debounce';
+	import Alert from '@/utilities/Alert';
 	
 	export default {
 
@@ -94,16 +96,60 @@
 			Modal
 		},
 
+		computed: {
+			...mapGetters('user', ['isLoggedIn']),
+			...mapState('comment', ['userCommentLikes']),
+		},
+
 		methods: {
+
+			userLikedComment(value, commentId) {
+				
+				if (this.isLoggedIn) {
+					
+					for (let userCommentLike of this.userCommentLikes) {
+						
+						// check if user like or dislike this comment
+						if (commentId == userCommentLike.comment && userCommentLike.like === value) {
+							return 'like-active';
+						}
+
+					}
+				
+				} else {
+
+					return '';
+
+				}
+
+			},
 
 			...mapActions('comment', ['addReply', 'addLike']),
 
 			showReplyPopup(commentId, userId, postId) {
-				this.formData.commentId = commentId;
-				this.formData.userId = userId;
-				this.formData.postId = postId;
 
-				this.modalIsOpen = true;
+				if (!this.isLoggedIn) {
+
+					Alert.message({
+						icon: 'error',
+						title: 'Reply Failed', 
+						text: 'You need to be logged in to continue.',
+						confirmBtnText: 'Login',
+						redirect: '/login',
+						confirmButton: true,
+						cancelButton: true
+					});
+
+				} else {
+
+					this.formData.commentId = commentId;
+					this.formData.userId = userId;
+					this.formData.postId = postId;
+	
+					this.modalIsOpen = true;
+
+				}
+
 			},
 
 			updateModalState(state) {
@@ -131,13 +177,29 @@
 				this.formData.comment = '';
 			},
 
-			async submitLike(value, commentId) {
+			submitLike: _debounce(async function(value, commentId) {
+			
+				if (!this.isLoggedIn) {
 
-				this.addLike({value, commentId});
+					Alert.message({
+						icon: 'error',
+						title: 'Like Failed', 
+						text: 'You need to be logged in to continue.',
+						confirmBtnText: 'Login',
+						redirect: '/login',
+						confirmButton: true,
+						cancelButton: true
+					});
 
-				this.$emit('update-blog-post');
+				} else {
+					
+					await this.addLike({value, commentId});
 
-			}
+					this.$emit('update-blog-post');
+				
+				}
+
+			}, 250)
 
 		},
 
@@ -159,7 +221,10 @@
 
 .comment-icon:hover {
 	color: var(--prim-theme-color);
+}
 
+.like-active {
+	color: var(--prim-theme-color);
 }
 
 </style>
