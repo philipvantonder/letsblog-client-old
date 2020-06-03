@@ -49,8 +49,8 @@
 						<div v-if="postComments" class="mt-4">
 
 							<div> <strong> Comments ({{ postComments.length }}) </strong> </div>
-
-							<ListComment v-for="(comment, index) in postComments" :key="index" :comment="comment" @update-blog-post="updateBlogPost()" />
+							
+							<ListComment v-for="(comment, index) in postComments" :key="index" :comment="comment" :blogPostId="blogPost.id" @update-blog-post="updateBlogPost()" />
 						</div>
 					</div>
 				</div>

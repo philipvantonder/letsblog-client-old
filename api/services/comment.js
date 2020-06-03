@@ -21,65 +21,12 @@ module.exports = {
 
 	getPostCommentsById: async (id) => {
 
-		// const testPostCommentsArr = await CommentModel.find({ post: id });
+		const linkedPostCommentsArr = await CommentModel.find({ post: id });
 
-		// function getNestedChildren(arr, parentId) {
+		const postCommentsArr = [];
 
-		// 	console.log("-----------------");
-		// 	console.log(parentId);
-		// 	console.log("-----------------");
+		for (let postComment of linkedPostCommentsArr) {
 
-		// 	var out = [];
-		// 	for(var i in arr) {
-		// 		if(arr[i].parentId == parentId) {
-		// 			console.log("---ID---");
-		// 			console.log(arr[i]._id);
-		// 			console.log("---ID---");
-					
-		// 			var children = getNestedChildren(arr, arr[i]._id);
-
-		// 			console.log('---Children---');
-		// 			console.log(children);
-		// 			console.log('---Children---');
-		
-		// 			if(children.length) {
-		// 				arr[i].children = children;
-		// 			}
-		// 			out.push(arr[i]);
-		// 		}
-		// 	}
-		// 	return out;
-		// }
-		
-		// console.log(getNestedChildren(testPostCommentsArr));
-
-		// const linkedPostComments = [];
-		
-		// const testPostCommentsArr = await CommentModel.find({ post: id });
-		
-		// testPostCommentsArr.forEach(node => {
-			
-		// 	// No parentId means top level
-		// 	if (!node.parentId) return linkedPostComments.push(node);
-		
-		// 	// Insert node as child of parent in flat array
-		// 	const parentIndex = testPostCommentsArr.findIndex(el => el._id === node.parentId);
-		
-		// 	if (!testPostCommentsArr[parentIndex].children) {
-		// 	  	return testPostCommentsArr[parentIndex].children = [node];
-		// 	}
-		
-		// 	testPostCommentsArr[parentIndex].children.push(node);
-		// });
-		
-		// console.log(linkedPostComments);
-
-		const postCommentsArr = await CommentModel.find({ post: id, parentId: null });
-
-		const postComments = [];
-
-		for (let postComment of postCommentsArr) {
-			
 			const userObject = await UserModel.findById({ _id: postComment.user });
 
 			const totalLikes = await LikeModel.find({ comment: postComment._id, like: true }).countDocuments();
@@ -87,6 +34,7 @@ module.exports = {
 
 			let postCommentDetails = {
 				commentId: postComment._id,
+				parentId: postComment.parentId,
 				commentBody: postComment.body,
 				commentLike: totalLikes,
 				commentDislike: totalDislikes,
@@ -99,9 +47,25 @@ module.exports = {
 				userProfileImage: userObject.profileImage,
 			};
 
-			postComments.push(postCommentDetails);
-
+			postCommentsArr.push(postCommentDetails);
+			
 		}
+
+		const postComments = [];
+
+		postCommentsArr.forEach(node => {
+
+			if (!node.parentId) return postComments.push(node);
+
+			const parentIndex = postCommentsArr.findIndex(el => el.commentId.toString() === node.parentId.toString());
+
+			if (!postCommentsArr[parentIndex].children) {
+				return postCommentsArr[parentIndex].children = [node];
+			}
+		
+			postCommentsArr[parentIndex].children.push(node);
+
+		});
 
 		return { postComments };
 

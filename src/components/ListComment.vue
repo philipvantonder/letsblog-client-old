@@ -39,6 +39,12 @@
 			</div>
 		</div>
 
+		<div v-if="comment.children && comment.children.length > 0">
+			<div class="ml-4">
+				<ListComment v-for="(childComment, index) in comment.children" :key="index" :comment="childComment" :blogPostId="blogPostId" @update-blog-post="updateBlogPost()" />
+			</div>
+		</div>
+
 		<Modal v-show="modalIsOpen" @modalState="updateModalState($event)" :showModal="modalIsOpen" >
 			<template #header>
 				Add Reply
@@ -69,11 +75,18 @@
 	
 	export default {
 
+		name: "ListComment",
+
 		props: {
 
 			comment: {
 				type: Object,
 				required: true,
+			},
+
+			blogPostId: {
+				tpye: String,
+				required: true
 			}
 
 		},
@@ -124,7 +137,7 @@
 
 			},
 
-			...mapActions('comment', ['addReply', 'addLike']),
+			...mapActions('comment', ['addReply', 'addLike', 'setPostCommentsById']),
 
 			showReplyPopup(commentId, userId, postId) {
 
@@ -199,7 +212,11 @@
 				
 				}
 
-			}, 250)
+			}, 250),
+
+			async updateBlogPost() {
+				await this.setPostCommentsById(this.blogPostId);
+			}
 
 		},
 
