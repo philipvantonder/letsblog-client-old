@@ -36,7 +36,7 @@ module.exports = {
 				})
 				.catch(() => res.status(200).send({ code: 1, message: 'Error retreiving user' }));
 
-			})
+			});
 
 		} else {
 

@@ -73,7 +73,7 @@ export default {
 
 		async signIn() {
 
-			this.$v.$touch()
+			this.$v.$touch();
 			if (this.$v.$invalid) {
 				return;
 			}

@@ -172,7 +172,7 @@ router.route('/image/:id').get(async (req, res, next) => {
 
 		const { post } = await PostService.getPost(id);
 
-		fileDir = '../images/blog/' + post.user + '/' + post.fileName;
+		const fileDir = '../images/blog/' + post.user + '/' + post.fileName;
 		
 		res.sendFile(path.join(__dirname, fileDir));
 

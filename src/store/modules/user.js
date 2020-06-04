@@ -6,7 +6,6 @@ export default {
 
 	state: {
 		token: localStorage.getItem('token') || false,
-		loggedInUser: '',
 		user: ''
 	},
 
@@ -24,9 +23,7 @@ export default {
 
 	getters: {
 
-		isLoggedIn: state => !!state.token,
-
-		loggedInUser: state => state.loggedInUser,
+		isLoggedIn: state => !!state.token
 
 	},
 

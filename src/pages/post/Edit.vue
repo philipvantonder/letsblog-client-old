@@ -146,7 +146,7 @@ export default {
 
 			let { id } = this.$route.params;
 
-			await this.updatePost({ id, post: formData })
+			await this.updatePost({ id, post: formData });
 
 			this.$router.push({ name: 'post-list' });
 

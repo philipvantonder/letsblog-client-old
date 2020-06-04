@@ -100,7 +100,7 @@ module.exports = {
 		post.slug = postDTO.slug;
 		post.category = postDTO.category;
 		post.tags = tagsArr;
-		
+
 		// check if a new file are being uploaded.
 		if (postDTO.fileName !== undefined) {
 			post.fileName = postDTO.fileName;
