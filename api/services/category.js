@@ -58,6 +58,7 @@ module.exports = {
 					id: subcategoryItem._id,
 					name: subcategoryItem.name,
 					slug: subcategoryItem.slug,
+					parentId: subcategoryItem.parentId,
 					canRemoveSubCategory
 				};
 
@@ -189,7 +190,7 @@ module.exports = {
 		await CategoryModel.updateOne({ _id: postDTO.id }, {
 			$set: {
 				name: postDTO.categoryName,
-				slug: postDTO.categorySlug,
+				slug: postDTO.categorySlug
 			}
 		});
 
@@ -203,12 +204,12 @@ module.exports = {
 					slug: subcategory.slug,
 					parentId: postDTO.id
 				});
-
+				
 				await newCategory.save();
-
+				
 			} else {
 
-				await CategoryModel.updateOne({ _id: subcategory._id }, {
+				await CategoryModel.updateOne({ _id: subcategory.id }, {
 					$set: {
 						name: subcategory.name,
 						slug: subcategory.slug

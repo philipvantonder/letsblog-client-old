@@ -10,7 +10,7 @@ export default {
 
 	},
 
-	async getCategoryById (id) {
+	async getCategoryById(id) {
 
 		const { data } = await getAxiosInstance('/category').get('/categories/' + id);
 
@@ -18,7 +18,7 @@ export default {
 
 	},
 
-	async getCategories () {
+	async getCategories() {
 
 		const { data } = await getAxiosInstance('/category').get('/categories');
 
@@ -26,7 +26,7 @@ export default {
 
 	},
 
-	async createCategory (postDTO) {
+	async createCategory(postDTO) {
 
 		const { data } = await getAxiosInstance('/category').post('/addCategory', postDTO);
 
@@ -34,7 +34,7 @@ export default {
 
 	},
 
-	async removeCategory (id) {
+	async removeCategory(id) {
 
 		const { data } = await getAxiosInstance('/category').post('/removeCategory', { id });
 
@@ -42,15 +42,15 @@ export default {
 
 	},
 
-	async update (postDTO) {
+	async update(postDTO) {
 
-		const { data } = await getAxiosInstance('/category').post('/update', postDTO);
+		const { data } = await getAxiosInstance('/category').put('/update', postDTO);
 
 		return data;
 
 	},
 
-	async getCategoryBySlug (slug) {
+	async getCategoryBySlug(slug) {
 
 		const { data } = await getAxiosInstance('/category').get('/categoryBySlug/' + slug);
 

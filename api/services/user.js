@@ -117,7 +117,7 @@ module.exports = {
 			throw new EntityNotFoundError('User', 'Email does not exists.');
 		}
 
-		user.generatePasswordReset();
+		await user.generatePasswordReset();
 
 		await user.save();
 

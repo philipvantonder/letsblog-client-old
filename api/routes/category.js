@@ -105,7 +105,7 @@ router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, 
  * @desc update category.
  * @access Private
  */
-router.route('/update').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/update').put(userAuthentication.isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 

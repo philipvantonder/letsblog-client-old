@@ -33,9 +33,9 @@ router.route('/postComment/:id').get(async (req, res, next) => {
 
 		const { id } = req.params;
 
-		const { postComments } = await CommentService.getPostCommentsById(id);
+		const { postComments, totalComments } = await CommentService.getPostCommentsById(id);
 
-		res.status(200).send({ postComments });
+		res.status(200).send({ postComments, totalComments });
 
 		res.end();
 

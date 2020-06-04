@@ -48,15 +48,21 @@ module.exports = {
 			};
 
 			postCommentsArr.push(postCommentDetails);
-			
+
 		}
 
 		const postComments = [];
 
+		let totalComments = 0;
+		
 		postCommentsArr.forEach(node => {
+			
+			totalComments++;
 
+			// No parentId means top level
 			if (!node.parentId) return postComments.push(node);
 
+			// Insert node as child of parent in postCommentsArr
 			const parentIndex = postCommentsArr.findIndex(el => el.commentId.toString() === node.parentId.toString());
 
 			if (!postCommentsArr[parentIndex].children) {
@@ -67,7 +73,7 @@ module.exports = {
 
 		});
 
-		return { postComments };
+		return { postComments, totalComments };
 
 	},
 

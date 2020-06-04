@@ -7,7 +7,8 @@ export default {
 	state: {
 
 		postComments: [],
-		userCommentLikes: []
+		userCommentLikes: [],
+		totalComments: ''
 
 	},
 
@@ -19,6 +20,10 @@ export default {
 		
 		UPDATE_USER_COMMENT_LIKES(state, likes) {
 			state.userCommentLikes = likes;
+		},
+
+		UPDATE_TOTAL_COMMENT(state, totalComments) {
+			state.totalComments = totalComments;
 		}
 
 	},
@@ -37,9 +42,10 @@ export default {
 
 		async setPostCommentsById({ commit }, id) {
 
-			const { postComments } = await CommentService.fetchPostCommentsById(id);
+			const { postComments, totalComments } = await CommentService.fetchPostCommentsById(id);
 
 			commit('UPDATE_COMMENT', postComments);
+			commit('UPDATE_TOTAL_COMMENT', totalComments);
 		},
 
 		async addReply(context, postDTO) {

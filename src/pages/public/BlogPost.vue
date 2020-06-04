@@ -48,7 +48,7 @@
 					<div class="col-lg-12">
 						<div v-if="postComments" class="mt-4">
 
-							<div> <strong> Comments ({{ postComments.length }}) </strong> </div>
+							<div> <strong> Comments ({{ totalComments }}) </strong> </div>
 							
 							<ListComment v-for="(comment, index) in postComments" :key="index" :comment="comment" :blogPostId="blogPost.id" @update-blog-post="updateBlogPost()" />
 						</div>
@@ -88,7 +88,7 @@
 		computed: {
 			...mapState('posts', ['blogPost']),
 			...mapState('user', ['user']),
-			...mapState('comment', ['postComments']),
+			...mapState('comment', ['postComments', 'totalComments']),
 			...mapGetters('user', ['isLoggedIn']),
 		},
 

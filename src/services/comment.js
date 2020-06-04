@@ -2,7 +2,7 @@ import { getAxiosInstance } from '@/services/axios/index';
 
 export default {
 
-	async create (postDTO) {
+	async create(postDTO) {
 
 		const { data } = await getAxiosInstance('/comment').post('/', postDTO);
 
@@ -10,7 +10,7 @@ export default {
 
 	},
 
-	async fetchPostCommentsById (id) {
+	async fetchPostCommentsById(id) {
 
 		const { data } = await getAxiosInstance('/comment').get('/postComment/' + id);
 
@@ -18,7 +18,7 @@ export default {
 
 	},
 
-	async addreply (postDTO) {
+	async addreply(postDTO) {
 
 		const { data } = await getAxiosInstance('/comment').post('/addReply', postDTO);
 

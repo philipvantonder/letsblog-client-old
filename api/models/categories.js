@@ -1,19 +1,5 @@
 const mongoose = require('mongoose');
 
-// const subCategorySchema = new mongoose.Schema({
-// 	subcategoryName: String,
-// 	subcategorySlugName: String
-// });
-
-// const CategorySchema = new mongoose.Schema({
-// 	name: String,
-// 	slug: {
-// 		type: String,
-// 		unique: true
-// 	},
-// 	subcategories: [subCategorySchema]
-// }, { timestamps: true });
-
 const CategorySchema = new mongoose.Schema({
 	name: String,
 	slug: {
