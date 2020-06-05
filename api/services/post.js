@@ -1,5 +1,5 @@
-const PostModel = require('../models/post');
-const UserModel = require('../models/user');
+const PostsModel = require('../models/posts');
+const UsersModel = require('../models/users');
 const UserService = require('../services/user');
 const fs = require('fs');
 const { EntityNotFoundError } = require('../utils/error-handling/custom-errors');
@@ -9,7 +9,7 @@ module.exports = {
 
 	getBlogPost: async (id) => {
 
-		const post = await PostModel.findOne({ _id: id, isPublished: true });
+		const post = await PostsModel.findOne({ _id: id, isPublished: true });
 		
 		return { post };
 
@@ -17,9 +17,9 @@ module.exports = {
 
 	getBlogPostBySlug: async (slug) => {
 
-		const postObj = await PostModel.findOne({ slug: slug, isPublished: true });
+		const postObj = await PostsModel.findOne({ slug: slug, isPublished: true });
 		
-		const AuthorObj = await UserModel.findById({ _id: postObj.user });
+		const AuthorObj = await UsersModel.findById({ _id: postObj.user });
 
 		const post = {
 			id: postObj._id,
@@ -37,7 +37,7 @@ module.exports = {
 
 	getPublishedBlogPosts: async () => {
 
-		const posts = await PostModel.find({ isPublished: true }).sort({ createdAt: 'desc' });
+		const posts = await PostsModel.find({ isPublished: true, reviewed: true }).sort({ createdAt: 'desc' });
 		
 		return { posts };
 
@@ -47,7 +47,7 @@ module.exports = {
 
 		const { user } = await UserService.getUserByToken(token);
 		
-		const posts = await PostModel.find({ user: user.id }).sort({ createdAt: 'desc' });
+		const posts = await PostsModel.find({ user: user.id }).sort({ createdAt: 'desc' });
 		
 		return { posts };
 
@@ -59,7 +59,7 @@ module.exports = {
 		
 		const { user } = await UserService.getUserByToken(token);
 
-		const post = new PostModel({
+		const post = new PostsModel({
 			title: postDTO.title,
 			body: postDTO.body,
 			fileName: postDTO.filename,
@@ -78,7 +78,7 @@ module.exports = {
 
 	getPost: async (id) => {
 
-		const post = await PostModel.findById({ _id: id });
+		const post = await PostsModel.findById({ _id: id });
 
 		return { post };
 
@@ -86,7 +86,7 @@ module.exports = {
 
 	update: async (id, postDTO) => {
 
-		const post = await PostModel.findById({ _id: id });
+		const post = await PostsModel.findById({ _id: id });
 
 		if (!post) {
 			throw new EntityNotFoundError('Post', 'Post not found');
@@ -112,7 +112,7 @@ module.exports = {
 
 	delete: async (id) => {
 
-		const post = await PostModel.findByIdAndRemove({ _id: id });
+		const post = await PostsModel.findByIdAndRemove({ _id: id });
 
 		return { post }; 
 
@@ -130,7 +130,7 @@ module.exports = {
 
 	unique: async (postDTO) => {
 
-		const post = await PostModel.findOne({ slug: postDTO.slug });
+		const post = await PostsModel.findOne({ slug: postDTO.slug });
 
 		if (post && postDTO.id) {
 			if ((postDTO.id == post._id) && (postDTO.slug == post.slug)) {

@@ -1,6 +1,7 @@
-const CommentModel = require('../models/comment');
-const UserModel = require('../models/user');
-const LikeModel = require('../models/likes');
+const CommentsModel = require('../models/comments');
+const UsersModel = require('../models/users');
+const LikesModel = require('../models/likes');
+
 const UserService = require('../services/user');
 
 const moment = require('moment');
@@ -9,7 +10,7 @@ module.exports = {
 
 	create: async (postDTO) => {
 
-		const comment = new CommentModel({
+		const comment = new CommentsModel({
 			body: postDTO.comment,
 			user: postDTO.userId,
 			post: postDTO.postId,
@@ -21,16 +22,16 @@ module.exports = {
 
 	getPostCommentsById: async (id) => {
 
-		const linkedPostCommentsArr = await CommentModel.find({ post: id });
+		const linkedPostCommentsArr = await CommentsModel.find({ post: id });
 
 		const postCommentsArr = [];
 
 		for (let postComment of linkedPostCommentsArr) {
 
-			const userObject = await UserModel.findById({ _id: postComment.user });
+			const userObject = await UsersModel.findById({ _id: postComment.user });
 
-			const totalLikes = await LikeModel.find({ comment: postComment._id, like: true }).countDocuments();
-			const totalDislikes = await LikeModel.find({ comment: postComment._id, like: false }).countDocuments();
+			const totalLikes = await LikesModel.find({ comment: postComment._id, like: true }).countDocuments();
+			const totalDislikes = await LikesModel.find({ comment: postComment._id, like: false }).countDocuments();
 
 			let postCommentDetails = {
 				commentId: postComment._id,
@@ -79,7 +80,7 @@ module.exports = {
 
 	addReply: async (postDTO) => {
 
-		const comment = new CommentModel({
+		const comment = new CommentsModel({
 			body: postDTO.comment,
 			user: postDTO.userId,
 			post: postDTO.postId,
@@ -96,11 +97,11 @@ module.exports = {
 
 		const userId = user.id;
 
-		const getLike = await LikeModel.findOne({ comment: postDTO.commentId, user: userId });
+		const getLike = await LikesModel.findOne({ comment: postDTO.commentId, user: userId });
 
 		if (!getLike) {
 			
-			const like = new LikeModel({
+			const like = new LikesModel({
 				comment: postDTO.commentId,
 				user: userId,
 				like: postDTO.value
@@ -110,7 +111,7 @@ module.exports = {
 			
 		} else {
 
-			await LikeModel.updateOne({ comment: postDTO.commentId, user: userId }, {
+			await LikesModel.updateOne({ comment: postDTO.commentId, user: userId }, {
 				$set: {
 					like: postDTO.value
 				}
@@ -124,7 +125,7 @@ module.exports = {
 
 		const { user } = await UserService.getUserByToken(token);
 
-		const likes = await LikeModel.find({ user: user.id });
+		const likes = await LikesModel.find({ user: user.id });
 
 		return { likes };
 

@@ -10,6 +10,7 @@ const PostRoute = require('./routes/post');
 const UserRoute = require('./routes/user');
 const CategoryRoute = require('./routes/category');
 const CommentRoute = require('./routes/comment');
+const RoleRoute = require('./routes/userRole');
 
 const { port, mongo_url } = require('./config/index');
 const { errorHandlingMiddleware } = require('./utils/error-handling/error-handling-middleware');
@@ -30,26 +31,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-// const rolesModel = require('./models/roles');
-// const userRolesModel = require('./models/userRoles');
-
-// rolesModelObj = new rolesModel({
-// 	name: "Moderator"
-// });
-
-// rolesModelObj.save();
-
-// userRolesModelObj = new userRolesModel({
-// 	user: "5e9b2503ee770d423cdb48a6",
-// 	role: "5ed95159c0d17e0914b18e3d"
-// });
-
-// userRolesModelObj.save();
-
 app.use('/api/posts', PostRoute);
 app.use('/api/users', UserRoute);
 app.use('/api/category', CategoryRoute);
 app.use('/api/comment', CommentRoute);
+app.use('/api/userRole', RoleRoute);
 
 app.use(errorHandlingMiddleware);
 

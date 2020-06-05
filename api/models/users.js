@@ -54,4 +54,4 @@ UserSchema.methods.resetPassword = async function(password) {
 
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Users', UserSchema);

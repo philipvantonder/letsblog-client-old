@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 
-const CommentSchema = new mongoose.Schema({
+const CommentsSchema = new mongoose.Schema({
 	body: {
 		type: String,
 		required: true
 	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'User',
+		ref: 'Users',
 		required: true
 	},
 	post: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Post',
+		ref: 'Posts',
 		required: true
 	},
 	parentId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Comment',
+		ref: 'Comments',
 		default: null
 	},
 	ispublished: {
@@ -26,4 +26,4 @@ const CommentSchema = new mongoose.Schema({
 	},
 }, { timestamps: true });
 
-module.exports = mongoose.model('Comment', CommentSchema);
+module.exports = mongoose.model('Comments', CommentsSchema);

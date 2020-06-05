@@ -5,7 +5,7 @@
 			<h1>Edit post</h1>
 		</div>
 
-		<div class="row py-2">
+		<div class="row py-2 mb-5">
 			<div v-if="post" class="col-lg-9">
 				<div class="shadow radius-10 p-5 bg-white">
 
@@ -127,6 +127,7 @@ export default {
     methods: {
 		...mapActions('posts', ['setPost', 'updatePost']),
 		...mapActions('category', ['setCategories']),
+		...mapActions('userRoles', ['getUserRoles']),
 
         async submitPost() {
 
@@ -230,6 +231,8 @@ export default {
 		this.slugTitle = this.post.slug
 
 		await this.setCategories();
+
+		await this.getUserRoles();
 
 	},
 	

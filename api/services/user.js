@@ -1,4 +1,4 @@
-const UserModel = require('../models/user');
+const UsersModel = require('../models/users');
 const EmailService =  require('../services/email');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -11,7 +11,7 @@ module.exports = {
 
 		const verify = await jwt.verify(token, jwt_secret);
 
-		const user = await UserModel.findOne({ _id: verify.userId });
+		const user = await UsersModel.findOne({ _id: verify.userId });
 
 		if (!user) {
 			throw new EntityNotFoundError('User', 'User not found.');
@@ -23,13 +23,13 @@ module.exports = {
 
 		userDTO.password = await bcrypt.hash(userDTO.password, 10);
 
-		const user = await UserModel.findOne({ email: userDTO.email });
+		const user = await UsersModel.findOne({ email: userDTO.email });
 
 		if (user) {
 			throw new EntityAlreadyExists('User', `Email ${userDTO.email} already exists.`);
 		}
 
-		const User = new UserModel({
+		const User = new UsersModel({
 			'name': userDTO.name,
 			'surname': userDTO.surname,
 			'email': userDTO.email,
@@ -42,7 +42,7 @@ module.exports = {
 
 	signIn: async (userDTO) => {
 
-		const user = await UserModel.findOne({ email: userDTO.email });
+		const user = await UsersModel.findOne({ email: userDTO.email });
 
 		if (!user) {
 			throw new EntityNotFoundError('User', 'Password or username does not match.');
@@ -64,7 +64,7 @@ module.exports = {
 
 		const token_verify = await jwt.verify(token, jwt_secret);
 		
-		const userObj = await UserModel.findById({ _id: token_verify.userId });
+		const userObj = await UsersModel.findById({ _id: token_verify.userId });
 
 		if (!userObj) {
 			throw new EntityNotFoundError('User', 'Could not find user');
@@ -88,7 +88,7 @@ module.exports = {
 
 	update: async (id, userDTO) => {
 
-		const user = await UserModel.findById({ _id: id });
+		const user = await UsersModel.findById({ _id: id });
 
 		if (!user) {
 			throw new EntityNotFoundError('User', 'Could not find user');
@@ -111,7 +111,7 @@ module.exports = {
 
 	sendPasswordResetEmail: async (email) => {
 
-		const user = await UserModel.findOne({ email: email });
+		const user = await UsersModel.findOne({ email: email });
 
 		if (!user) {
 			throw new EntityNotFoundError('User', 'Email does not exists.');
@@ -136,7 +136,7 @@ module.exports = {
 
 	resetPassword: async (token, password) => {
 
-		const user = await UserModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
+		const user = await UsersModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
 
 		if (!user) {
 			throw new TokenExpiredError('Password token is invalid or has expires.');

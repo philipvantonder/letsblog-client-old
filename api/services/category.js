@@ -1,11 +1,11 @@
-const CategoryModel = require('../models/categories');
-const PostModel = require('../models/post');
+const CategoriesModel = require('../models/categories');
+const PostsModel = require('../models/posts');
 
 module.exports = {
 
 	uniqueCategory: async (postDTO) => {
 
-		const category = await CategoryModel.findOne({ slug: postDTO.slug });
+		const category = await CategoriesModel.findOne({ slug: postDTO.slug });
 
 		if (category && postDTO.id) {
 			if ((postDTO.id == category._id) && (postDTO.slug == category.slug)) {
@@ -26,17 +26,17 @@ module.exports = {
 
 	getCategoryById: async (id) => {
 
-		let parent_arr = await CategoryModel.find({ _id: id });
+		let parent_arr = await CategoriesModel.find({ _id: id });
 		
 		let category_arr = [];
 		
 		for (category of parent_arr) {
 
-			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
+			let subcategory_arr = await CategoriesModel.find({ parentId: category._id });
 
 			let canRemoveCategory = true;
 
-			const linkedPost = await PostModel.findOne({ category: category._id });
+			const linkedPost = await PostsModel.findOne({ category: category._id });
 
 			if (linkedPost) {
 				canRemoveCategory = false;
@@ -47,7 +47,7 @@ module.exports = {
 
 				canRemoveSubCategory = true;
 
-				const linkedSubPost = await PostModel.findOne({ category: subcategoryItem._id })
+				const linkedSubPost = await PostsModel.findOne({ category: subcategoryItem._id })
 
 				if (linkedSubPost) {
 					canRemoveSubCategory = false;
@@ -86,17 +86,17 @@ module.exports = {
 
 	getCategories: async () => {
 
-		let parent_arr = await CategoryModel.find({ parentId: null });
+		let parent_arr = await CategoriesModel.find({ parentId: null });
 		
 		let category_arr = [];
 		
 		for (category of parent_arr) {
 
-			let subcategory_arr = await CategoryModel.find({ parentId: category._id });
+			let subcategory_arr = await CategoriesModel.find({ parentId: category._id });
 
 			let canRemoveCategory = true;
 
-			const linkedPost = await PostModel.findOne({ category: category._id });
+			const linkedPost = await PostsModel.findOne({ category: category._id });
 
 			if (linkedPost) {
 				canRemoveCategory = false;
@@ -107,7 +107,7 @@ module.exports = {
 
 				canRemoveSubCategory = true;
 
-				const linkedSubPost = await PostModel.findOne({ category: subcategoryItem._id })
+				const linkedSubPost = await PostsModel.findOne({ category: subcategoryItem._id })
 
 				if (linkedSubPost) {
 					canRemoveSubCategory = false;
@@ -145,7 +145,7 @@ module.exports = {
 
 	addCategory: async (postDTO) => {
 
-		const category = new CategoryModel({
+		const category = new CategoriesModel({
 			name: postDTO.categoryName,
 			slug: postDTO.categorySlug,
 			subcategories: postDTO.subcategoryArr
@@ -157,7 +157,7 @@ module.exports = {
 
 			for (subcategory of postDTO.subcategoryArr) {
 
-				let newSubcategory = new CategoryModel({
+				let newSubcategory = new CategoriesModel({
 					name: subcategory.name,
 					slug: subcategory.slug,
 					parentId: newCategory._id,
@@ -173,21 +173,21 @@ module.exports = {
 
 	removeCategory: async(id) => {
 
-		let subCategories = await CategoryModel.find({ parentId: id });
+		let subCategories = await CategoriesModel.find({ parentId: id });
 		
 		if (subCategories.length > 0) {
 			for (subcategory of subCategories) {
-				await CategoryModel.findByIdAndRemove({ _id: subcategory._id });
+				await CategoriesModel.findByIdAndRemove({ _id: subcategory._id });
 			}
 		}
 
-		await CategoryModel.findByIdAndRemove({ _id: id });
+		await CategoriesModel.findByIdAndRemove({ _id: id });
 
 	},
 
 	update: async(postDTO) => {
 		
-		await CategoryModel.updateOne({ _id: postDTO.id }, {
+		await CategoriesModel.updateOne({ _id: postDTO.id }, {
 			$set: {
 				name: postDTO.categoryName,
 				slug: postDTO.categorySlug
@@ -199,7 +199,7 @@ module.exports = {
 			// Add new Category
 			if (typeof subcategory.parentId === 'undefined') {
 
-				let newCategory = new CategoryModel({
+				let newCategory = new CategoriesModel({
 					name: subcategory.name,
 					slug: subcategory.slug,
 					parentId: postDTO.id
@@ -209,7 +209,7 @@ module.exports = {
 				
 			} else {
 
-				await CategoryModel.updateOne({ _id: subcategory.id }, {
+				await CategoriesModel.updateOne({ _id: subcategory.id }, {
 					$set: {
 						name: subcategory.name,
 						slug: subcategory.slug
@@ -224,7 +224,7 @@ module.exports = {
 
 	getCategoriesBySlug: async (slug) => {
 
-		const category = await CategoryModel.findOne({ slug });
+		const category = await CategoriesModel.findOne({ slug });
 
 		if (!category) {
 			return { posts: [] };
@@ -232,7 +232,7 @@ module.exports = {
 
 		if (category) {
 
-			const posts = await PostModel.find({ category: category._id, isPublished: true }).sort({ createdAt: 'desc' });
+			const posts = await PostsModel.find({ category: category._id, isPublished: true }).sort({ createdAt: 'desc' });
 			
 			return { posts };
 			
