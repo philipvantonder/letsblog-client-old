@@ -80,9 +80,9 @@ router.route('/isAuthenticated').get(async (req, res, next) => {
 
 		const token = req.headers['authorization'];
 
-		const { message} = await UserService.isAuthenticated(token);
+		await UserService.isAuthenticated(token);
 
-		res.status(200).send({ message });
+		res.status(200).send({ message: 'user is Authenticated' });
 
 		res.end();
 

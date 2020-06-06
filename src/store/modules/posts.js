@@ -99,11 +99,17 @@ export default {
 
 		},
 
-		async checkUnique (context, postDTO) {
+		async checkUnique(context, postDTO) {
 
 			const { newSlug } = await PostService.checkUnique(postDTO);
 
 			return { newSlug };
+
+		},
+
+		async updateReview(context, postDTO) {
+
+			await PostService.updateReview(postDTO);
 
 		}
  

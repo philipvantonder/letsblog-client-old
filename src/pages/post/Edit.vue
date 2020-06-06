@@ -51,8 +51,9 @@
 						</div>
 
 						<div class="form-group">
-							<button class="btn btn-outline-primary" @click.prevent="savePost({ publish: false })"> Save </button>
-							<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="savePost({ publish: true })"> {{ publisedText }} </button>
+							<button class="btn btn-outline-primary" @click.prevent="savePost()"> Save </button>
+							<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="publishPost()"> {{ publisedText }} </button>
+							<button v-if="isModerator" class="btn ml-1" :class="[post.reviewed ? 'btn-outline-danger' : 'btn-outline-dark']" @click.prevent="approveReview()" > {{ reviewedText }} </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
 						</div>
 
@@ -62,9 +63,7 @@
 
 			<div class="col-md-12 col-lg-3 mt-4 mt-lg-0">
 				<div class="border-0 p-5 shadow radius-10 bg-white">
-
 					<TagInput v-model="post.tags" :tagsArr="post.tags" />
-
 				</div>
 			</div>
 
@@ -76,7 +75,7 @@
 <script>
 
 import { required } from  'vuelidate/lib/validators';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 import { VueEditor } from "vue2-editor";
 import Alert from '@/utilities/Alert'; 
@@ -118,14 +117,20 @@ export default {
 		...mapState('posts', ['post']),
 		...mapState('category', ['categories']),
 
+		...mapGetters('userRoles', ['isModerator']),
+
 		publisedText() {
 			return this.post.isPublished ? 'Unpublish' : 'Publish';
+		},
+
+		reviewedText() {
+			return this.post.reviewed ? 'Reject Review' : 'Approve Review';
 		},
 		
 	},
 
     methods: {
-		...mapActions('posts', ['setPost', 'updatePost']),
+		...mapActions('posts', ['setPost', 'updatePost', 'updateReview']),
 		...mapActions('category', ['setCategories']),
 		...mapActions('userRoles', ['getUserRoles']),
 
@@ -153,41 +158,73 @@ export default {
 
 		},
 		
-        async savePost(data) {
-			
+		async approveReview() {
+
 			this.$v.$touch();
 			if (this.$v.$invalid || this.fileError) {
 				return;
 			}
 
-			if (data.publish) {
+			let title = "Are you sure you want to Approve this post?";
+			let toastMessage = "Post have been Approved.";
+			if (this.post.reviewed) {
+				title = "Are you sure you want to Reject this post?";
+				toastMessage = "Post have been Rejected.";
+			}
 
-				let message = "Are you sure you want to Publish this post?";
-				let tosts_message = "Post have been Published.";
-				if (this.post.isPublished) {
-					message = "Are you sure you want to Unpublish this post?";
-					tosts_message = "Post have been Unpublish.";
-				}
+			const response = await Alert.confirm({ title });
 
-				const response = await Alert.confirm({ title: message });
+			if (response) {
 
-				if (response) {
+				this.updateReview({ id: this.post._id, review: !this.post.reviewed });
 
-					this.post.isPublished = !this.post.isPublished;
+				Alert.toast({ title: toastMessage, customClass: 'mt-7' });
 
-					this.submitPost();
+				this.$router.push({ name: 'post-list' });
 
-					Alert.toast({ title: tosts_message, customClass: 'mt-7' });
-				}
+			}
 
-			} else {
+		},
+
+		async publishPost() {
+
+			this.$v.$touch();
+			if (this.$v.$invalid || this.fileError) {
+				return;
+			}
+
+			let title = "Are you sure you want to Publish this post?";
+			let toastMessage = "Post have been Published.";
+			if (this.post.isPublished) {
+				title = "Are you sure you want to Unpublish this post?";
+				toastMessage = "Post have been Unpublish.";
+			}
+
+			const response = await Alert.confirm({ title });
+
+			if (response) {
+
+				this.post.isPublished = !this.post.isPublished;
 
 				this.submitPost();
 
-				Alert.toast({ title: 'Post have been updated.', customClass: 'mt-7' });
+				Alert.toast({ title: toastMessage, customClass: 'mt-7' });
 
 			}
-            
+
+		},
+
+        async savePost() {
+
+			this.$v.$touch();
+			if (this.$v.$invalid || this.fileError) {
+				return;
+			}
+
+			this.submitPost();
+
+			Alert.toast({ title: 'Post have been updated.', customClass: 'mt-7' });
+
 		},
 
 		onSelect() {

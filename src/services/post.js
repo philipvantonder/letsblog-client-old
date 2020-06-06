@@ -92,6 +92,14 @@ export default {
 
 		return data;
 
+	},
+	
+	async updateReview(postDTO) {
+
+		const { data } = await getAxiosInstance('/posts').put('/review', postDTO);
+
+		return data;
+
 	}
 
 }

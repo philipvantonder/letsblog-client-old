@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { jwt_secret } = require('../../config/index');
+
+const { InvalidPermissionError, EntityNotFoundError } = require('../../utils/error-handling/custom-errors');
+
 const UsersModel = require('../../models/users');
+const UserRolesModel = require('../../models/userRoles');
+const RolesModel = require('../../models/roles');
 
 module.exports = {
 
@@ -47,6 +52,30 @@ module.exports = {
 
 		}
 
-	}
+	},
+
+	isModerator: async (req, res, next) => {
+
+		const token = req.headers['authorization'];
+
+		const verify = await jwt.verify(token, jwt_secret);
+
+		const user = await UsersModel.findOne({ _id: verify.userId });
+
+		if (!user) {
+			throw new EntityNotFoundError('User', 'User not found.');
+		}
+
+		const roles = await RolesModel.findOne({ name: "Moderator" });
+
+		const userRole = await UserRolesModel.findOne({ user: user._id, role: roles._id });
+
+		if (userRole) {
+			throw new InvalidPermissionError();
+		} else {
+			next();
+		}
+
+	} 
 
 }

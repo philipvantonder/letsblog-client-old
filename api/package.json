@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app",
-    "test": "nodemon test_file"
+	"seed": "node script/index.js"
   },
   "author": "",
   "license": "ISC",

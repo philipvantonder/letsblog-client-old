@@ -97,6 +97,7 @@ module.exports = {
 		post.title = postDTO.title;
 		post.body = postDTO.body;
 		post.isPublished = postDTO.isPublished;
+		post.reviewed = postDTO.reviewed;
 		post.slug = postDTO.slug;
 		post.category = postDTO.category;
 		post.tags = tagsArr;
@@ -149,5 +150,17 @@ module.exports = {
 		return { newSlug: postDTO.slug };
 
 	},
+
+	updateReview: async(postDTO) => {
+
+		const { id, review } = postDTO;
+		
+		await PostsModel.updateOne({ _id: id }, {
+			$set: {
+				reviewed: review
+			}
+		});
+
+	} 
 
 };

@@ -13,7 +13,7 @@ module.exports = {
 
 			let role = await rolesModel.findOne({ _id: userRole.role });
 
-			userRoles.push({ name: role.name });
+			userRoles.push(role.name.toLowerCase());
 
 		}
 

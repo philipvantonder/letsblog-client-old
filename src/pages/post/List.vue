@@ -14,6 +14,7 @@
 							<th>Body</th>
 							<th>File</th>
 							<th>Published</th>
+							<th>Reviewed</th>
 							<th>Date Added</th>
 							<th>Date last updated</th>
 							<th colspan="2">Actions</th>
@@ -25,6 +26,7 @@
 							<td>{{ LimitText(post.body, 50) }}</td>
 							<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image" /></td>
 							<td>{{ BooleanText(post.isPublished) }}</td>
+							<td>{{ BooleanText(post.reviewed) }}</td>
 							<td>{{ FormatDate(post.createdAt) }}</td>
 							<td>{{ FormatDate(post.updatedAt) }}</td>
 							<td class="text-center" colspan="2">

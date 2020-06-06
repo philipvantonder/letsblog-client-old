@@ -19,6 +19,16 @@ export default {
 
 	getters: {
 	
+		isModerator(state) {
+
+			if (state.userRoles.includes('moderator')) {
+				return true;
+			}			
+			
+			return false;
+
+		}
+
 	},
 
 	actions: {

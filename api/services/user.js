@@ -139,7 +139,7 @@ module.exports = {
 		const user = await UsersModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
 
 		if (!user) {
-			throw new TokenExpiredError('Password token is invalid or has expires.');
+			throw new TokenExpiredError();
 		}
 
 		await user.resetPassword(password);

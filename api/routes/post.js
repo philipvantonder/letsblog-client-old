@@ -6,7 +6,7 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 
-const userAuthentication = require('./middleware/userAuthentication');
+const { isLoggedIn, isModerator } = require('./middleware/userAuthentication');
 const router = express.Router();
 const { handle } = require('../utils/error-handling/request-handler');
 
@@ -78,7 +78,7 @@ const fileUpload = multer({
  * @desc fetch all posts linked to a user.
  * @access Public
  */
-router.route('/user').get(userAuthentication.isLoggedIn, async (req, res, next) => { 	
+router.route('/user').get(isLoggedIn, async (req, res, next) => { 	
 	
 	await handle(async () => {
 
@@ -141,7 +141,7 @@ router.route('/slug/:slug').get(async (req, res, next) => {
  * @desc Create new blog post.
  * @access Private
  */
-router.route('/create').post(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
+router.route('/create').post(isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -204,7 +204,7 @@ router.route('/publishedBlogs').get(async (req, res, next) => {
  * @desc fetch single blog post.
  * @access Private
  */
-router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/post/:id').get(isLoggedIn, async (req, res, next) => {
 	
 	await handle(async () => {
 
@@ -225,7 +225,7 @@ router.route('/post/:id').get(userAuthentication.isLoggedIn, async (req, res, ne
  * @desc Update blog post.
  * @access Private
  */
-router.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
+router.route('/update/:id').put(isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 	
 	await handle(async () => {
 
@@ -244,7 +244,7 @@ router.route('/update/:id').put(userAuthentication.isLoggedIn, fileUpload.single
  * @desc Remove blog post.
  * @access Private
  */
-router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/delete/:id').delete(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -265,7 +265,7 @@ router.route('/delete/:id').delete(userAuthentication.isLoggedIn, async (req, re
  * @desc Check if the Slug is unique.
  * @access Private
  */
-router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/unique').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 		
@@ -273,6 +273,23 @@ router.route('/unique').post(userAuthentication.isLoggedIn, async (req, res, nex
 
 		res.status(200).send({ newSlug });
 
+		res.end();
+
+	}, next);
+
+});
+
+/**
+ * @route PUT api/posts/review
+ * @desc update post review status.
+ * @access Private
+ */
+router.route('/review').put(isLoggedIn, isModerator, async (req, res, next) => {
+	
+	await handle(async () => {
+
+		await PostService.updateReview(req.body);
+		
 		res.end();
 
 	}, next);
