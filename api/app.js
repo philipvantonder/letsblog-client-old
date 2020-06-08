@@ -39,6 +39,6 @@ app.use('/api/userRole', RoleRoute);
 
 app.use(errorHandlingMiddleware);
 
-app.listen(port, function() {
+app.listen(process.env.PORT || port, function() {
     console.log(`Server listenig at: http://localhost:${port}`);
 });
