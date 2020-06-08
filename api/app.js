@@ -17,7 +17,7 @@ const { errorHandlingMiddleware } = require('./utils/error-handling/error-handli
 
 // Connect to mongo
 mongoose.Promise = global.Promise
-mongoose.connect(mongo_url, {
+mongoose.connect(process.env.MONGODB_URI || mongo_url, {
 	useNewUrlParser: true,
 	useFindAndModify: false,
 	useCreateIndex: true,

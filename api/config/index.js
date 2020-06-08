@@ -11,7 +11,6 @@ dotenv.config();
 });
 
 module.exports = {
-
 	node_env: process.env.NODE_ENV,
 	jwt_secret: process.env.JWT_SECRET,
 	port: process.env.PORT,
@@ -19,6 +18,5 @@ module.exports = {
 	sendgrid_api_key: process.env.SENDGRID_API_KEY,
 	from_email: process.env.FROM_EMAIL,
 	client_url: process.env.CLIENT_URL,
-	test_user_email: process.env.TEST_USER_EMAIL,
-	
+	test_user_email: process.env.TEST_USER_EMAIL
 }
