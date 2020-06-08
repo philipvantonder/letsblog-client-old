@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserService = require('../services/user');
-const userAuthentication = require('./middleware/userAuthentication');
+const { isLoggedIn } = require('./middleware/authentication');
 
 const multer = require("multer");
 const fs = require('fs');
@@ -156,7 +156,7 @@ router.route('/getUser').get(async (req, res, next) => {
  * @desc update user's details
  * @access Private
  */
-router.route('/update').put(userAuthentication.isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
+router.route('/update').put(isLoggedIn, fileUpload.single('file'), async (req, res, next) => {
 
 	await handle(async () => {
 

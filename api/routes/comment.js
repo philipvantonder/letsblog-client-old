@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const CommentService = require('../services/comment');
-const userAuthentication = require('./middleware/userAuthentication');
+const { isLoggedIn } = require('./middleware/authentication');
 const { handle } = require('../utils/error-handling/request-handler');
 
 /**
@@ -10,7 +10,7 @@ const { handle } = require('../utils/error-handling/request-handler');
  * @desc Create new comment.
  * @access Private
  */
-router.route('/').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -48,7 +48,7 @@ router.route('/postComment/:id').get(async (req, res, next) => {
  * @desc Add reply to a post comment.
  * @access Private
  */
-router.route('/addReply').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/addReply').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -65,7 +65,7 @@ router.route('/addReply').post(userAuthentication.isLoggedIn, async (req, res, n
  * @desc Add reply to a post comment.
  * @access Private
  */
-router.route('/addLike').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/addLike').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -84,7 +84,7 @@ router.route('/addLike').post(userAuthentication.isLoggedIn, async (req, res, ne
  * @desc Get all user likes that have been made to a comment.
  * @access Private
  */
-router.route('/userLikes').get(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/userLikes').get(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 

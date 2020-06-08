@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const CategoryService = require('../services/category');
-const userAuthentication = require('./middleware/userAuthentication');
+const { isLoggedIn } = require('./middleware/authentication');
 const { handle } = require('../utils/error-handling/request-handler');
 
 /**
@@ -10,7 +10,7 @@ const { handle } = require('../utils/error-handling/request-handler');
  * @desc Check if the Slug category name is unique.
  * @access Private
  */
-router.route('/uniqueCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/uniqueCategory').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 		
@@ -69,7 +69,7 @@ router.route('/categories').get(async (req, res, next) => {
  * @desc Add new category.
  * @access Private
  */
-router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/addCategory').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 	
@@ -86,7 +86,7 @@ router.route('/addCategory').post(userAuthentication.isLoggedIn, async (req, res
  * @desc remove category.
  * @access Private
  */
-router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/removeCategory').post(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 
@@ -105,7 +105,7 @@ router.route('/removeCategory').post(userAuthentication.isLoggedIn, async (req, 
  * @desc update category.
  * @access Private
  */
-router.route('/update').put(userAuthentication.isLoggedIn, async (req, res, next) => {
+router.route('/update').put(isLoggedIn, async (req, res, next) => {
 
 	await handle(async () => {
 

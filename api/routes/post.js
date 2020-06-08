@@ -6,7 +6,7 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 
-const { isLoggedIn, isModerator } = require('./middleware/userAuthentication');
+const { isLoggedIn, isModerator } = require('./middleware/authentication');
 const router = express.Router();
 const { handle } = require('../utils/error-handling/request-handler');
 

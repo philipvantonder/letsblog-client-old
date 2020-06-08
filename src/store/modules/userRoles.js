@@ -23,7 +23,7 @@ export default {
 
 			if (state.userRoles.includes('moderator')) {
 				return true;
-			}			
+			}
 			
 			return false;
 

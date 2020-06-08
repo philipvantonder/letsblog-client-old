@@ -6,7 +6,7 @@ async function handle (func, next) {
 
 		await func();
 
-	} catch (error) { 
+	} catch (error) {
 		if ((error instanceof ErrorBase) === false) {
 			error = new UnknownError(error.message);
 		}
