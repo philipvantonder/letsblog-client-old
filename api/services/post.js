@@ -118,7 +118,6 @@ module.exports = {
 		post.title = postDTO.title;
 		post.body = postDTO.body;
 		post.isPublished = postDTO.isPublished;
-		post.reviewed = postDTO.reviewed;
 		post.slug = postDTO.slug;
 		post.category = postDTO.category;
 		post.tags = tagsArr;

@@ -46,7 +46,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
-						<div v-if="postComments" class="mt-4">
+						<div v-if="postComments.length > 0" class="mt-4">
 
 							<div> <strong> Comments ({{ totalComments }}) </strong> </div>
 							
