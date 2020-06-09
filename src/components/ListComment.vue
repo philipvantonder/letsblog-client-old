@@ -26,11 +26,11 @@
 						</div>
 						<div>
 							<span>
-								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" :class="userLikedComment(true, comment.commentId)" @click="submitLike(true, comment.commentId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
+								<font-awesome-layers v-tooltip:top="'Like Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" :class="commentLiked" @click="submitLike(true, comment.commentId)"> <font-awesome-icon icon="thumbs-up" /> </font-awesome-layers>	
 								({{ comment.commentLike }})
 							</span>
 							<span>
-								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" :class="userLikedComment(false, comment.commentId)" @click="submitLike(false, comment.commentId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
+								<font-awesome-layers v-tooltip:top="'Dislike Post'" full-width class="fa-fw fa-1x py-1 cursor-pointer comment-icon" :class="commentDisliked" @click="submitLike(false, comment.commentId)"> <font-awesome-icon icon="thumbs-down" /> </font-awesome-layers>
 								({{ comment.commentDislike }})
 							</span>
 						</div>
@@ -91,9 +91,19 @@
 
 		},
 
+		watch: {
+
+			comment: async function(after) {
+				await this.userLikedComment(after.commentId);
+			}
+
+		},
+
 		data() {
 
 			return  {
+				commentLike: false,
+				commentDislike: false,
 				modalIsOpen: false,
 				formData: {
 					commentId: '',
@@ -112,32 +122,37 @@
 		computed: {
 			...mapGetters('user', ['isLoggedIn']),
 			...mapState('comment', ['userCommentLikes']),
+
+			commentLiked() {
+				return (this.commentLike === true ? 'like-active' : '');
+			},
+
+			commentDisliked() {
+				return (this.commentDislike === true ? 'like-active' : '');
+			}
 		},
 
 		methods: {
 
-			userLikedComment(value, commentId) {
+			userLikedComment(commentId) {
 				
-				if (this.isLoggedIn) {
+				for (let userCommentLike of this.userCommentLikes) {
 					
-					for (let userCommentLike of this.userCommentLikes) {
-						
-						// check if user like or dislike this comment
-						if (commentId == userCommentLike.comment && userCommentLike.like === value) {
-							return 'like-active';
-						}
-
+					if (commentId == userCommentLike.comment && userCommentLike.like === true) {
+						this.commentLike = true;
+						this.commentDislike = false;
 					}
-				
-				} else {
 
-					return '';
+					if (commentId == userCommentLike.comment && userCommentLike.like === false) {
+						this.commentDislike = true;
+						this.commentLike = false;
+					}
 
 				}
 
 			},
 
-			...mapActions('comment', ['addReply', 'addLike', 'setPostCommentsById']),
+			...mapActions('comment', ['addReply', 'addLike', 'setPostCommentsById', 'getUserCommentLikes']),
 
 			showReplyPopup(commentId, userId, postId) {
 
@@ -208,6 +223,8 @@
 					
 					await this.addLike({value, commentId});
 
+					await this.getUserCommentLikes();
+
 					this.$emit('update-blog-post');
 				
 				}
@@ -221,12 +238,16 @@
 		},
 
 		validations: {
-
 			formData: {
-
 				comment: { required }
-
 			},
+		},
+
+		mounted () {
+			
+			if (this.isLoggedIn) {
+				this.userLikedComment(this.comment.commentId);
+			}
 
 		}
 

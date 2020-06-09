@@ -133,7 +133,9 @@
 
 			await this.setPostCommentsById(this.blogPost.id);
 
-			await this.getUserCommentLikes();
+			if (this.isLoggedIn) {
+				await this.getUserCommentLikes();
+			}
 
 			this.loading = false;
 
