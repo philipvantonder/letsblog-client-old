@@ -3,14 +3,27 @@
 		<div class="row pt-4">
 			<div class="col-lg-12">
 				<div v-if="publishedBlogPosts.length" class="card-deck">
-					<div class="col-xs-12 col-sm-6 col-lg-4 mb-4 d-flex" v-for="post in publishedBlogPosts" :key="post._id">
+					<div class="col-xs-12 col-sm-6 col-lg-4 mb-4 d-flex" v-for="post in publishedBlogPosts" :key="post.id">
 						<router-link :to="{ name: 'blog-post', params: { 'id': post.slug } }" tag="div" class="card w-100 shadow border-0">
-							<img class="card-img-top card-height" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="Card image cap">
+							<img class="card-img-top card-height" :src="'http://localhost:4000/api/posts/image/' + post.id" alt="Card image cap">
 
-							<div class="card-body">
+							<div class="card-body d-flex flex-column justify-content-between">
 								<h5 class="card-title" title="View post"> {{ post.title }} </h5>
 
 								<p class="card-text" v-html="LimitText(post.body, 80)"> </p>
+
+								<div class="d-flex align-items-center">
+									<div>
+										<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + post.authorId + '/' + post.authorPicture" />
+									</div>
+									<div class="d-flex flex-column ml-2">
+										<div>
+											{{ post.author }} <br>
+											{{ post.datePublished }}
+										</div>
+									</div>
+								</div>
+
 							</div>
 						</router-link>
 					</div>

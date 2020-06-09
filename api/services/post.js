@@ -37,8 +37,29 @@ module.exports = {
 
 	getPublishedBlogPosts: async () => {
 
-		const posts = await PostsModel.find({ isPublished: true, reviewed: true }).sort({ createdAt: 'desc' });
+		const postsArr = await PostsModel.find({ isPublished: true, reviewed: true }).sort({ createdAt: 'desc' });
 		
+		const posts = [];
+
+		for (let post of postsArr) {
+
+			const AuthorObj = await UsersModel.findById({ _id: post.user });
+	
+			const postObj = {
+				id: post._id,
+				body: post.body,
+				title: post.title,
+				slug: post.slug,
+				datePublished: moment(post.createdAt).format('MMMM Do YYYY'),
+				authorId: AuthorObj._id,
+				authorPicture: AuthorObj.profileImage,
+				author: `${AuthorObj.name} ${AuthorObj.surname}`
+			};
+
+			posts.push(postObj);
+
+		}
+
 		return { posts };
 
 	},
