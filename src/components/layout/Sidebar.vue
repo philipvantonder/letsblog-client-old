@@ -87,7 +87,7 @@ export default {
 	color: #000 !important;
 }
 
-.slide-enter-active, .slide-leave-active{
+.slide-enter-active, .slide-leave-active {
 	transition: transform 0.4s ease;
 }
 
