@@ -76,7 +76,7 @@ const router = new VueRouter({
 			path: '/profile',
 			component: lazyLoad('pages/profile/index'),
 			meta: {
-				requiresAuth: true 
+				requiresAuth: true
 			}
 		},
 
@@ -85,7 +85,7 @@ const router = new VueRouter({
 			path: '/edit-profile',
 			component: lazyLoad('pages/profile/EditProfile'),
 			meta: {
-				requiresAuth: true 
+				requiresAuth: true
 			}
 		},
 
@@ -94,7 +94,7 @@ const router = new VueRouter({
 			path: '/categories',
 			component: lazyLoad('pages/category/index'),
 			meta: {
-				requiresAuth: true 
+				requiresAuthAndIsAdmin: true
 			}
 		},
 
@@ -103,7 +103,7 @@ const router = new VueRouter({
 			path: '/add-post',
 			component: lazyLoad('pages/post/Add'),
 			meta: {
-				requiresAuth: true 
+				requiresAuth: true
 			}
 		},
 
@@ -112,7 +112,7 @@ const router = new VueRouter({
 			path: '/edit-post/:id',
 			component: lazyLoad('pages/post/Edit'),
 			meta: {
-				requiresAuth: true 
+				requiresAuth: true
 			}
 		},
 
@@ -121,7 +121,7 @@ const router = new VueRouter({
 			path: '/post-list',
 			component: lazyLoad('pages/post/List'),
 			meta: {
-				requiresAuth: true 
+				requiresAuth: true
 			}
 		},
 
@@ -141,6 +141,18 @@ router.beforeEach((to, from, next) => {
 		} else {
 			next();
 		}
+
+	} else if (to.matched.some(record => record.meta.requiresAuthAndIsAdmin)) {
+
+		if (!store.getters['user/isLoggedIn'] || !store.getters['userRoles/isAdmin']) {
+
+			console.error("Routes: You are not logged in or is not a Admin. Redirect you to the Feed Page");
+
+			next({ name: 'feed' });
+		} else {
+			next();
+		}
+		
 
 	} else {
 		next();

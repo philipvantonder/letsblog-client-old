@@ -14,7 +14,7 @@
 				<li class="nav-item hover-white" v-if="isLoggedIn">
 					<router-link tag="a" :to="{ name: 'post-list' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> My Posts </router-link>
 				</li>
-				<li class="nav-item hover-white" v-if="isLoggedIn">
+				<li class="nav-item hover-white" v-if="isLoggedIn && isAdmin">
 					<router-link tag="a" :to="{ name: 'categories' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Categories </router-link>
 				</li>
 			</ul>
@@ -67,6 +67,7 @@ export default {
 
 	computed: {
 		...mapGetters('user', ['isLoggedIn']),
+		...mapGetters('userRoles', ['isAdmin']),
 	}
 
 }

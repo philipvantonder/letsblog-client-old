@@ -1,16 +1,18 @@
 <template>
-	<div class="vh-100 d-flex flex-column">
+	<div id="app">
+		<div class="vh-100 d-flex flex-column">
 
-		<navbar @toggleSidebar="updateSidebarStatus($event)" :navBarStatus="isOpen" />
+			<navbar @toggleSidebar="updateSidebarStatus($event)" :navBarStatus="isOpen" />
 
-		<sidebar @toggleNavbarStatus="updateNavbarStatus($event)" v-if="isLoggedIn" :sideBarStatus="isOpen" />
+			<sidebar @toggleNavbarStatus="updateNavbarStatus($event)" v-if="isLoggedIn" :sideBarStatus="isOpen" />
 
-		<div class="d-flex flex-grow-1 overflow-y-hidden">
-			<div class="d-flex flex-grow-1 overflow-auto feed-content">
-				<router-view :key="$route.fullPath" ></router-view>
+			<div class="d-flex flex-grow-1 overflow-y-hidden">
+				<div class="d-flex flex-grow-1 overflow-auto feed-content">
+					<router-view :key="$route.fullPath" ></router-view>
+				</div>
 			</div>
-		</div>
 
+		</div>
 	</div>
 </template>
 

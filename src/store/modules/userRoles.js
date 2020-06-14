@@ -27,6 +27,16 @@ export default {
 			
 			return false;
 
+		},
+
+		isAdmin(state) {
+
+			if (state.userRoles.includes('admin')) {
+				return true;
+			}
+			
+			return false;
+
 		}
 
 	},
