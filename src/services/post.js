@@ -100,6 +100,14 @@ export default {
 
 		return data;
 
+	},
+
+	async fetchPostsforReview() {
+
+		const { data } = await getAxiosInstance('/posts').get('/postsReview');
+
+		return data;
+
 	}
 
 }

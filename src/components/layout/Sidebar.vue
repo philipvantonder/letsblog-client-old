@@ -17,6 +17,9 @@
 				<li class="nav-item hover-white" v-if="isLoggedIn && isAdmin">
 					<router-link tag="a" :to="{ name: 'categories' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Categories </router-link>
 				</li>
+				<li class="nav-item hover-white" v-if="isLoggedIn && isModerator">
+					<router-link tag="a" :to="{ name: 'review-posts' }" @click.native="toggleSideBarStatus()" class="nav-link text-white pl-2rem"> Review  Posts</router-link>
+				</li>
 			</ul>
 		</div>
 	</transition>
@@ -24,7 +27,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
 
@@ -59,6 +62,8 @@ export default {
 
 	methods: {
 
+		...mapActions('userRoles', ['getUserRoles']),
+
 		toggleSideBarStatus() {
 			this.$emit('toggleNavbarStatus', this.isOpen = !this.isOpen);
 		}
@@ -67,7 +72,11 @@ export default {
 
 	computed: {
 		...mapGetters('user', ['isLoggedIn']),
-		...mapGetters('userRoles', ['isAdmin']),
+		...mapGetters('userRoles', ['isAdmin', 'isModerator']),
+	},
+
+	created() {
+		this.getUserRoles();
 	}
 
 }

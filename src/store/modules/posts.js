@@ -111,6 +111,14 @@ export default {
 
 			await PostService.updateReview(postDTO);
 
+		},
+
+		async getPostsforReview() {
+
+			const { posts } = await PostService.fetchPostsforReview();
+
+			return posts;
+
 		}
  
 	}

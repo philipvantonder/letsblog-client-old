@@ -125,6 +125,15 @@ const router = new VueRouter({
 			}
 		},
 
+		{
+			name: 'review-posts',
+			path: '/review-posts',
+			component: lazyLoad('pages/reviewPosts/index'),
+			meta: {
+				requiresAuth: true
+			}
+		},
+
 	]
 
 });

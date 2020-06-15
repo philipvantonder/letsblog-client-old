@@ -296,4 +296,23 @@ router.route('/review').put(isLoggedIn, isModerator, async (req, res, next) => {
 
 });
 
+/**
+ * @route GET api/posts/postsReview
+ * @desc get all posts for moderator to review.
+ * @access Private
+ */
+router.route('/postsReview').get(isLoggedIn, isModerator, async (req, res, next) => {
+	
+	await handle(async () => {
+
+		const { posts } = await PostService.getPostsforReview();
+		
+		res.status(200).send({ posts });
+
+		res.end();
+
+	}, next);
+
+});
+
 module.exports = router;
