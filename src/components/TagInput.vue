@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<div v-if="message" class="mt-2 tag-input__message tag-input__warning" :class="{ 'tag-input__shake': message }" v-html="message"></div>
+
 		<div class="tag-input">
 			<div v-for="(tag, index) in tags" :key="tag" class="tag-input__tag">
 				<span @click="removeTag(index)">x</span>
@@ -7,8 +9,6 @@
 			</div>
 			<input type="text" placeholder="Enter a Tag" v-model.trim="tag" class="tag-input__text" @keydown.enter="addTag()" />
 		</div>
-
-		<div v-if="message" class="mt-2 tag-input__message tag-input__warning" :class="{ 'tag-input__shake': message }" v-html="message"></div>
 
 		<div class="mt-2">
 			<button class="btn btn-primary" @click="addTag()"> Add Tag </button>
