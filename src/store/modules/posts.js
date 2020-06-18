@@ -11,6 +11,8 @@ export default {
 		userPosts: [], // All user posts
 		post: false, // Editing of a single user post,
 
+		blogPosts: []
+
 	},
 
 	mutations: {
@@ -34,6 +36,10 @@ export default {
 
 		SET_POST(state, post) {
 			state.post = post;
+		},
+
+		SET_BLOG_POSTS(state, post) {
+			state.blogPosts = post;
 		}
 
 	},
@@ -56,7 +62,8 @@ export default {
 
 			const { post } = await PostService.fetchBlogPostBySlug(id);
 
-			commit('SET_BLOG_POST', post);
+			// commit('SET_BLOG_POST', post);
+			commit('SET_BLOG_POSTS', post);
 
 		},
 
@@ -81,7 +88,6 @@ export default {
 			const { post } = await PostService.fetchPost(id);
 
 			commit('SET_POST', post);
-
 
 		},
 
@@ -113,11 +119,11 @@ export default {
 
 		},
 
-		async getPostsforReview() {
+		async getPostsforReview({ commit }) {
 
 			const { posts } = await PostService.fetchPostsforReview();
 
-			return posts;
+			commit('SET_BLOG_POSTS', posts);
 
 		}
  
