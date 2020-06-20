@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!loading" class="container">
-		<div v-if="blogPosts" class="row py-lg-5 py-4">
+		<div v-if="blogPosts" class="row py-4">
 			<div class="col-lg-12">
 				<div class="shadow radius-10 bg-white">
 					<div class="d-flex align-items-center justify-content-between px-5 py-4">
@@ -28,12 +28,23 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="row pb-lg-5">
+			<div class="col-lg-12">
+				<div class="d-flex justify-content-between align-items-center">
+					<button v-if="isModerator" class="btn ml-1" :class="[blogPosts.reviewed ? 'btn-outline-danger' : 'btn-outline-dark']" @click.prevent="approveReview()" > {{ reviewedText }} </button>
+					<router-link tag="button" :to="{ name: 'review-posts' }" class="btn btn-secondary ml-1" > Cancel </router-link>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </template>
 
 <script>
 
-	import { mapActions, mapState } from 'vuex';
+	import { mapActions, mapState, mapGetters } from 'vuex';
+	import Alert from '@/utilities/Alert'; 
 
     export default {
 
@@ -47,10 +58,41 @@
 
 		computed: {
 			...mapState('posts', ['blogPosts']),
+			...mapGetters('userRoles', ['isModerator']),
+			reviewedText() {
+				return this.blogPosts.reviewed ? 'Reject Review' : 'Approve Review';
+			},
 		},
 
 		methods: {
-			...mapActions('posts', ['setBlogPostBySlug']),
+			...mapActions('posts', ['setBlogPostBySlug', 'updateReview']),
+
+			async approveReview() {
+
+				let title = "Are you sure you want to Approve this post?";
+				let toastMessage = "Post have been Approved.";
+				if (this.blogPosts.reviewed) {
+					title = "Are you sure you want to Reject this post?";
+					toastMessage = "Post have been Rejected.";
+				}
+
+				const response = await Alert.confirm({ title });
+
+				if (response) {
+
+					await this.updateReview({ id: this.blogPosts.id, review: !this.blogPosts.reviewed });
+
+					Alert.toast({ title: toastMessage, customClass: 'mt-7' });
+					
+
+					const { id } = this.$route.params;
+
+					await this.setBlogPostBySlug(id);
+
+				}
+
+			},
+
 		},
 
 		async created() {

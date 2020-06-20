@@ -7,7 +7,7 @@
 
 		<div class="row py-2">
 			<div class="col-lg-12">
-				<table v-if="userPosts.length" class="table table-borderless table-hover table-striped bg-white radius-10 shadow">
+				<table v-if="blogPosts.length > 0" class="table table-borderless table-hover table-striped bg-white radius-10 shadow">
 					<thead>
 						<tr>
 							<th>Title</th>
@@ -21,7 +21,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="post in userPosts" :key="post._id">
+						<tr v-for="post in blogPosts" :key="post._id">
 							<td>{{ post.title }}</td>
 							<td>{{ LimitText(post.body, 50) }}</td>
 							<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image" /></td>
@@ -54,7 +54,7 @@ import { BooleanText, LimitText, FormatDate } from '@/utilities/filters/index';
 export default {
 	
 	computed: {
-		...mapState('posts', ['userPosts'])
+		...mapState('posts', ['blogPosts'])
 	},
 
 	methods: {
@@ -67,9 +67,9 @@ export default {
 
 		async deletePost(id) {
 			
-			const post_index = this.userPosts.map(post => post._id).indexOf(id);
+			const post_index = this.blogPosts.map(post => post._id).indexOf(id);
 
-			const post = this.userPosts[post_index];
+			const post = this.blogPosts[post_index];
 
 			if (post.isPublished) {
 

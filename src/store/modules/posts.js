@@ -6,41 +6,20 @@ export default {
 	
 	state: {
 
-		blogPost: false, // Viewing of single post in public feed
-		publishedBlogPosts: [], // Published posts for public feed
-		userPosts: [], // All user posts
-		post: false, // Editing of a single user post,
-
-		blogPosts: []
+		blogPosts: [] // this store all realted blog post(s) data
 
 	},
 
 	mutations: {
 
-		SET_BLOG_POST(state, post) {
-			state.blogPost = post;
-		},
-
-		SET_PUBLISHED_BLOG_POSTS(state, posts) {
-			state.publishedBlogPosts = posts;
-		},
-
-		SET_USER_POSTS(state, posts) {
-			state.userPosts = posts;
+		SET_BLOG_POSTS(state, post) {
+			state.blogPosts = post;
 		},
 
 		REMOVE_USER_POST(state, id) {
 			let post_index = state.userPosts.map(post => post._id).indexOf(id);
 			state.userPosts.splice(post_index, 1);
 		},
-
-		SET_POST(state, post) {
-			state.post = post;
-		},
-
-		SET_BLOG_POSTS(state, post) {
-			state.blogPosts = post;
-		}
 
 	},
 
@@ -54,7 +33,7 @@ export default {
 
 			const { posts } = await PostService.fetchPublishedBlogPosts();
 
-			commit('SET_PUBLISHED_BLOG_POSTS', posts);
+			commit('SET_BLOG_POSTS', posts);
 
 		},
 
@@ -62,7 +41,6 @@ export default {
 
 			const { post } = await PostService.fetchBlogPostBySlug(id);
 
-			// commit('SET_BLOG_POST', post);
 			commit('SET_BLOG_POSTS', post);
 
 		},
@@ -71,7 +49,7 @@ export default {
 
 			let { posts } = await PostService.fetchUserPosts();
 
-			commit('SET_USER_POSTS', posts);
+			commit('SET_BLOG_POSTS', posts);
 
 		},
 
@@ -87,7 +65,7 @@ export default {
 
 			const { post } = await PostService.fetchPost(id);
 
-			commit('SET_POST', post);
+			commit('SET_BLOG_POSTS', post);
 
 		},
 
@@ -119,7 +97,7 @@ export default {
 
 		},
 
-		async getPostsforReview({ commit }) {
+		async setPostsforReview({ commit }) {
 
 			const { posts } = await PostService.fetchPostsforReview();
 

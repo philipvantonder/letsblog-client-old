@@ -12,15 +12,29 @@
 
 								<p class="card-text" v-html="LimitText(post.body, 80)"> </p>
 
-								<div class="d-flex align-items-center">
-									<div>
-										<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + post.authorId + '/' + post.authorPicture" />
-									</div>
-									<div class="d-flex flex-column ml-2">
+
+
+								<div class="d-flex align-items-center justify-content-between">
+									<div class="d-flex align-items-center">
 										<div>
-											{{ post.author }} <br>
-											{{ post.datePublished }}
+											<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + post.authorId + '/' + post.authorPicture" />
 										</div>
+										<div class="d-flex flex-column ml-2">
+											<div>
+												{{ post.author }} <br>
+												{{ post.datePublished }}
+											</div>
+										</div>
+									</div>
+									<div>
+										<span v-if="post.reviewed">
+											<font-awesome-layers full-width class="fa-fw fa-1x text-success"> <font-awesome-icon icon="check" /> </font-awesome-layers>
+											Approved
+										</span>
+										<span v-else>
+											<font-awesome-layers full-width class="fa-fw fa-1x text-danger"> <font-awesome-icon icon="times" /> </font-awesome-layers>
+											Rejected
+										</span>
 									</div>
 								</div>
 
@@ -59,13 +73,13 @@ export default {
 	},
 
 	methods: {
-		...mapActions('posts', ['getPostsforReview']),
+		...mapActions('posts', ['setPostsforReview']),
 
 		LimitText
 	},
 
 	async created() {
-		await this.getPostsforReview();
+		await this.setPostsforReview();
 	}
 
 }

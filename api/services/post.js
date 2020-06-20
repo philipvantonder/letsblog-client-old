@@ -26,6 +26,7 @@ module.exports = {
 			body: postObj.body,
 			title: postObj.title,
 			datePublished: moment(postObj.createdAt).format('MMMM Do YYYY'),
+			reviewed: postObj.reviewed,
 			authorId: AuthorObj._id,
 			authorPicture: AuthorObj.profileImage,
 			author: `${AuthorObj.name} ${AuthorObj.surname}`
@@ -51,6 +52,7 @@ module.exports = {
 				title: post.title,
 				slug: post.slug,
 				datePublished: moment(post.createdAt).format('MMMM Do YYYY'),
+				reviewed: post.reviewed,
 				authorId: AuthorObj._id,
 				authorPicture: AuthorObj.profileImage,
 				author: `${AuthorObj.name} ${AuthorObj.surname}`
@@ -199,6 +201,7 @@ module.exports = {
 				title: post.title,
 				slug: post.slug,
 				datePublished: moment(post.createdAt).format('MMMM Do YYYY'),
+				reviewed: post.reviewed,
 				authorId: AuthorObj._id,
 				authorPicture: AuthorObj.profileImage,
 				author: `${AuthorObj.name} ${AuthorObj.surname}`

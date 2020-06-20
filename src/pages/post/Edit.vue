@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="row py-2 mb-5">
-			<div v-if="post" class="col-lg-9">
+			<div v-if="blogPosts" class="col-lg-9">
 				<div class="shadow radius-10 p-5 bg-white">
 
 					<div v-if="message" class="alert alert-warning" role="alert">
@@ -15,19 +15,19 @@
 
 					<form enctype="multipart/form-data"> 
 						<div class="form-group">
-							<input type="text" class="form-control" v-model="post.title" :class="{ 'is-invalid': $v.post.title.$error }" placeholder="Title">
+							<input type="text" class="form-control" v-model="blogPosts.title" :class="{ 'is-invalid': $v.blogPosts.title.$error }" placeholder="Title">
 						</div>
 
 						<div class="form-group">
-							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="slugTitle" :id="post._id" :type="'post'" />
+							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="slugTitle" :id="blogPosts._id" :type="'post'" />
 						</div>
 
 						<div class="form-group">
-							<vue-editor v-model="post.body" ></vue-editor>
+							<vue-editor v-model="blogPosts.body" ></vue-editor>
 						</div>
 
 						<div class="form-group">
-							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image"/>
+							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + blogPosts._id" alt="post image"/>
 						</div>
 
 						<div class="form-group">
@@ -38,7 +38,7 @@
 						</div>
 
 						<div class="form-group">
-							<select v-model="post.category" :class="{ 'is-invalid': $v.post.category.$error }" class="form-control">
+							<select v-model="blogPosts.category" :class="{ 'is-invalid': $v.blogPosts.category.$error }" class="form-control">
 								<option value=""> Choose a category </option>
 								
 								<template v-for="category in categories" >
@@ -52,8 +52,7 @@
 
 						<div class="form-group">
 							<button class="btn btn-outline-primary" @click.prevent="savePost()"> Save </button>
-							<button class="btn ml-1" :class="[post.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="publishPost()"> {{ publisedText }} </button>
-							<button v-if="isModerator" class="btn ml-1" :class="[post.reviewed ? 'btn-outline-danger' : 'btn-outline-dark']" @click.prevent="approveReview()" > {{ reviewedText }} </button>
+							<button class="btn ml-1" :class="[blogPosts.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="publishPost()"> {{ publisedText }} </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
 						</div>
 
@@ -63,7 +62,7 @@
 
 			<div class="col-md-12 col-lg-3 mt-4 mt-lg-0">
 				<div class="border-0 p-5 shadow radius-10 bg-white">
-					<TagInput v-model="post.tags" :tagsArr="post.tags" />
+					<TagInput v-model="blogPosts.tags" :tagsArr="blogPosts.tags" />
 				</div>
 			</div>
 
@@ -75,7 +74,7 @@
 <script>
 
 import { required } from  'vuelidate/lib/validators';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import { VueEditor } from "vue2-editor";
 import Alert from '@/utilities/Alert'; 
@@ -99,7 +98,7 @@ export default {
 	},
 
 	watch: {
-		'post.title': {
+		'blogPosts.title': {
 			handler(newVal) {
 				this.slugTitle = newVal;
 			}
@@ -114,23 +113,16 @@ export default {
 	},
 
 	computed: {
-		...mapState('posts', ['post']),
+		...mapState('posts', ['blogPosts']),
 		...mapState('category', ['categories']),
-
-		...mapGetters('userRoles', ['isModerator']),
-
 		publisedText() {
-			return this.post.isPublished ? 'Unpublish' : 'Publish';
-		},
-
-		reviewedText() {
-			return this.post.reviewed ? 'Reject Review' : 'Approve Review';
+			return this.blogPosts.isPublished ? 'Unpublish' : 'Publish';
 		},
 		
 	},
 
     methods: {
-		...mapActions('posts', ['setPost', 'updatePost', 'updateReview']),
+		...mapActions('posts', ['setPost', 'updatePost']),
 		...mapActions('category', ['setCategories']),
 		...mapActions('userRoles', ['getUserRoles']),
 
@@ -138,16 +130,16 @@ export default {
 
 			let formData = new FormData();
 		
-			formData.append('title', this.post.title);
-			formData.append('body', this.post.body);
-			formData.append('isPublished', this.post.isPublished);
-			formData.append('category', this.post.category);
-			formData.append('slug', this.post.slug);
-			formData.append('tags', this.post.tags);
+			formData.append('title', this.blogPosts.title);
+			formData.append('body', this.blogPosts.body);
+			formData.append('isPublished', this.blogPosts.isPublished);
+			formData.append('category', this.blogPosts.category);
+			formData.append('slug', this.blogPosts.slug);
+			formData.append('tags', this.blogPosts.tags);
 
 			if (this.$refs.file.value) {
-				formData.append('file', this.post.file)
-				formData.append('fileName', this.post.file.name);
+				formData.append('file', this.blogPosts.file)
+				formData.append('fileName', this.blogPosts.file.name);
 			}
 
 			let { id } = this.$route.params;
@@ -155,34 +147,6 @@ export default {
 			await this.updatePost({ id, post: formData });
 
 			this.$router.push({ name: 'post-list' });
-
-		},
-		
-		async approveReview() {
-
-			this.$v.$touch();
-			if (this.$v.$invalid || this.fileError) {
-				return;
-			}
-
-			let title = "Are you sure you want to Approve this post?";
-			let toastMessage = "Post have been Approved.";
-			if (this.post.reviewed) {
-				title = "Are you sure you want to Reject this post?";
-				toastMessage = "Post have been Rejected.";
-			}
-
-			const response = await Alert.confirm({ title });
-
-			if (response) {
-
-				this.updateReview({ id: this.post._id, review: !this.post.reviewed });
-
-				Alert.toast({ title: toastMessage, customClass: 'mt-7' });
-
-				this.$router.push({ name: 'post-list' });
-
-			}
 
 		},
 
@@ -195,7 +159,7 @@ export default {
 
 			let title = "Are you sure you want to Publish this post?";
 			let toastMessage = "Post have been Published.";
-			if (this.post.isPublished) {
+			if (this.blogPosts.isPublished) {
 				title = "Are you sure you want to Unpublish this post?";
 				toastMessage = "Post have been Unpublish.";
 			}
@@ -204,7 +168,7 @@ export default {
 
 			if (response) {
 
-				this.post.isPublished = !this.post.isPublished;
+				this.blogPosts.isPublished = !this.blogPosts.isPublished;
 
 				this.submitPost();
 
@@ -246,13 +210,13 @@ export default {
 			}
 
 			this.fileName = file.name;
-			this.post.fileName = file.name;
-			this.post.file = file;
+			this.blogPosts.fileName = file.name;
+			this.blogPosts.file = file;
 
 		},
 
 		updateSlug(val) {
-			this.post.slug = val;
+			this.blogPosts.slug = val;
 		}
 
 	},
@@ -265,7 +229,7 @@ export default {
 
 		this.loading = false;
 
-		this.slugTitle = this.post.slug
+		this.slugTitle = this.blogPosts.slug
 
 		await this.setCategories();
 
@@ -275,7 +239,7 @@ export default {
 	
 	validations: {
 
-		post: {
+		blogPosts: {
 
 			title: { required },
 			body: { required },
