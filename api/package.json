@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app",
-	"seed": "node script/index.js",
-	"test": ""
+    "seed": "node script/index.js"
   },
   "author": "",
   "license": "ISC",
