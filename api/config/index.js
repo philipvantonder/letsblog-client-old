@@ -3,7 +3,6 @@ dotenv.config();
 
 [
 	'NODE_ENV',
-	'PORT',
 ].forEach((name) => {
 	if (!process.env[name]) {
 		throw new Error(`Environement variable ${name} is missing.`);
