@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "app",
+    "start": "node app",
     "dev": "nodemon app",
 	"seed": "node script/index.js"
   },
@@ -25,5 +25,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
