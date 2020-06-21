@@ -21,11 +21,6 @@ module.exports = {
 
 	createUser: async (userDTO) => {
 
-		console.log("--------------");
-		console.log(userDTO);
-		console.log("--------------");
-		
-
 		userDTO.password = await bcrypt.hash(userDTO.password, 10);
 
 		const user = await UsersModel.findOne({ email: userDTO.email });
