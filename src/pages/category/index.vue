@@ -56,7 +56,7 @@
 
 					<div class="form-group">
 						<label class="font-weight-bolder">Slug Name</label>
-						<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="formData.categoryName" :type="'category'" :id='formData.id' />
+						<SlugWidget @slugChanged="updateSlug($event)" :url="api_url" :subdirectory="'/category/'" :title="formData.categoryName" :type="'category'" :id='formData.id' />
 						<input type="hidden" v-model="formData.categorySlug" />
 					</div>
 
@@ -69,7 +69,7 @@
 									<button class="btn btn-danger ml-2" v-if="subcategory.canRemoveSubCategory" @click="deleteSubcategory(subcategory.id, index)"> Remove </button>
 								</div>
 								<div class="d-flex mt-2">
-									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="'http://localhost:8080'" :subdirectory="'/category/'" :title="subcategory.name" :type="'category'" :id='subcategory.id' />
+									<SlugWidget @slugChanged="updateSubcategorySlug($event, index)" :url="api_url" :subdirectory="'/category/'" :title="subcategory.name" :type="'category'" :id='subcategory.id' />
 									<input type="hidden" v-model="subcategory.slug" />
 								</div>
 							</div>
@@ -99,6 +99,7 @@ import { required } from 'vuelidate/lib/validators';
 import SlugWidget from '@/components/SlugWidget.vue';
 import Alert from '@/utilities/Alert';
 import Modal from '@/components/Modal';
+import { api_url } from '@/utilities/config/index';
 
 export default {
 
@@ -119,7 +120,9 @@ export default {
 				categoryName: '',
 				categorySlug: '',
 				subcategoryArr: []
-			}
+			},
+
+			api_url
 
 		}
 	},

@@ -19,7 +19,7 @@
 						</div>
 
 						<div class="form-group">
-							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="post.title" :type="'post'" />
+							<SlugWidget @slugChanged="updateSlug($event)" :url="api_url" :subdirectory="'/post/'" :title="post.title" :type="'post'" />
 							<input type="hidden" v-model="post.slug" />
 						</div>
 

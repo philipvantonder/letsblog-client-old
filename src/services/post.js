@@ -108,6 +108,16 @@ export default {
 
 		return data;
 
+	},
+
+	async fetchReviewBlogPostBySlug(slug) {
+
+		console.log(slug);
+
+		const { data } = await getAxiosInstance('/posts').get('/reviewBlogPostSlug/' + slug);
+
+		return data;
+
 	}
 
 }

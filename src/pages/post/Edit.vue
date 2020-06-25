@@ -19,7 +19,7 @@
 						</div>
 
 						<div class="form-group">
-							<SlugWidget @slugChanged="updateSlug($event)" :url="'http://localhost:8080'" :subdirectory="'/post/'" :title="slugTitle" :id="blogPosts._id" :type="'post'" />
+							<SlugWidget @slugChanged="updateSlug($event)" :url="api_url" :subdirectory="'/post/'" :title="slugTitle" :id="blogPosts._id" :type="'post'" />
 						</div>
 
 						<div class="form-group">
@@ -27,7 +27,7 @@
 						</div>
 
 						<div class="form-group">
-							<img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + blogPosts._id" alt="post image"/>
+							<img class="img-thumbnail img-thumb" :src="api_url + '/api/posts/image/' + blogPosts._id" alt="post image"/>
 						</div>
 
 						<div class="form-group">
@@ -82,6 +82,8 @@ import Alert from '@/utilities/Alert';
 import SlugWidget from '@/components/SlugWidget.vue';
 import TagInput from '@/components/TagInput.vue';
 
+import { api_url } from '@/utilities/config/index';
+
 export default {
 
 	data() {
@@ -92,7 +94,8 @@ export default {
 			fileError: false,
 			message: '',
 			fileName: '', // this property is use to show which new file you are uploading
-			slugTitle: ''
+			slugTitle: '',
+			api_url
 		}
 
 	},

@@ -45,32 +45,33 @@ export default {
 
 		},
 
+		
 		async setUserPosts({ commit }) {
 
 			let { posts } = await PostService.fetchUserPosts();
-
+			
 			commit('SET_BLOG_POSTS', posts);
-
+			
 		},
-
+		
 		async removePost({ commit }, id) {
-
+			
 			await PostService.delete(id);
-
+			
 			commit('REMOVE_USER_POST', id);
-
+			
 		},
-
+		
 		async setPost({ commit }, id) {
-
+			
 			const { post } = await PostService.fetchPost(id);
-
+			
 			commit('SET_BLOG_POSTS', post);
-
+			
 		},
-
+		
 		async createPost(context, post) {
-
+			
 			await PostService.create(post);
 			
 		},
@@ -78,33 +79,43 @@ export default {
 		async updatePost(contex, postDTO) {
 			
 			const { id, post } = postDTO;
-
+			
 			await PostService.update(id, post);
-
+			
 		},
-
+		
 		async checkUnique(context, postDTO) {
-
+			
 			const { newSlug } = await PostService.checkUnique(postDTO);
-
+			
 			return { newSlug };
-
+			
 		},
-
+		
 		async updateReview(context, postDTO) {
-
+			
 			await PostService.updateReview(postDTO);
-
+			
+		},
+		
+		async setPostsforReview({ commit }) {
+			
+			const { posts } = await PostService.fetchPostsforReview();
+			
+			commit('SET_BLOG_POSTS', posts);
+			
 		},
 
-		async setPostsforReview({ commit }) {
+		async setReviewBlogPostBySlug({ commit }, id) {
+	
+			console.log(id);
 
-			const { posts } = await PostService.fetchPostsforReview();
-
-			commit('SET_BLOG_POSTS', posts);
-
-		}
- 
+			const { post } = await PostService.fetchReviewBlogPostBySlug(id);
+	
+			commit('SET_BLOG_POSTS', post);
+	
+		},
+		
 	}
-
+	
 }

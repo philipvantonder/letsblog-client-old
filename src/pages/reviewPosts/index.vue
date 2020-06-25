@@ -5,19 +5,17 @@
 				<div v-if="blogPosts.length" class="card-deck">
 					<div class="col-xs-12 col-sm-6 col-lg-4 mb-4 d-flex" v-for="post in blogPosts" :key="post.id">
 						<router-link :to="{ name: 'review-post', params: { 'id': post.slug } }" tag="div" class="card w-100 shadow border-0">
-							<img class="card-img-top card-height" :src="'http://localhost:4000/api/posts/image/' + post.id" alt="Card image cap">
+							<img class="card-img-top card-height" :src="api_url + '/api/posts/image/' + post.id" alt="Card image cap">
 
 							<div class="card-body d-flex flex-column justify-content-between">
 								<h5 class="card-title" title="View post"> {{ post.title }} </h5>
 
 								<p class="card-text" v-html="LimitText(post.body, 80)"> </p>
 
-
-
 								<div class="d-flex align-items-center justify-content-between">
 									<div class="d-flex align-items-center">
 										<div>
-											<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + post.authorId + '/' + post.authorPicture" />
+											<img class="rounded-circle h-10 w-10 obj-fit" :src="api_url + '/api/users/image/' + post.authorId + '/' + post.authorPicture" />
 										</div>
 										<div class="d-flex flex-column ml-2">
 											<div>
@@ -53,8 +51,8 @@
 <script>
 
 import { mapActions, mapState } from 'vuex';
-
-import { LimitText } from '@/utilities/filters/index'; 
+import { LimitText } from '@/utilities/filters/index';
+import { api_url } from '@/utilities/config/index';
 
 export default {
 	
@@ -63,7 +61,7 @@ export default {
 	data() {
 
 		return {
-		
+			api_url
 		}
 
 	},

@@ -24,7 +24,7 @@
 						<tr v-for="post in blogPosts" :key="post._id">
 							<td>{{ post.title }}</td>
 							<td>{{ LimitText(post.body, 50) }}</td>
-							<td><img class="img-thumbnail img-thumb" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="post image" /></td>
+							<td><img class="img-thumbnail img-thumb" :src="api_url + '/api/posts/image/' + post._id" alt="post image" /></td>
 							<td>{{ BooleanText(post.isPublished) }}</td>
 							<td>{{ BooleanText(post.reviewed) }}</td>
 							<td>{{ FormatDate(post.createdAt) }}</td>
@@ -48,11 +48,21 @@
 
 import { mapActions, mapState } from 'vuex';
 import Alert from '@/utilities/Alert';
-
 import { BooleanText, LimitText, FormatDate } from '@/utilities/filters/index';
+import { api_url } from '@/utilities/config/index';
 
 export default {
 	
+	data() {
+
+		return {
+
+			api_url
+
+		}
+
+	},
+
 	computed: {
 		...mapState('posts', ['blogPosts'])
 	},

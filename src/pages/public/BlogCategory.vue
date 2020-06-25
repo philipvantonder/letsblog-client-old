@@ -5,7 +5,7 @@
 				<div v-if="linkedCategoryPosts.length" class="card-deck">
 					<div class="col-xs-12 col-sm-6 col-lg-4 mb-4 d-flex" v-for="post in linkedCategoryPosts" :key="post._id">
 						<router-link :to="{ name: 'blog-post', params: { 'id': post.slug } }" tag="div" class="card w-100 shadow border-0">
-							<img class="card-img-top card-height" :src="'http://localhost:4000/api/posts/image/' + post._id" alt="Card image cap">
+							<img class="card-img-top card-height" :src="api_url + '/api/posts/image/' + post._id" alt="Card image cap">
 
 							<div class="card-body">
 								<h5 class="card-title" title="View post"> {{ post.title }} </h5>
@@ -26,7 +26,8 @@
 <script>
 
 import { mapActions, mapState } from 'vuex';
-import { LimitText } from '@/utilities/filters/index'; 
+import { LimitText } from '@/utilities/filters/index';
+import { api_url } from '@/utilities/config/index';
 
 export default {
 
@@ -35,7 +36,7 @@ export default {
 	data() {
 
 		return {
-
+			api_url
 		}
 
 	},

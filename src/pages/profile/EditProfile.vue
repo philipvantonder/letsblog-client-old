@@ -17,7 +17,7 @@
 					</div>
 
 					<div class="d-flex justify-content-center">
-						<img class="rounded-circle obj-fit h-20 w-20" :src="'http://localhost:4000/api/users/image/' + user.id + '/' + user.profileImage" />
+						<img class="rounded-circle obj-fit h-20 w-20" :src="api_url + '/api/users/image/' + user.id + '/' + user.profileImage" />
 					</div>
 
 					<div v-show="changeProfilePicture" class="mt-3">
@@ -82,6 +82,7 @@
 import { required } from 'vuelidate/lib/validators';
 import { mapActions, mapState } from 'vuex';
 import Alert from '@/utilities/Alert';
+import { api_url } from '@/utilities/config/index';
 
 export default {
 
@@ -91,7 +92,8 @@ export default {
 			
 			loading: true,
 			changeProfilePicture: false,
-			message: false
+			message: false,
+			api_url
 
 		}
 

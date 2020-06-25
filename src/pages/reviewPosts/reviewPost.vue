@@ -9,7 +9,7 @@
 						</div>
 						<div class="d-flex align-items-center">
 							<div>
-								<img class="rounded-circle h-10 w-10 obj-fit" :src="'http://localhost:4000/api/users/image/' + blogPosts.authorId + '/' + blogPosts.authorPicture" />
+								<img class="rounded-circle h-10 w-10 obj-fit" :src="api_url + '/api/users/image/' + blogPosts.authorId + '/' + blogPosts.authorPicture" />
 							</div>
 							<div class="d-flex flex-column ml-2">
 								<div>
@@ -21,7 +21,7 @@
 					</div>
 					
 					<div class="px-5 pb-4">
-						<img :src="'http://localhost:4000/api/posts/image/' + blogPosts.id" alt="post image" class="img-fluid w-100" > 	
+						<img :src="api_url + '/api/posts/image/' + blogPosts.id" alt="post image" class="img-fluid w-100" > 	
 
 						<div class="text-break mt-3" v-html="blogPosts.body"> </div>
 					</div>
@@ -44,14 +44,16 @@
 <script>
 
 	import { mapActions, mapState, mapGetters } from 'vuex';
-	import Alert from '@/utilities/Alert'; 
+	import Alert from '@/utilities/Alert';
+	import { api_url } from '@/utilities/config/index';
 
     export default {
 
 		data() {
 
 			return {
-				loading: true
+				loading: true,
+				api_url
 			}
 			
 		},
@@ -65,7 +67,7 @@
 		},
 
 		methods: {
-			...mapActions('posts', ['setBlogPostBySlug', 'updateReview']),
+			...mapActions('posts', ['setReviewBlogPostBySlug', 'updateReview']),
 
 			async approveReview() {
 
@@ -87,7 +89,7 @@
 
 					const { id } = this.$route.params;
 
-					await this.setBlogPostBySlug(id);
+					await this.setReviewBlogPostBySlug(id);
 
 				}
 
@@ -99,7 +101,7 @@
 
 			const { id } = this.$route.params;
 
-			await this.setBlogPostBySlug(id);
+			await this.setReviewBlogPostBySlug(id);
 
 			this.loading = false;
 
