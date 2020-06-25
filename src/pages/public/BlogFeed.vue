@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div v-if="!loading" class="container">
 		<div class="row pt-4">
 			<div class="col-lg-12">
 				<div v-if="blogPosts.length" class="card-deck">
@@ -47,6 +47,7 @@ export default {
 	data() {
 
 		return {
+			loading: true,
 			api_url
 		}
 
@@ -63,6 +64,8 @@ export default {
 
     async created() {
 		await this.setPublishedBlogPosts();
+
+		this.loading = false;
     }
 
 }

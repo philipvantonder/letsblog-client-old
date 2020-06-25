@@ -77,6 +77,7 @@
 
 	import SlugWidget from '@/components/SlugWidget.vue';
 	import TagInput from '@/components/TagInput.vue';
+	import { api_url } from '@/utilities/config/index';
 
     export default {
 
@@ -92,7 +93,8 @@
 					category: '',
 					tags: '',
 					fileName: ''
-				}
+				},
+				api_url
 
             }
 

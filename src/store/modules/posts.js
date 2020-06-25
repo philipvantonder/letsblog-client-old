@@ -17,8 +17,8 @@ export default {
 		},
 
 		REMOVE_USER_POST(state, id) {
-			let post_index = state.userPosts.map(post => post._id).indexOf(id);
-			state.userPosts.splice(post_index, 1);
+			let post_index = state.blogPosts.map(post => post._id).indexOf(id);
+			state.blogPosts.splice(post_index, 1);
 		},
 
 	},
@@ -108,8 +108,6 @@ export default {
 
 		async setReviewBlogPostBySlug({ commit }, id) {
 	
-			console.log(id);
-
 			const { post } = await PostService.fetchReviewBlogPostBySlug(id);
 	
 			commit('SET_BLOG_POSTS', post);

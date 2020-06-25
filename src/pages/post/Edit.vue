@@ -27,7 +27,7 @@
 						</div>
 
 						<div class="form-group">
-							<img class="img-thumbnail img-thumb" :src="api_url + '/api/posts/image/' + blogPosts._id" alt="post image"/>
+							<img class="img-thumbnail img-thumb" :src="api_url + '/posts/image/' + blogPosts._id" alt="post image"/>
 						</div>
 
 						<div class="form-group">

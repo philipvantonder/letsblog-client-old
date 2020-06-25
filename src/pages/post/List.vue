@@ -5,7 +5,7 @@
 			<h1>My Posts</h1>
 		</div>
 
-		<div class="row py-2">
+		<div v-if="!loading" class="row py-2">
 			<div class="col-lg-12">
 				<table v-if="blogPosts.length > 0" class="table table-borderless table-hover table-striped bg-white radius-10 shadow">
 					<thead>
@@ -57,6 +57,7 @@ export default {
 
 		return {
 
+			loading: true,
 			api_url
 
 		}
@@ -103,6 +104,8 @@ export default {
 	async created() {
 
 		await this.setUserPosts();
+
+		this.loading = false; 
 
 	},
 

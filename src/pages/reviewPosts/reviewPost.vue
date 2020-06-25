@@ -1,6 +1,9 @@
 <template>
 	<div v-if="!loading" class="container">
 		<div v-if="blogPosts" class="row py-4">
+
+			{{ blogPosts }}
+
 			<div class="col-lg-12">
 				<div class="shadow radius-10 bg-white">
 					<div class="d-flex align-items-center justify-content-between px-5 py-4">
