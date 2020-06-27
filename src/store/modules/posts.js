@@ -109,7 +109,7 @@ export default {
 		async setReviewBlogPostBySlug({ commit }, id) {
 	
 			const { post } = await PostService.fetchReviewBlogPostBySlug(id);
-	
+
 			commit('SET_BLOG_POSTS', post);
 	
 		},

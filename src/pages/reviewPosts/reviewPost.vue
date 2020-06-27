@@ -1,9 +1,6 @@
 <template>
 	<div v-if="!loading" class="container">
 		<div v-if="blogPosts" class="row py-4">
-
-			{{ blogPosts }}
-
 			<div class="col-lg-12">
 				<div class="shadow radius-10 bg-white">
 					<div class="d-flex align-items-center justify-content-between px-5 py-4">
@@ -88,11 +85,12 @@
 					await this.updateReview({ id: this.blogPosts.id, review: !this.blogPosts.reviewed });
 
 					Alert.toast({ title: toastMessage, customClass: 'mt-7' });
-					
 
 					const { id } = this.$route.params;
 
 					await this.setReviewBlogPostBySlug(id);
+
+					this.$router.push({ name: 'review-posts' });
 
 				}
 

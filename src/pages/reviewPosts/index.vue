@@ -4,7 +4,7 @@
 			<div class="col-lg-12">
 				<div v-if="blogPosts.length" class="card-deck">
 					<div class="col-xs-12 col-sm-6 col-lg-4 mb-4 d-flex" v-for="post in blogPosts" :key="post.id">
-						<router-link :to="{ name: 'review-post', params: { 'id': post.slug } }" tag="div" class="card w-100 shadow border-0">
+						<router-link :to="{ name: 'review-post', params: { 'id': post.slug } }" tag="div" :class="getReviewState(post.reviewed)" class="card w-100 shadow border-0">
 							<img class="card-img-top card-height" :src="api_url + '/api/posts/image/' + post.id" alt="Card image cap">
 
 							<div class="card-body d-flex flex-column justify-content-between">
@@ -27,11 +27,11 @@
 									<div>
 										<span v-if="post.reviewed">
 											<font-awesome-layers full-width class="fa-fw fa-1x text-success"> <font-awesome-icon icon="check" /> </font-awesome-layers>
-											Approved
+											Reviewed
 										</span>
 										<span v-else>
 											<font-awesome-layers full-width class="fa-fw fa-1x text-danger"> <font-awesome-icon icon="times" /> </font-awesome-layers>
-											Rejected
+											Reviewed
 										</span>
 									</div>
 								</div>
@@ -67,13 +67,17 @@ export default {
 	},
 
 	computed: {
-		...mapState('posts', ['blogPosts'])
+		...mapState('posts', ['blogPosts']),
 	},
 
 	methods: {
 		...mapActions('posts', ['setPostsforReview']),
 
-		LimitText
+		LimitText,
+
+		getReviewState(review) {
+			return review ? 'approve-border' : 'not-approve-border';
+		}
 	},
 
 	async created() {
@@ -97,6 +101,14 @@ export default {
 .card:hover {
 	transform: translate(0, -5px);
 	cursor: pointer;
+}
+
+.approve-border {
+	border: 4px solid green !important;
+}
+
+.not-approve-border {
+	border: 4px solid red !important;
 }
 
 </style>
