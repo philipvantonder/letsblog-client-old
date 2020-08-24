@@ -2,7 +2,7 @@
 	<div id="app">
 		<div class="vh-100 d-flex flex-column">
 
-			<navbar @toggleSidebar="updateSidebarStatus($event)" :navBarStatus="isOpen" />
+			<navbar @toggle-sidebar="updateSidebarStatus($event)" :navBarStatus="isOpen" />
 
 			<sidebar @toggleNavbarStatus="updateNavbarStatus($event)" v-if="isLoggedIn" :sideBarStatus="isOpen" />
 

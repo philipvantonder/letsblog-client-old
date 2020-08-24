@@ -1,32 +1,35 @@
 <template>
     <div class="container">
-		<div class="mx-auto w-50 shadow p-3 mt-5 radius-10 bg-white">
+		<div class="row">
+			<div class="col-md-12 col-lg-6 mx-auto">
+				<div class="shadow p-3 mt-5 radius-10 bg-white">
+					<div v-if="message" v-html="message" class="alert alert-success" role="alert"></div>
 
-			<div v-if="message" v-html="message" class="alert alert-success" role="alert"></div>
-
-			<div v-if="sentEmail">
-				<a href="javascript:void(0);" class="btn btn-link" @click="resendEmail()" > Resend Email </a>
-			</div>
-			<div v-else>
-				<h2 class="mb-3"> Forgot Password </h2>
-
-				<form @submit.prevent="submitPasswordReset()">
-					<div class="form-group">
-						<input type="email" class="form-control" :class="{ 'is-invalid': $v.user.email.$error }" v-model="user.email" placeholder="Email">
-						<div v-if="$v.user.email.$error" class="invalid-feedback">
-							<span v-if="!$v.user.email.email"> Email is invalid </span>
-						</div>
+					<div v-if="sentEmail">
+						<a href="javascript:void(0);" class="btn btn-link" @click="resendEmail()" > Resend Email </a>
 					</div>
-					
-					<div class="d-flex alig-items center justify-content-between">
-						<div v-if="!sentEmail" >
-							<button class="btn btn-outline-primary" :disabled="loading"> {{ buttonText }} </button>
-						</div>
-						<router-link tag="a" :to="{ name: 'login' }" >Back to Login</router-link>
-					</div>
-				</form>
-			</div>
+					<div v-else>
+						<h2 class="mb-3"> Forgot Password </h2>
 
+						<form @submit.prevent="submitPasswordReset()">
+							<div class="form-group">
+								<input type="email" class="form-control" :class="{ 'is-invalid': $v.user.email.$error }" v-model="user.email" placeholder="Email">
+								<div v-if="$v.user.email.$error" class="invalid-feedback">
+									<span v-if="!$v.user.email.email"> Email is invalid </span>
+								</div>
+							</div>
+							
+							<div class="d-flex alig-items center justify-content-between">
+								<div v-if="!sentEmail" >
+									<button class="btn btn-outline-primary" :disabled="loading"> {{ buttonText }} </button>
+								</div>
+								<router-link tag="a" :to="{ name: 'login' }" >Back to Login</router-link>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
 		</div>
     </div>
 </template>

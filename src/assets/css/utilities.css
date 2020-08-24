@@ -191,3 +191,14 @@ body {
 		transform: translate3d(4px, 0, 0);
 	}
 }
+
+.hide-on-mobile {
+	display: block !important;
+}
+
+/* Login Responsive Queries */
+@media only screen and (max-width: 600px) {
+	.hide-on-mobile {
+		display: none !important;
+	}
+}

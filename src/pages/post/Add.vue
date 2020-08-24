@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="row py-2">
-			<div class="col-md-12 col-lg-9">
+			<div class="col-md-12 col-lg-8">
 				<div class="shadow p-5 radius-10 bg-white">
 
 					<div v-if="message" class="alert alert-warning" role="alert">
@@ -48,19 +48,17 @@
 						</div>
 
 						<div class="form-group">
-							<button class="btn btn-outline-primary" @click.prevent="addPost({ published: false })"> Save Draft</button>
-							<button class="btn btn-outline-success ml-1" @click.prevent="addPost({ published: true })"> Publish </button>
+							<button class="btn btn-outline-primary" @click.prevent="saveAsDraft()"> Save as Draft </button>
+							<button class="btn ml-1 btn-outline-danger" @click.prevent="submitForReview()"> Submit for Review </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" tag="a" :to="{ name: 'feed' }"> Cancel </router-link>
 						</div>
 					</form>
 				</div>
 			</div>
 
-			<div class="col-md-12 col-lg-3 mt-4 mt-lg-0">
+			<div class="col-md-12 col-lg-4 mt-4 mt-lg-0">
 				<div class="border-0 p-5 shadow radius-10 bg-white">
-
 					<TagInput v-model="post.tags" />
-
 				</div>
 			</div>
 
@@ -92,7 +90,8 @@
 					slug: '',
 					category: '',
 					tags: '',
-					fileName: ''
+					fileName: '',
+					inReview: false
 				},
 				api_url
 
@@ -111,27 +110,30 @@
 			...mapActions('posts', ['createPost']),
 			...mapActions('category', ['setCategories']),
 
-			async addPost (data) {
+			async saveAsDraft() {
 
 				this.$v.$touch();
 				if (this.$v.$invalid || this.fileError) {
 					return;
 				}
 
-				if (data.published) {
+				this.submitPost();
 
-					let response = await Alert.confirm({ title: "Are You sure you want to publish this post?" });
+			},
 
-					if (response) {
-						
-						this.post.isPublished = true;
-						this.submitPost();
+			async submitForReview() {
 
+				let response = await Alert.confirm({ title: "Submit post for Review?" });
+
+				if (response) {
+
+					this.$v.$touch();
+					if (this.$v.$invalid || this.fileError) {
+						return;
 					}
 
-				} else {
-					
-					this.post.isPublished = false;
+					this.post.inReview = true;
+
 					this.submitPost();
 
 				}
@@ -144,7 +146,6 @@
 					
 				formData.append('title', this.post.title);
 				formData.append('body', this.post.body);
-				formData.append('isPublished', this.post.isPublished);
 
 				formData.append('file', this.post.file)
 				formData.append('slug', this.post.slug)
@@ -152,6 +153,8 @@
 				
 				formData.append('category', this.post.category);
 				formData.append('tags', this.post.tags);
+
+				formData.append('inReview', this.post.inReview);
 
 				await this.createPost(formData);
 

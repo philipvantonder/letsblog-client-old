@@ -9,6 +9,14 @@
 			<div v-if="blogPosts" class="col-lg-9">
 				<div class="shadow radius-10 p-5 bg-white">
 
+					<div v-if="blogPosts.reviewed && !blogPosts.isPublished" class="alert alert-success" role="alert">
+						This Blog post is ready to be <b>Published</b>.
+					</div>
+
+					<div v-if="!blogPosts.reviewed" class="alert alert-warning" role="alert">
+						This Blog post is currently being Reviewed before it can be published.
+					</div>
+					
 					<div v-if="message" class="alert alert-warning" role="alert">
 						{{ message }}
 					</div>
@@ -27,7 +35,7 @@
 						</div>
 
 						<div class="form-group">
-							<img class="img-thumbnail img-thumb" :src="api_url + '/posts/image/' + blogPosts._id" alt="post image"/>
+							<img class="img-thumbnail img-thumb" :src="api_url + '/api/posts/image/' + blogPosts._id" alt="post image"/>
 						</div>
 
 						<div class="form-group">
@@ -51,8 +59,9 @@
 						</div>
 
 						<div class="form-group">
-							<button class="btn btn-outline-primary" @click.prevent="savePost()"> Save </button>
-							<button class="btn ml-1" :class="[blogPosts.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="publishPost()"> {{ publisedText }} </button>
+							<button class="btn btn-outline-primary" v-if="!blogPosts.isPublished && !blogPosts.inReview" @click.prevent="saveAsDraft()"> Save as Draft </button>
+							<button class="btn ml-1" v-if="blogPosts.reviewed" :class="[blogPosts.isPublished ? 'btn-outline-danger' : 'btn-outline-success']" @click.prevent="publishPost()"> {{ publisedText }} </button>
+							<button class="btn ml-1 btn-outline-danger" v-if="!blogPosts.reviewed && !blogPosts.inReview" @click.prevent="submitForReview()"> Submit for Review </button>
 							<router-link class="btn btn-outline-secondary ml-1 float-right" :to="{ name: 'post-list' }"> Cancel </router-link>
 						</div>
 
@@ -121,7 +130,9 @@ export default {
 		publisedText() {
 			return this.blogPosts.isPublished ? 'Unpublish' : 'Publish';
 		},
-		
+		saveBtnText() {
+			return this.blogPosts.isPublished ? 'Unpublish' : 'Publish';
+		}
 	},
 
     methods: {
@@ -139,6 +150,9 @@ export default {
 			formData.append('category', this.blogPosts.category);
 			formData.append('slug', this.blogPosts.slug);
 			formData.append('tags', this.blogPosts.tags);
+
+			formData.append('inReview', this.blogPosts.inReview);
+			formData.append('reviewed', this.blogPosts.reviewed);
 
 			if (this.$refs.file.value) {
 				formData.append('file', this.blogPosts.file)
@@ -181,7 +195,32 @@ export default {
 
 		},
 
-        async savePost() {
+		async submitForReview() {
+
+			this.$v.$touch();
+			if (this.$v.$invalid || this.fileError) {
+				return;
+			}
+
+			let title = "Are you sure you want to Submit this post for Review?";
+			let toastMessage = "Post have been Submitted for Review.";
+
+			const response = await Alert.confirm({ title });
+
+			if (response) {
+			
+				this.blogPosts.reviewed = false;
+				this.blogPosts.inReview = true;
+
+				this.submitPost();
+
+				Alert.toast({ title: toastMessage, customClass: 'mt-7' });
+
+			}
+
+		},
+
+        async saveAsDraft() {
 
 			this.$v.$touch();
 			if (this.$v.$invalid || this.fileError) {
