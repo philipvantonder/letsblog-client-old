@@ -100,7 +100,7 @@ export default {
 	},
 
 	computed: {
-		...mapState('user', ['user']),
+		...mapState('User', ['user']),
 
 		changeProfileText() {
 			return (this.changeProfilePicture ? 'Cancel' : 'Change Profile Picture');
@@ -109,7 +109,7 @@ export default {
 
 	methods: {
 	
-		...mapActions('user', ['setUser', 'updateUser']),
+		...mapActions('User', ['setUser', 'updateUser']),
 
 		async submitForm() {
 

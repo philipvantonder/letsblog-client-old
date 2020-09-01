@@ -81,7 +81,7 @@ export default {
 
 	methods: {
 
-		...mapActions('posts', ['checkUnique']),
+		...mapActions('Posts', ['checkUnique']),
 
 		editSlug() {
 

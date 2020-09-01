@@ -107,8 +107,8 @@
 
         methods: {
 
-			...mapActions('posts', ['createPost']),
-			...mapActions('category', ['setCategories']),
+			...mapActions('Posts', ['createPost']),
+			...mapActions('Category', ['setCategories']),
 
 			async saveAsDraft() {
 
@@ -193,7 +193,7 @@
 		
 		computed: {
 
-			...mapState('category', ['categories'])
+			...mapState('Category', ['categories'])
 
 		},
 

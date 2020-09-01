@@ -88,15 +88,15 @@
 		},
 
 		computed: {
-			...mapState('posts', ['blogPosts']),
-			...mapState('user', ['user']),
-			...mapState('comment', ['postComments', 'totalComments']),
-			...mapGetters('user', ['isLoggedIn']),
+			...mapState('Posts', ['blogPosts']),
+			...mapState('User', ['user']),
+			...mapState('Comment', ['postComments', 'totalComments']),
+			...mapGetters('User', ['isLoggedIn']),
 		},
 
 		methods: {
-			...mapActions('posts', ['setBlogPostBySlug']),
-			...mapActions('comment', ['setPostCommentsById', 'getUserCommentLikes']),
+			...mapActions('Posts', ['setBlogPostBySlug']),
+			...mapActions('Comment', ['setPostCommentsById', 'getUserCommentLikes']),
 
 			showCommentBox() {
 

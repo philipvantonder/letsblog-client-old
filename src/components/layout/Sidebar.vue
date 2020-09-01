@@ -62,7 +62,7 @@ export default {
 
 	methods: {
 
-		...mapActions('userRoles', ['getUserRoles']),
+		...mapActions('UserRoles', ['getUserRoles']),
 
 		toggleSideBarStatus() {
 			this.$emit('toggleNavbarStatus', this.isOpen = !this.isOpen);
@@ -71,8 +71,8 @@ export default {
 	},
 
 	computed: {
-		...mapGetters('user', ['isLoggedIn']),
-		...mapGetters('userRoles', ['isAdmin', 'isModerator']),
+		...mapGetters('User', ['isLoggedIn']),
+		...mapGetters('UserRoles', ['isAdmin', 'isModerator']),
 	},
 
 	created() {

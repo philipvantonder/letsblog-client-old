@@ -69,7 +69,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['changePassword']),
+		...mapActions('User', ['changePassword']),
 
 		async submitChangePassword() {
 

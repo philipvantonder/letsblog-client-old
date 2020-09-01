@@ -59,15 +59,15 @@
 		},
 
 		computed: {
-			...mapState('posts', ['blogPosts']),
-			...mapGetters('userRoles', ['isModerator']),
+			...mapState('Posts', ['blogPosts']),
+			...mapGetters('UserRoles', ['isModerator']),
 			reviewedText() {
 				return this.blogPosts.reviewed ? 'Reject Review' : 'Approve Review';
 			},
 		},
 
 		methods: {
-			...mapActions('posts', ['setReviewBlogPostBySlug', 'updateReview']),
+			...mapActions('Posts', ['setReviewBlogPostBySlug', 'updateReview']),
 
 			async approveReview() {
 

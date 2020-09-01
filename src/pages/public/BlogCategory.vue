@@ -45,13 +45,13 @@ export default {
 
 		LimitText,
 
-		...mapActions('category', ['setCategoryBySlug'])
+		...mapActions('Category', ['setCategoryBySlug'])
 
 	},
 
 	computed: {
 
-		...mapState('category', ['linkedCategoryPosts'])
+		...mapState('Category', ['linkedCategoryPosts'])
 
 	},
 

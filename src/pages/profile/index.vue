@@ -51,7 +51,7 @@ export default {
 	},
 
 	computed: {
-		...mapState('user', ['user']),
+		...mapState('User', ['user']),
 
 		userFullName() {
 			return this.user.name + ' ' + this.user.surname;
@@ -59,7 +59,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions('user', ['setUser'])
+		...mapActions('User', ['setUser'])
 	},
 
 	async created() {

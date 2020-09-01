@@ -101,7 +101,7 @@
 
         methods: {
 
-			...mapActions('user', ['createUser']),
+			...mapActions('User', ['createUser']),
 
             async registerUser() {
 

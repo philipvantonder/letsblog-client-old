@@ -73,7 +73,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['login', 'setUser']),
+		...mapActions('User', ['login', 'setUser']),
 
 		async signIn() {
 

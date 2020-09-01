@@ -99,8 +99,8 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['setUser', 'logout']),
-		...mapActions('category', ['setCategories']),
+		...mapActions('User', ['setUser', 'logout']),
+		...mapActions('Category', ['setCategories']),
 
 		logoutUser() {
 
@@ -123,9 +123,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters('user', ['isLoggedIn']),
-		...mapState('user', ['user']),
-		...mapState('category', ['categories']),
+		...mapGetters('User', ['isLoggedIn']),
+		...mapState('User', ['user']),
+		...mapState('Category', ['categories']),
 	},
 
 	async created() {

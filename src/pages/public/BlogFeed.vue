@@ -54,12 +54,12 @@ export default {
 	},
 
 	computed: {
-		...mapState('posts', ['blogPosts']),
+		...mapState('Posts', ['blogPosts']),
 	},
 
 	methods: {
 		LimitText,
-		...mapActions('posts', ['setPublishedBlogPosts'])
+		...mapActions('Posts', ['setPublishedBlogPosts'])
 	},
 
     async created() {

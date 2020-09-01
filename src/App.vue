@@ -37,7 +37,7 @@ export default {
 	},
 	
 	computed: {
-		...mapGetters('user', ['isLoggedIn']),
+		...mapGetters('User', ['isLoggedIn']),
 	},
 
 	methods: {

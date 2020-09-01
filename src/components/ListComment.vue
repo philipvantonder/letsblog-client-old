@@ -122,8 +122,8 @@
 		},
 
 		computed: {
-			...mapGetters('user', ['isLoggedIn']),
-			...mapState('comment', ['userCommentLikes']),
+			...mapGetters('User', ['isLoggedIn']),
+			...mapState('Comment', ['userCommentLikes']),
 
 			commentLiked() {
 				return (this.commentLike === true ? 'like-active' : '');
@@ -154,7 +154,7 @@
 
 			},
 
-			...mapActions('comment', ['addReply', 'addLike', 'setPostCommentsById', 'getUserCommentLikes']),
+			...mapActions('Comment', ['addReply', 'addLike', 'setPostCommentsById', 'getUserCommentLikes']),
 
 			showReplyPopup(commentId, userId, postId) {
 

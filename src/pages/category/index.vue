@@ -128,7 +128,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions('category', ['setCategories', 'createCategory', 'removeCategory', 'removeSubCategory', 'setCategoryById', 'updateCategory']),
+		...mapActions('Category', ['setCategories', 'createCategory', 'removeCategory', 'removeSubCategory', 'setCategoryById', 'updateCategory']),
 
 		async submitForm() {
 
@@ -262,9 +262,9 @@ export default {
 	},
 
 	computed: {
-		...mapState('category', ['categories', 'category']),
+		...mapState('Category', ['categories', 'category']),
 
-		...mapGetters('category', ['getCategory'])
+		...mapGetters('Category', ['getCategory'])
 	},
 
 	created() {

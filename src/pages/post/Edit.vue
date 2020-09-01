@@ -125,8 +125,8 @@ export default {
 	},
 
 	computed: {
-		...mapState('posts', ['blogPosts']),
-		...mapState('category', ['categories']),
+		...mapState('Posts', ['blogPosts']),
+		...mapState('Category', ['categories']),
 		publisedText() {
 			return this.blogPosts.isPublished ? 'Unpublish' : 'Publish';
 		},
@@ -136,9 +136,9 @@ export default {
 	},
 
     methods: {
-		...mapActions('posts', ['setPost', 'updatePost']),
-		...mapActions('category', ['setCategories']),
-		...mapActions('userRoles', ['getUserRoles']),
+		...mapActions('Posts', ['setPost', 'updatePost']),
+		...mapActions('Category', ['setCategories']),
+		...mapActions('UserRoles', ['getUserRoles']),
 
         async submitPost() {
 

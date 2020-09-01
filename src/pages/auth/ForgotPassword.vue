@@ -82,7 +82,7 @@ export default {
 
 	methods: {
 
-		...mapActions('user', ['passwordReset']),
+		...mapActions('User', ['passwordReset']),
 
 		resendEmail() {
 			this.user.email = '';

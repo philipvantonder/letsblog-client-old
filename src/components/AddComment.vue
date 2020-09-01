@@ -58,7 +58,7 @@ export default {
 
 	methods: {
 
-		...mapActions('comment', ['create', 'setPostCommentsById']),
+		...mapActions('Comment', ['create', 'setPostCommentsById']),
 
 		async submitForm() {
 

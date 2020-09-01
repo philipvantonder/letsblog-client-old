@@ -67,11 +67,11 @@ export default {
 	},
 
 	computed: {
-		...mapState('posts', ['blogPosts']),
+		...mapState('Posts', ['blogPosts']),
 	},
 
 	methods: {
-		...mapActions('posts', ['setPostsforReview']),
+		...mapActions('Posts', ['setPostsforReview']),
 
 		LimitText,
 

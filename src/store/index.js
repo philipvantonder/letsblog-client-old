@@ -3,22 +3,10 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import UserModule from './modules/user';
-import PostsModule from './modules/posts';
-import CategoryModule from './modules/category';
-import CommentModule from './modules/comment';
-import UserRolesModule from './modules/userRoles';
+import modules from './modules/index';
 
 export default new Vuex.Store({
 
-	modules: {
-
-		user: UserModule,
-		posts: PostsModule,
-		category: CategoryModule,
-		comment: CommentModule,
-		userRoles: UserRolesModule
-
-	}
+	modules
 
 });

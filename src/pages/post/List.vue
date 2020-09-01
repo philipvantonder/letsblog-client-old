@@ -65,7 +65,7 @@ export default {
 	},
 
 	computed: {
-		...mapState('posts', ['blogPosts'])
+		...mapState('Posts', ['blogPosts'])
 	},
 
 	methods: {
@@ -74,7 +74,7 @@ export default {
 		LimitText,
 		FormatDate,
 
-		...mapActions('posts', ['setUserPosts', 'removePost']),
+		...mapActions('Posts', ['setUserPosts', 'removePost']),
 
 		async deletePost(id) {
 			
