@@ -151,7 +151,7 @@ router.beforeEach((to, from, next) => {
 
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 
-		if (!store.getters['user/isLoggedIn']) {
+		if (!store.getters['User/isLoggedIn']) {
 
 			console.error("Routes: You are not logged in. Redirect you to the Feed Page");
 
@@ -162,7 +162,7 @@ router.beforeEach((to, from, next) => {
 
 	} else if (to.matched.some(record => record.meta.requiresAuthAndIsAdmin)) {
 
-		if (!store.getters['user/isLoggedIn'] || !store.getters['userRoles/isAdmin']) {
+		if (!store.getters['User/isLoggedIn'] || !store.getters['UserRoles/isAdmin']) {
 
 			console.error("Routes: You are not logged in or is not a Admin. Redirect you to the Feed Page");
 

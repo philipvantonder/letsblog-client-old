@@ -146,7 +146,7 @@ export default {
 
 				if (slug != '') {
 
-					const { newSlug } = await this.$store.dispatch('category/checkUniqueCategory', { slug, id });
+					const { newSlug } = await this.$store.dispatch('Category/checkUniqueCategory', { slug, id });
 
 					this.slug = newSlug;
 					this.$emit('slugChanged', newSlug);
